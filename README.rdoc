@@ -1,5 +1,5 @@
 
-= Ruby BlackBag
+= Ruby BlackBag (rbkb)
 
 A miscellaneous collection of command-line tools and ruby library helpers 
 related to pen-testing and reversing. 
@@ -8,9 +8,10 @@ related to pen-testing and reversing.
 
     Disclaimer: 
     Most of what's in the black bag came from a desire to do less typing.
-    But there might actually be a few clever things accidentally added.
+    But there might be a few clever things that were added by accident.
 
-rbkb is inspired by Matasano BlackBag (a set of similar tools written in C).
+
+RBkB is inspired by Matasano BlackBag (a set of similar tools written in C).
 
 See:
 * http://www.matasano.com/log/1048/blackbag-091-new-link-and-minor-fixes/
