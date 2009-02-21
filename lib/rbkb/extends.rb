@@ -437,7 +437,7 @@ class String
   end
 
   # Does string "start with" dat?
-  # No clue whether/when this is faster than a regex, but it is to type.
+  # No clue whether/when this is faster than a regex, but it is easier to type.
   def starts_with?(dat)
     self[0,dat.size] == dat
   end
