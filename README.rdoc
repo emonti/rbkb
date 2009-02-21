@@ -25,6 +25,9 @@ Along the way, some of tools in the blackbag spirit make their way into 'rbkb'
 that may or may not make it to 'bkb' right away (or ever). Similarly some of
 the things in 'bkb' have not yet made it to 'rbkb' (and may not).
 
+=== More Info
+
+See usage.txt
 
 === Requirements
 
