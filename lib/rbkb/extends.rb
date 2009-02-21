@@ -5,6 +5,10 @@ require 'zlib'
 require 'open3'
 require 'sha1'
 
+module RBkB
+  DEFAULT_BYTE_ORDER=:big
+end
+
 # Generates a "universally unique identifier"
 def uuid
   (SHA1::sha1(rand.to_s)).to_s
@@ -344,7 +348,7 @@ class String
   # Supports ASCII and little endian unicode (though only for ASCII printable 
   # character.)
   #
-  # ==Parameters and options:
+  # === Parameters and options:
   #
   #  * Use the :minimum parameter to specify minimum number of characters
   #    to match. (default = 6)
@@ -361,7 +365,7 @@ class String
   #    The block's boolean return value also determines whether the match 
   #    passes or fails (true or false/nil) and gets returned by the function.
   #
-  # ==Return Value:
+  # === Return Value:
   #
   # Returns an array consisting of matches with the following elements:
   #
@@ -547,50 +551,63 @@ class Numeric
 
   def clear_bits(c) ; (self ^ (self & c)) ; end
 
-  #----------------------------------------------------------------------
+  # Returns an array of chars per 8-bit break-up.
+  # Accepts a block for some transformation on each byte.
+  # (used by to_bytes and to_hex under the hood)
+  #
+  # args: 
+  #   order: byte order - :big or :little
+  #                       (only :big has meaning)
+  #   siz:  pack to this size. larger numbers will wrap
+  def to_chars(order=nil, siz=nil)
+    order ||= RBkB::DEFAULT_BYTE_ORDER
+    n=self
+    siz ||= self.size
+    ret=[]
+    siz.times do 
+      c = (n % 256)
+      if block_given? then (c = yield(c)) end
+      ret << c
+      n=(n >> 8)
+    end
+    return ((order == :big)? ret.reverse  : ret)
+  end
+
   # "packs" a number into bytes using bit-twiddling instead of pack()
+  #
+  # Uses to_chars under the hood. See also: to_hex
+  #
   # args: 
   #   siz:  pack to this size. larger numbers will wrap
-  #   order: byte order - :big or :little (default=:little)
+  #   order: byte order - :big or :little
   #                       (only :big has meaning)
-  def to_bytes(siz=nil, order=:little)
-    raise "Can't convert negative numbers" if self < 0
-    n = ([0,nil].include? siz)? self : self % (2**(siz*8))
-    ret = Array.new(siz || 0){"\0"}
-    i=0
-
-    begin 
-      ret[i] = (n % 256).chr
-      i+=1
-    end while ((n=(n >> 8)) != 0)
-
-    ((order == :big)? ret.reverse : ret).join
+  def to_bytes(order=nil, siz=nil)
+    to_chars(order,siz) {|c| c.chr }.join
   end
 
-  # convert a number to hex with width and endian options
-  def to_hex(siz=nil, order=:big)
-    raise "Can't convert negative numbers" if self < 0
-    n = ([0,nil].include? siz)? self : self % (2**(siz*8))
-    ret = Array.new(siz || 0){"00"}
-    i=0
-
-    begin
-      c = (n % 256)
-      ret[i] = HEXCHARS[c.clear_bits(0x0f) >> 4] + 
-               HEXCHARS[c.clear_bits(0xf0)]
-      i+=1
-    end while ((n=(n >> 8)) != 0)
-
-    ((order == :big)? ret.reverse : ret).join
-
+  # Converts a number to hex string with width and endian options.
+  # "packs" a number into bytes using bit-twiddling instead of pack()
+  #
+  # Uses to_chars under the hood. See also: to_bytes
+  #
+  # args: 
+  #   siz:  pack to this size. larger numbers will wrap
+  #   order: byte order - :big or :little
+  #                       (only :big has meaning)
+  #
+  def to_hex(o=nil, s=nil)
+    to_chars(o,s) {|c| 
+      HEXCHARS[c.clear_bits(0x0f) >> 4] + HEXCHARS[c.clear_bits(0xf0)]
+    }.join
   end
 
-  def to_guid(order=:big)
-    raw = self.to_bytes(16, order)
-    a,b,c,d,*e = raw.unpack("VvvnC6").map{|x| x.to_hex}
-    e = e.join
-    [a,b,c,d,e].join("-").upcase
-  end
+  # XXX TODO Fixme for new to_bytes/char etc.
+#  def to_guid(order=RBkB::DEFAULT_BYTE_ORDER)
+#    raw = self.to_bytes(order, 16)
+#    a,b,c,d,*e = raw.unpack("VvvnC6").map{|x| x.to_hex}
+#    e = e.join
+#    [a,b,c,d,e].join("-").upcase
+#  end
 
 end # class Numeric
 
@@ -613,7 +630,9 @@ module Zlib
     OS_UNKNOWN  => :unknown
   }
 
+  # Helpers for Zlib::GzipFile... more to come?
   class GzipFile
+
     ## extra info dump for gzipped files
     def get_xtra_info
       info = {
