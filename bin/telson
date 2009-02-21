@@ -1,0 +1,108 @@
+#!/usr/bin/env ruby
+# telson <emonti at matasano> 3/15/2008
+#----------------------------------------------------------------------
+#
+# This is an implementation of the original blackbag "telson" around 
+# ruby and eventmachine. 
+#
+# Telson can do the following things with minimum fuss: 
+#   - Run as a server or client using UDP or TCP
+#   - Debug protocols without a lot of work up front
+#   - Observe client/server behaviors using different messages at
+#     various phases of a conversation.
+# 
+#----------------------------------------------------------------------
+#
+# Usage: telson -h
+#
+
+require 'eventmachine'
+require 'rbkb/util'
+require 'rbkb/extends'
+require 'rbkb/plug'
+
+Plug::UI::LOGCFG[:verbose] = true
+Plug::UI::LOGCFG[:dump] = :hex
+
+
+b_addr = Plug::Blit::DEFAULT_IPADDR
+b_port = Plug::Blit::DEFAULT_PORT
+
+srced = persist = false
+
+s_addr = "0.0.0.0"
+s_port = 0
+
+proto = :TCP
+
+arg = bkb_stdargs(nil, {})
+arg.banner += " host:port"
+
+arg.on("-u", "--udp", "UDP mode") do
+  proto=:UDP
+end
+
+arg.on("-b", "--blit=ADDR:PORT", "Where to listen for blit") do |b|
+  unless m=/^(?:([\w\.]+):)?(\d+)$/.match(b)
+    raise "invalid blit address/port"
+  end
+  b_port = m[2].to_i
+  b_addr = m[1] if m[1]
+end
+
+arg.on("-o", "--output=FILE", "Output to file instead of screen") do |f|
+  Plug::UI::LOGCFG[:out] = File.open(f, "w")
+end
+
+arg.on("-q", "--quiet", "Turn off verbose logging") do
+  Plug::UI::LOGCFG[:verbose] = false
+end
+
+arg.on("-r", "--reconnect", "Attempt to reconnect endlessly.") do
+  persist=true
+end
+
+arg.on("-s", "--source=(ADDR:?)PORT", "Bind on port (and addr?)") do |p|
+  if m=/^(?:([\w\.]+):)?(\d+)$/.match(p)
+    s_addr = $1 if $1
+    s_port = $2.to_i
+    srced = true
+  else
+    raise "Invalid listen argument: #{p.inspect}"
+  end
+end
+
+
+arg.parse!(ARGV) rescue bail "Error: #{$!}\nUse -h|--help for more info."
+
+# Get target argument
+unless (m = /^([\w\.]+):(\d+)$/.match(ARGV.shift)) and ARGV.shift.nil?
+  bail arg
+end
+
+t_addr = m[1]
+t_port = m[2].to_i
+
+loop do
+  EventMachine.run {
+    if proto == :TCP
+      bail "Sorry: --source only works with UDP. Blame EventMachine!" if srced
+
+      c=EventMachine.connect(t_addr, t_port, Plug::Telson, proto)
+
+    elsif proto == :UDP
+      c=EventMachine.open_datagram_socket(s_addr, s_port, Plug::Telson, proto)
+      c.peers.add_peer_manually(t_addr, t_port)
+
+    ### someday maybe raw or others?
+    else
+      raise "bad protocol"
+    end
+
+    EventMachine.start_server(b_addr, b_port, Plug::Blit, :TCP, c)
+    Plug::UI::verbose("** BLITSRV-#{b_addr}:#{b_port}(TCP) Started")
+  }
+  break unless persist
+  Plug::UI::verbose("** RECONNECTING")
+end
+

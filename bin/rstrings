@@ -1,0 +1,121 @@
+#!/usr/bin/env ruby
+#
+# rstrings is "strings"... in ruby... with extra stuff
+#
+# Usage: rstrings [options] <file | blank for stdin>
+#   -h, --help                       Show this message
+#   -v, --version                    Show version and exit
+#   -s, --start=OFFSET               Start at offset
+#   -e, --end=OFFSET                 End at offset
+#   -t, --encoding-type=TYPE         Encoding: ascii|unicode|both (default=both)
+#   -l, --min-length=NUM             Minimum length of strings (default=6)
+#   -a, --align=ALIGNMENT            Match only on alignment (default=none)
+# 
+
+require 'rbkb/util'
+require 'rbkb/extends'
+
+#-------------------------------------------------------------------------------
+# Init options and arg parsing
+OPTS = {
+  :start_off => 0, 
+  :end_off => -1, 
+  :encoding => :both, 
+  :minimum => 6,
+  :align => nil,
+  :indat => Array.new,
+  :fnames => Array.new,
+}
+
+arg = bkb_stdargs(nil, OPTS)
+
+arg.banner += " <file | blank for stdin>"
+
+#------------------------------------------------------------------------------
+# Add local options
+
+arg.on("-s", "--start=OFFSET", "Start at offset") do |s|
+  unless m=/^(?:(\d+)|0x([A-Fa-f0-9]+))$/.match(s)
+    raise "invalid offset '#{s}'"
+  end
+  OPTS[:start_off] = (m[2])? m[0].hex : m[0].to_i
+end
+
+arg.on("-e", "--end=OFFSET", "End at offset") do |e|
+  unless m=/^(?:(\d+)|0x([A-Fa-f0-9]+))$/.match(e)
+    raise "invalid offset '#{e}'"
+  end
+  OPTS[:end_off] = (m[2])? m[0].hex : m[0].to_i
+end
+
+arg.on("-t", "--encoding-type=TYPE", 
+  "Encoding: ascii/unicode/both (default=#{OPTS[:encoding]})") do |t|
+    OPTS[:encoding] = t.to_sym
+end
+
+arg.on("-l", "--min-length=NUM", Numeric,
+  "Minimum length of strings (default=#{OPTS[:minimum]})") do |l|
+    OPTS[:minimum] = l
+end
+
+arg.on("-a", "--align=ALIGNMENT", Numeric, 
+  "Match only on alignment (default=none)") do |a|
+    (OPTS[:align] = a) > 0 or raise "bad alignment '#{a}'"
+end
+
+
+#------------------------------------------------------------------------------
+# Parse arguments
+arg.parse!(ARGV) rescue bail "Error: #{$!}\n#{arg}"
+
+# default string arg
+if OPTS[:indat].empty? and not ARGV.empty?
+  while a=ARGV.shift
+    OPTS[:indat] << File.read(a) rescue(bail "Error: Can't open '#{a}'")
+    OPTS[:fnames] << a
+  end
+end
+
+# catchall
+if ARGV.length != 0 
+  bail "Error: bad arguments - #{ARGV.join(' ')}\n#{arg}"
+end
+
+if OPTS[:indat].empty?
+  OPTS[:indat] << STDIN.read() if OPTS[:indat].empty?
+  OPTS[:fnames] << "[STDIN]"
+end
+
+#------------------------------------------------------------------------------
+# Do stuff
+
+start_off = OPTS[:start_off]
+end_off   = OPTS[:end_off]
+enc  = OPTS[:encoding]
+min  = OPTS[:minimum]
+align = OPTS[:align]
+
+OPTS[:pr_fnames]=true if OPTS[:fnames].size > 1
+
+begin
+  i=0
+  while buf=OPTS[:indat].shift
+    buf[start_off..end_off].strings(
+      :encoding => enc,
+      :minimum => min,
+      :align => align
+    ) do |off, len, type, str|
+      if OPTS[:pr_fnames]
+        print "#{OPTS[:fnames][i]}:"
+      end
+      puts "#{(off+start_off).to_hex.rjust(8,"0")}:"+
+           "#{(len+start_off).to_hex.rjust(8,"0")}:"+
+           "#{type.to_s[0,1]}:#{str.delete("\000").inspect}"
+    end
+    i+=1
+  end
+rescue
+#  STDERR.puts $!
+#  exit 1
+end
+

@@ -1,0 +1,93 @@
+#!/usr/bin/env ruby
+#
+# blit is for use with any of the "plug" tools such as telson, feed, blitplug.
+# It is used to send data over a socket via their OOB blit listener.
+#
+# Usage: blit [options] <data | blank for stdin>
+#     -h, --help                       Show this message
+#     -v, --version                    Show version and exit
+#     -f, --file FILENAME              Input from FILENAME
+#     -t, --trans-protocol=PROTO       Blit transport protocol TCP/UDP
+#     -b, --blitsrv=ADDR:PORT          Where to send blit messages
+#     -i, --peer-index=IDX             Index for remote peer to receive
+#     -l, --list-peers                 Lists the peer array for the target
+#     -k, --kill                       Stops the remote event loop.
+# 
+
+require 'rbkb/util'
+require 'rbkb/plug'
+require 'socket'
+
+#------------------------------------------------------------------------------
+# Init options and arg parsing
+
+OPTS = {
+  :b_addr => Plug::Blit::DEFAULT_IPADDR,
+  :b_port => Plug::Blit::DEFAULT_PORT,
+  :bp_proto => :TCP,
+  :b_peeridx => 0,
+}
+
+blit_msg = nil
+
+arg = bkb_stdargs(nil, OPTS)
+arg = bkb_inpargs(arg, OPTS)
+
+arg.banner += " <data | blank for stdin>"
+
+
+#------------------------------------------------------------------------------
+# Add local options here
+
+arg.on("-t", "--trans-protocol=PROTO", "Blit transport protocol TCP/UDP") do |t|
+  OPTS[:b_proto] = t.upcase.to_sym
+end
+
+arg.on("-b", "--blitsrv=ADDR:PORT", "Where to send blit messages") do |b|
+  unless(m=/^(?:([\w\.]+):)?(\d+)$/.match(b))
+    bail "invalid blit address/port"
+  end
+  OPTS[:b_port] = m[2].to_i
+  OPTS[:b_port] = m[1] if m[1]
+end
+
+arg.on("-i", "--peer-index=IDX", Numeric, "Index for remote peer to receive") do |i|
+  OPTS[:b_peeridx] = i
+end
+
+arg.on("-l", "--list-peers", "Lists the peer array for the target") do
+  blit_msg = Plug::Blit.make_list_peers
+end
+
+arg.on("-k", "--kill", "Stops the remote event loop.") do
+  blit_msg = Plug::Blit.make_kill
+end
+
+#------------------------------------------------------------------------------
+# Parse arguments
+arg.parse!(ARGV) rescue bail "Error: #{$!}\nUse -h|--help for more info."
+
+unless blit_msg
+  if OPTS[:indat].nil?
+    OPTS[:indat] = (ARGV.length > 0)?  ARGV.join(" ") : STDIN.read()
+  end
+  blit_msg = Plug::Blit.make_sendmsg(OPTS[:b_peeridx], OPTS[:indat]) 
+end
+
+#------------------------------------------------------------------------------
+# Do stuff
+
+begin
+  Plug::Blit.blit_init(
+    :addr => OPTS[:b_addr],
+    :port => OPTS[:b_port],
+    :protocol => OPTS[:b_proto]
+  )
+
+  Plug::Blit.blit_raw(blit_msg)
+
+rescue
+  bail $!
+  exit 1
+end
+

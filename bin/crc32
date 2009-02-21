@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+# (emonti at matasano) Matasano Security LLC
+#
+# crc32.rb : returns a crc32 checksum in hex from stdin or a file
+# 
+# Usage: crc32 [options]
+#     -h, --help                       Show this message
+#     -v, --version                    Show version and exit
+#     -f, --file FILENAME              Input from FILENAME
+#     -r, --range=START[:END]          Start and optional end range
+#     -x, --hexrange=START[:END]       same, but in hex
+
+require 'rbkb/util'
+require 'rbkb/extends'
+
+OPTS = {:first => 0, :last => -1}
+arg = bkb_stdargs(nil, OPTS)
+arg = bkb_inpargs(arg, OPTS)
+
+arg.on("-r", "--range=START[:END]", "Start and optional end range") do |r|
+
+  raise "-x and -r are mutually exclusive" if OPTS[:first]
+
+  unless m=/^(-?[0-9]+)(?::(-?[0-9]+))?$/.match(r)
+    raise "invalid range #{r.inspect}"
+  end
+
+  OPTS[:first] = $1.to_i
+  OPTS[:last] = $2.to_i if $2
+end
+
+arg.on("-x", "--hexrange=START[:END]", "same, but in hex") do |r|
+
+  raise "-x and -r are mutually exclusive" if OPTS[:first]
+
+  unless m=/^(-?[0-9a-f]+)(?::(-?[0-9a-f]+))?$/i.match(r)
+    raise "invalid range #{r.inspect}"
+  end
+
+  OPTS[:first]=($1[0,1] == '-')? ($1[1..-1]).hex_to_num * -1 : $1.hex_to_num
+  if $2
+    OPTS[:last]=($2[0,1] == '-')? ($2[1..-1]).hex_to_num * -1 : $2.hex_to_num
+  end
+end
+
+begin
+  arg.parse!
+
+  raise "bad arguments #{ARGV.join(" ").inspect}" unless (ARGV.length == 0)
+
+  OPTS[:indat] ||= STDIN.read()
+
+  puts OPTS[:indat][ OPTS[:first] .. OPTS[:last] ].crc32.to_hex
+
+rescue
+  bail "Error: #{$!}\n#{arg}"
+end
+

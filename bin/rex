@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+#
+# lazy form of ruby -e "xxxx". All commandline arguments get smeared to
+# pure ruby.
+
+require 'pp'
+require 'rbkb/extends'
+
+eval ARGV.join(' ');
+

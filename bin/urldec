@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+# Author Eric Monti (emonti at matasano)
+#
+# urldec converts a url-encoded string back to its raw form.
+# (url encoding is really just fancy hex encoding)
+#
+# Usage: urldec [options] <data | blank for stdin>
+#     -h, --help                       Show this message
+#     -v, --version                    Show version and exit
+#     -f, --file FILENAME              Input from FILENAME
+#     -p, --[no-]plus                  Convert '+' to space (default is true)
+#
+
+require 'rbkb/util'
+require 'rbkb/extends'
+
+#-------------------------------------------------------------------------------
+# Init options and arg parsing
+OPTS = {}
+arg = bkb_stdargs(nil, OPTS)
+
+arg.banner += " <data | blank for stdin>"
+
+arg = bkb_inpargs(arg, OPTS)
+
+arg.on("-p", "--[no-]plus", "Convert '+' to space (default is true)") do |p|
+  OPTS[:noplus] = (not p)
+end
+
+
+#------------------------------------------------------------------------------
+# Add local options here
+
+#------------------------------------------------------------------------------
+# Parse arguments
+arg.parse!(ARGV) rescue bail "Error: #{$!}\n#{arg}"
+
+# default string arg
+if OPTS[:indat].nil? and a=ARGV.shift
+	OPTS[:indat] = a
+end
+
+# catchall
+if ARGV.length != 0 
+    bail "Error: bad arguments - #{ARGV.join(' ')}\n#{arg}"
+end
+
+OPTS[:indat] ||= STDIN.read()
+
+#------------------------------------------------------------------------------
+# Do stuff
+
+STDOUT.write(OPTS[:indat].urldec(:noplus => OPTS[:noplus]))
+

@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+# Author Eric Monti (emonti at matasano)
+#
+# repeating string xor
+#
+# Usage: xor [options] -k|-s <key> <data | stdin>
+#     -h, --help                       Show this message
+#     -v, --version                    Show version and exit
+#     -f, --file FILENAME              Input from FILENAME
+# 
+#   Key options (one of the following is required):
+#     -s, --strkey STRING              xor against bare STRING
+#     -x, --hexkey HEXSTR              xor against decoded HEXSTR
+# 
+
+require 'rbkb/util'
+require 'rbkb/extends'
+
+#-------------------------------------------------------------------------------
+# Init options and arg parsing
+OPTS = {}
+arg = bkb_stdargs(nil, OPTS)
+arg = bkb_inpargs(arg, OPTS)
+
+arg.banner += " -k|-s <key> <data | stdin>"
+
+#------------------------------------------------------------------------------
+# Add local options
+arg.separator ""
+arg.separator "  Key options (one of the following is required):"
+
+arg.on("-s", "--strkey STRING", "xor against bare STRING")  do |s|
+    bail "only one key option can be specified with -s or -x" if OPTS[:key]
+    OPTS[:key] = s
+end
+
+arg.on("-x", "--hexkey HEXSTR", "xor against decoded HEXSTR") do |x|
+    bail "only one key option can be specified with -s or -x" if OPTS[:key]
+    x.sub!(/^0[xX]/, '')
+    bail "Unable to parse hex string" unless OPTS[:key] = x.unhexify
+end
+
+#------------------------------------------------------------------------------
+# Parse arguments
+arg.parse!(ARGV) rescue bail "Error: #{$!}\n#{arg}"
+
+bail "You must specify a key with -s or -x\n#{arg}" unless OPTS[:key]
+
+OPTS[:indat] ||= ARGV.shift
+
+if ARGV.length != 0
+    bail "Error: bad arguments - #{ARGV.join(' ')}\n-h|--help for more info."
+end
+
+OPTS[:indat] ||= STDIN.read()
+
+STDOUT.write OPTS[:indat].xor(OPTS[:key])
+

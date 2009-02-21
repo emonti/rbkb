@@ -1,0 +1,89 @@
+#!/usr/bin/env ruby
+# searches for a binary string in input
+# string is provided 'hexified'
+#
+# usage: bgrep 'deadbeef' file
+#
+# use -h for more info
+
+require 'rbkb/util'
+require 'rbkb/extends'
+
+#-------------------------------------------------------------------------------
+# Init options and arg parsing
+OPTS = {
+  :start_off => 0, 
+  :end_off => -1, 
+  :align => nil
+}
+
+arg = bkb_stdargs(nil, OPTS)
+
+arg.banner += " <subject> <file | blank for stdin>"
+
+arg.on("-x", "--[no-]hex", "Specify subject as hex (default: false)") do |x|
+  OPTS[:hex] = x
+end
+
+arg.on("-r", "--[no-]regex", "Specify subject as regex (default: false)") do |r|
+  OPTS[:rx] = r
+end
+
+arg.on("-a", "--align=BYTES", Numeric, 
+       "Only match on alignment boundary") do |a|
+  OPTS[:align] = a
+end
+
+arg.on("-n", "--[no-]filename", "Suppress prefixing of filenames.") do |n|
+  OPTS[:suppress_fname] = n
+end
+
+
+#------------------------------------------------------------------------------
+# Parse arguments
+begin
+  arg.parse!
+
+  unless find = ARGV.shift
+    raise "need subject argument"
+  end
+
+  if OPTS[:hex] and OPTS[:rx]
+    raise "-r and -x are mutually exclusive"
+  end
+
+  if OPTS[:hex]
+    raise "you specified -x for hex and the subject isn't" unless find.ishex?
+    find = find.unhexify
+  elsif OPTS[:rx]
+    find = Regexp.new(find, Regexp::MULTILINE)
+  end
+
+  align = OPTS[:align]
+
+  if fname=ARGV.shift
+    dat = File.read(fname)
+    fname = nil unless ARGV[0]  # only print filename for multiple files
+  else
+    fname = nil
+    dat = STDIN.read
+  end
+
+  loop do 
+    dat.bgrep(find, align) do |hit_start, hit_end, match|
+      print "#{fname}:" if fname and not OPTS[:suppress_fname]
+
+      puts("#{(hit_start).to_hex.rjust(8,"0")}:"+
+           "#{(hit_end).to_hex.rjust(8,"0")}:b:"+
+           "#{match.inspect}")
+    end
+
+    break unless fname=ARGV.shift
+    dat = File.read(fname)
+  end
+
+rescue
+  STDERR.puts $!, "  use -h for help"
+  exit 1
+end
+
