@@ -30,10 +30,12 @@
 
 require 'rubygems'
 require 'eventmachine'
-require 'rbkb/plug/feed_import'
-require 'rbkb/util'
-require 'rbkb/extends'
+require 'rbkb'
 require 'rbkb/plug'
+require 'rbkb/plug/feed_import'
+require 'rbkb/command_line'
+
+include RBkB::CommandLine
 
 ## Default "UI" options
 Plug::UI::LOGCFG[:verbose] = true

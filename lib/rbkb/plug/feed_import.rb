@@ -7,7 +7,7 @@ $VERBOSE=nil
 require 'pcaplet'
 $VERBOSE=false
 
-require 'rbkb/extends'
+require 'rbkb'
 
 module FeedImport
 

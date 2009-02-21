@@ -7,7 +7,7 @@
 #
 # Telson can do the following things with minimum fuss: 
 #   - Run as a server or client using UDP or TCP
-#   - Debug protocols without a lot of work up front
+#   - Debugging network protocols
 #   - Observe client/server behaviors using different messages at
 #     various phases of a conversation.
 # 
@@ -16,10 +16,11 @@
 # Usage: telson -h
 #
 
-require 'eventmachine'
-require 'rbkb/util'
-require 'rbkb/extends'
+require 'rbkb'
 require 'rbkb/plug'
+require 'rbkb/command_line'
+
+include RBkB::CommandLine
 
 Plug::UI::LOGCFG[:verbose] = true
 Plug::UI::LOGCFG[:dump] = :hex

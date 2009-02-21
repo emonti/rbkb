@@ -5,14 +5,16 @@
 #
 # Usage: d64 -h
 #
-require 'rbkb/util'
-require 'rbkb/extends'
+require 'rbkb'
+require 'rbkb/command_line'
+
+include RBkB::CommandLine
 
 #-------------------------------------------------------------------------------
 # Init options and arg parsing
 OPTS = {}
 arg = bkb_stdargs(nil, OPTS)
-arg = bkb_inpargs(arg, OPTS)
+arg = bkb_inputargs(arg, OPTS)
 
 arg.banner += " <data | blank for stdin>"
 

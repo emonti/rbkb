@@ -15,8 +15,10 @@
 #     -l, --length=LEN                 Ignore all else and use LEN
 #
 
-require 'rbkb/util'
-require 'rbkb/extends'
+require 'rbkb'
+require 'rbkb/command_line'
+
+include RBkB::CommandLine
 
 #-------------------------------------------------------------------------------
 # Init options and arg parsing
@@ -27,7 +29,7 @@ endpair = [:big, :little]
 OPTS = {:nudge => 0, :size => 4, :endian => endpair[0]}
 
 arg = bkb_stdargs(nil, OPTS)
-arg = bkb_inpargs(arg, OPTS)
+arg = bkb_inputargs(arg, OPTS)
 
 arg.banner += " <data | blank for stdin>"
 
@@ -68,5 +70,5 @@ unless len=OPTS[:static]
   len += OPTS[:nudge]
 end
 
-STDOUT.write len.to_bytes(OPTS[:size], OPTS[:endian]) << OPTS[:indat]
+STDOUT.write len.to_bytes(OPTS[:endian], OPTS[:size]) << OPTS[:indat]
 

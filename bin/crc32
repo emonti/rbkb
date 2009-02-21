@@ -10,12 +10,14 @@
 #     -r, --range=START[:END]          Start and optional end range
 #     -x, --hexrange=START[:END]       same, but in hex
 
-require 'rbkb/util'
-require 'rbkb/extends'
+require 'rbkb'
+require 'rbkb/command_line'
+
+include RBkB::CommandLine
 
 OPTS = {:first => 0, :last => -1}
 arg = bkb_stdargs(nil, OPTS)
-arg = bkb_inpargs(arg, OPTS)
+arg = bkb_inputargs(arg, OPTS)
 
 arg.on("-r", "--range=START[:END]", "Start and optional end range") do |r|
 

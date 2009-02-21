@@ -2,7 +2,7 @@
 
 require 'eventmachine'
 require 'rbkb/plug'
-require 'rbkb/extends'
+require 'rbkb'
 
 module Plug
   class PeerStub

@@ -1,9 +1,11 @@
 #!/usr/bin/env ruby
 # (emonti at matasano) Matasano Security LLC 2008
 
-require 'rbkb/util'
-require 'rbkb/extends'
+require 'rbkb'
+require 'rbkb/command_line'
 require 'stringio'
+
+include RBkB::CommandLine
 
 first = 0
 last = nil

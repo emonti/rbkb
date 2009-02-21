@@ -12,12 +12,14 @@
 #     -x, --hexrange=START[:END]       same, but in hex
 #
 
-require 'rbkb/util'
-require 'rbkb/extends'
+require 'rbkb'
+require 'rbkb/command_line'
+
+include RBkB::CommandLine
 
 OPTS = {:last => -1}
 arg = bkb_stdargs(nil, OPTS)
-arg = bkb_inpargs(arg, OPTS)
+arg = bkb_inputargs(arg, OPTS)
 
 arg.banner += " start (no args when using -r|-x|)"
 

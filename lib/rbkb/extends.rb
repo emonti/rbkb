@@ -7,6 +7,7 @@ require 'sha1'
 
 module RBkB
   DEFAULT_BYTE_ORDER=:big
+  HEXCHARS = [("0".."9").to_a, ("a".."f").to_a].flatten
 end
 
 # Generates a "universally unique identifier"
@@ -26,7 +27,6 @@ def with(x)
   yield x if block_given?; x
 end if not defined? with
 
-HEXCHARS = [("0".."9").to_a, ("a".."f").to_a].flatten
 
 #-----------------------------------------------------------------------------
 
@@ -44,10 +44,11 @@ class String
     unless (opts[:rx] ||= /[^A-Za-z0-9_\.~-]/).kind_of? Regexp
       raise "rx must be a regular expression for a character class"
     end
+    hx = RBkB::HEXCHARS
 
     s.gsub(opts[:rx]) do |c| 
       c=c[0]
-      (plus and c==32)? '+' : "%" + (HEXCHARS[(c >> 4)] + HEXCHARS[(c & 0xf )])
+      (plus and c==32)? '+' : "%" + (hx[(c >> 4)] + hx[(c & 0xf )])
     end
   end
   
@@ -99,13 +100,15 @@ class String
       raise "rx must be a regular expression for a character class"
     end
 
+    hx=RBkB::HEXCHARS
+
     out=Array.new
 
     s.each_byte do |c| 
       hc = if (rx and not rx.match c.chr)
              c.chr 
            else
-             pre + (HEXCHARS[(c >> 4)] + HEXCHARS[(c & 0xf )]) + suf
+             pre + (hx[(c >> 4)] + hx[(c & 0xf )]) + suf
            end
       out << (hc)
     end
@@ -597,7 +600,7 @@ class Numeric
   #
   def to_hex(o=nil, s=nil)
     to_chars(o,s) {|c| 
-      HEXCHARS[c.clear_bits(0x0f) >> 4] + HEXCHARS[c.clear_bits(0xf0)]
+      RBkB::HEXCHARS[c.clear_bits(0xf) >> 4]+RBkB::HEXCHARS[c.clear_bits(0xf0)]
     }.join
   end
 

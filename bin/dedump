@@ -1,8 +1,13 @@
 #!/usr/bin/env ruby
 # Author Eric Monti (emonti at matasano)
+#
+# Reverses a hexdump back to raw data. Designed to work with hexdumps created 
+# by Unix utilities like 'xxd' as well as 'hexdump -C'.
 
-require 'rbkb/util'
-require 'rbkb/extends'
+require 'rbkb'
+require 'rbkb/command_line'
+
+include RBkB::CommandLine
 
 #------------------------------------------------------------------------------
 # Init options and arg parsing

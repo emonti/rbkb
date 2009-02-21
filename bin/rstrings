@@ -12,8 +12,10 @@
 #   -a, --align=ALIGNMENT            Match only on alignment (default=none)
 # 
 
-require 'rbkb/util'
-require 'rbkb/extends'
+require 'rbkb'
+require 'rbkb/command_line'
+
+include RBkB::CommandLine
 
 #-------------------------------------------------------------------------------
 # Init options and arg parsing

@@ -11,8 +11,10 @@
 #     -p, --[no-]plus                  Convert '+' to space (default is true)
 #
 
-require 'rbkb/util'
-require 'rbkb/extends'
+require 'rbkb'
+require 'rbkb/command_line'
+
+include RBkB::CommandLine
 
 #-------------------------------------------------------------------------------
 # Init options and arg parsing
@@ -21,7 +23,7 @@ arg = bkb_stdargs(nil, OPTS)
 
 arg.banner += " <data | blank for stdin>"
 
-arg = bkb_inpargs(arg, OPTS)
+arg = bkb_inputargs(arg, OPTS)
 
 arg.on("-p", "--[no-]plus", "Convert '+' to space (default is true)") do |p|
   OPTS[:noplus] = (not p)
