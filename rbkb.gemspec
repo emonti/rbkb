@@ -14,7 +14,7 @@ libfiles = %w{
 
 SPEC = Gem::Specification.new do |s|
   s.name      = "rbkb"
-  s.version   = "0.6.1"
+  s.version   = "0.6.1.1"
   s.author    = "Eric Monti"
   s.email     = "emonti@matasano.com"
   s.homepage  = "http://www.matasano.com"
@@ -29,8 +29,7 @@ SPEC = Gem::Specification.new do |s|
 
   s.has_rdoc      = true
   s.rdoc_options += [ '--title', "#{s.name} -- #{s.summary}",
-                      '--main', 'README.rdoc',
-                      '--line-numbers' ]
+                      '--line-numbers' ] + extrafiles
 
   s.add_dependency "eventmachine", ">= 0.12.2"
 end
