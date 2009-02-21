@@ -1,0 +1,33 @@
+
+= Ruby BlackBag
+
+A miscellaneous collection of tools and ruby library helpers related to 
+pen-testing and reversing. (Disclaimer: much of what's in the black bag 
+comes from a desire to do less typing)
+
+
+== Rationale
+
+rbkb is inspired by Matasano BlackBag (a set of similar tools written in C).
+
+See:
+* http://www.matasano.com/log/1048/blackbag-091-new-link-and-minor-fixes/
+* http://www.matasano.com/log/552/code-release-blackbag-09-binary-protocol-reversing-unix-thingies/
+
+Things go into the black bag as they get dreamed up, usually based on some
+repetetive task or desire for some new tool.
+
+Along the way, some of tools in the blackbag spirit make their way into 'rbkb' 
+that may or may not make it to 'bkb' right away (or ever). Similarly some of
+the things in 'bkb' have not yet made it to 'rbkb' (and may not).
+
+
+=== Requirements
+
+* For the plug based network stuff, you'll need EventMachine >= 0.12.0
+
+  $ gem install eventmachine
+
+* Some of the plug stuff also requires ruby pcap available from:
+    http://raa.ruby-lang.org/project/pcap/
+
