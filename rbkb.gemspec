@@ -29,6 +29,7 @@ SPEC = Gem::Specification.new do |s|
 
   s.has_rdoc      = true
   s.rdoc_options += [ '--title', "#{s.name} -- #{s.summary}",
+                      '--main', 'README.rdoc',
                       '--line-numbers' ] + extrafiles
 
   s.add_dependency "eventmachine", ">= 0.12.2"
