@@ -1,3 +1,4 @@
+# Define several variables with filenames that require repeating
 
 extrafiles = %w{ README.rdoc usage.txt }
 
