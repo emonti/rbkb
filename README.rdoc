@@ -1,12 +1,13 @@
 
 = Ruby BlackBag
 
-A miscellaneous collection of tools and ruby library helpers related to 
-pen-testing and reversing. (Disclaimer: much of what's in the black bag 
-comes from a desire to do less typing)
-
+A miscellaneous collection of command-line tools and ruby library helpers 
+related to pen-testing and reversing. 
 
 == Rationale
+
+    Disclaimer: much of what's in the black bag came from a desire to do less 
+    typing
 
 rbkb is inspired by Matasano BlackBag (a set of similar tools written in C).
 
@@ -14,8 +15,9 @@ See:
 * http://www.matasano.com/log/1048/blackbag-091-new-link-and-minor-fixes/
 * http://www.matasano.com/log/552/code-release-blackbag-09-binary-protocol-reversing-unix-thingies/
 
-Things go into the black bag as they get dreamed up, usually based on some
-repetetive task or desire for some new tool.
+Things go into the black bag as they stolen (as a compliment!) or dreamed up, 
+usually based on simplifying some repetetive task or desire for a new tool.
+
 
 Along the way, some of tools in the blackbag spirit make their way into 'rbkb' 
 that may or may not make it to 'bkb' right away (or ever). Similarly some of
