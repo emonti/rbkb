@@ -5,18 +5,19 @@ require 'zlib'
 require 'open3'
 require 'sha1'
 
+# Generates a "universally unique identifier"
 def uuid
-    (SHA1::sha1(rand.to_s)).to_s
+  (SHA1::sha1(rand.to_s)).to_s
 end
 
+# Generates a random alphanumeric string of 'size' bytes (8 by default)
 def random_string(size = 8)
   chars = ('A'..'Z').to_a + ('a'..'z').to_a + ('0'..'9').to_a
   (1..size).collect{|a| chars[rand(chars.size)]}.join
 end
 
 
-
-# simple syntactic sugar to pass any object to a block
+# Simple syntactic sugar to pass any object to a block
 def with(x)
   yield x if block_given?; x
 end if not defined? with
@@ -24,6 +25,7 @@ end if not defined? with
 HEXCHARS = [("0".."9").to_a, ("a".."f").to_a].flatten
 
 #-----------------------------------------------------------------------------
+
 # Mixins and class-specific items
 
 class String
@@ -45,7 +47,6 @@ class String
     end
   end
   
-
   # Undo percent-hexified url encoding data
   def urldec(opts={})
     s=self
@@ -78,8 +79,8 @@ class String
   end
 
 
-  # Convert a string to ASCII hex string
-  # supports a few options for format:
+  # Convert a string to ASCII hex string. Supports a few options for format:
+  #
   #   :delim - delimter between each hex byte
   #   :prefix - prefix before each hex byte
   #   :suffix - suffix after each hex byte
@@ -108,13 +109,21 @@ class String
   end
 
 
-  # Convert ASCII hex string to raw
-  # d = optional 'delimiter' between hex bytes (zero or more spaces by default)
+  # Convert ASCII hex string to raw. 
+  #
+  # Parameters:
+  #
+  #   d = optional 'delimiter' between hex bytes (zero+ spaces by default)
   def unhexify(d=/\s*/)
     self.strip.gsub(/([A-Fa-f0-9]{1,2})#{d}?/) { $1.hex.chr }
   end
 
-  # converts a hex value to numeric
+  # Converts a hex value to numeric.
+  #
+  # Parameters:
+  #   
+  #   order => :big or :little endian (default is :big)
+  #
   def hex_to_num(order=:big)
     s=self
     raise "invalid hex value: '#{s.inspect}'" unless s.ishex?
@@ -129,9 +138,19 @@ class String
   end
 
 
-  #----------------------------------------------------------------------
   # A "generalized" lazy bytestring -> numeric converter.
-  # bonus: should work with really large bit-size values 
+  #
+  # Parameters:
+  #   
+  #   order => :big or :little endian (default is :big)
+  #
+  # Bonus: should work seamlessly with really large strings.
+  #
+  #   >> ("\xFF"*10).dat_to_num
+  #   => 1208925819614629174706175
+  #   >> ("\xFF"*20).dat_to_num
+  #   => 1461501637330902918203684832716283019655932542975
+  #
   def dat_to_num(order=:big)
     s=self
     s.reverse! if order == :little
@@ -146,9 +165,11 @@ class String
 
   #### Crypto'ey stuff
 
+  # calculates entropy in string
+  #
   # TQBF's description:
-  # I also added a chi-squared test to quickly figure out entropy of a
-  # string, in "bits of randomness per byte". This is useful, so:
+  # "I also added a chi-squared test to quickly figure out entropy of a
+  # string, in "bits of randomness per byte". This is useful, so..."
   def entropy
     e = 0
     0.upto(255) do |i|
@@ -177,13 +198,14 @@ class String
     (self.dat_to_num ^ x)#.to_bytes
   end
 
-  #----------------------------------------------------------------------
   # String randomizer
   def randomize ; self.split('').randomize.to_s ; end
+
+  # In-place string randomizer
   def randomize! ; self.replace(randomize) end
 
-  # ==========================================================================
-  # Extends String class to return a hexdump in the style of 'hexdump -C'
+
+  # Returns or prints a hexdump in the style of 'hexdump -C'
   #
   # :len => optionally specify a length other than 16 for a wider or thinner 
   # dump. If length is an odd number, it will be rounded up.
@@ -193,12 +215,18 @@ class String
   # it as a string.
   #
   # Example:
-  # xxd = dat.hexdump(:len => 16, :out => StringIO.new)
-  # xxd => a hexdump
   #
-  # xxd = dat.hexdump(:len => 16, :out => STDERR)
-  # xxd => nil
-  # ==========================================================================
+  # Here's the default behavior done explicitely:
+  #
+  #   >> xxd = dat.hexdump(:len => 16, :out => StringIO.new)
+  #   => <a string containing hexdump>
+  #
+  # Here's how to change it to STDERR
+  #
+  #   >> xxd = dat.hexdump(:len => 16, :out => STDERR)
+  #   <prints hexdump on STDERR>
+  #   -> nil # return value is nil!
+  #
   def hexdump(opt={})
     s=self
     out = opt[:out] || StringIO.new
@@ -233,9 +261,8 @@ class String
   end
 
 
-  # ==========================================================================
-  # converts a hexdump back to binary - takes the same options as hexdump()
-  # fairly flexible. should work both with 'xxd' and 'hexdump -C' style dumps
+  # Converts a hexdump back to binary - takes the same options as hexdump().
+  # Fairly flexible. Should work both with 'xxd' and 'hexdump -C' style dumps.
   def dehexdump(opt={})
     s=self
     out = opt[:out] || StringIO.new
@@ -264,8 +291,16 @@ class String
     end
   end
   alias dedump dehexdump
+  alias undump dehexdump
+  alias unhexdump dehexdump
 
 
+  # Binary grep
+  # 
+  # Parameters:
+  #
+  #   find  : A Regexp or string to search for in self
+  #   align : nil | numeric alignment (matches only made if aligned)
   def bgrep(find, align=nil)
     if align and (not align.is_a?(Integer) or align < 0)
       raise "alignment must be a integer >= 0"
@@ -304,33 +339,38 @@ class String
     end
   end
 
-  # ==========================================================================
   # A 'strings' method a-la unix strings utility. Finds printable strings in
   # a binary blob.
   # Supports ASCII and little endian unicode (though only for ASCII printable 
   # character.)
   #
-  # Parameters and options:
-  #  - Use the :minimum parameter to specify minimum number of characters
+  # ==Parameters and options:
+  #
+  #  * Use the :minimum parameter to specify minimum number of characters
   #    to match. (default = 6)
-  #  - Use the :encoding parameter as one of :ascii, :unicode, or :both
+  #
+  #  * Use the :encoding parameter as one of :ascii, :unicode, or :both
   #    (default = :ascii)
-  #  - The 'strings' method uses Regexp under the hood. Therefore
+  #
+  #  * The 'strings' method uses Regexp under the hood. Therefore
   #    you can pass a character class for "valid characters" with :valid
   #    (default = /[\r\n [:print:]]/)
-  #  - Supports an optional block, which will be passed |offset, type, string|
+  #
+  #  * Supports an optional block, which will be passed |offset, type, string|
   #    for each match.
   #    The block's boolean return value also determines whether the match 
   #    passes or fails (true or false/nil) and gets returned by the function.
   #
-  # Return Value:
-  #  Returns an array consisting of matches with the following elements:
+  # ==Return Value:
+  #
+  # Returns an array consisting of matches with the following elements:
+  #
   #   [[start_offset, end_offset, string_type, string], ...]
   #
-  #   string_type will be one of :ascii or :unicode
-  #   end_offset will include the terminating null character
-  #   end_offset will include all null bytes in unicode strings (including
-  #   both terminating nulls)
+  #  * string_type will be one of :ascii or :unicode
+  #  * end_offset will include the terminating null character
+  #  * end_offset will include all null bytes in unicode strings (including
+  #  * both terminating nulls)
   # 
   #   If strings are null terminated, the trailing null *IS* included
   #   in the end_offset. Unicode matches will also include null bytes.
@@ -393,16 +433,18 @@ class String
   end
 
   # Does string "start with" dat?
-  # no clue whether/when this is faster than a regex, but it is easier 
-  # than escaping regex characters
+  # No clue whether/when this is faster than a regex, but it is to type.
   def starts_with?(dat)
     self[0,dat.size] == dat
   end
 
-  # returns a single null-terminated ascii string from beginning of string
-  # object. Will return the entire string if no null is encountered.
+  # Returns a single null-terminated ascii string from beginning of self.
+  # This will return the entire string if no null is encountered.
+  #
   # Parameters:
-  #  off = specify an optional beggining offset
+  #
+  #   off = specify an optional beggining offset
+  #
   def cstring(off=0)
     self[ off, self.index("\x00") || self.size ]
   end
@@ -422,9 +464,10 @@ class String
     Zlib.crc32 self
   end
 
-  #  This attempts to identify a blob of data using 'file(1)' via popen3
+  # This attempts to identify a blob of data using 'file(1)' via popen3
   # (using popen3 because IO.popen blows)
-  # See also "fmagic.rb"
+  # Tried doing this with a fmagic ruby extention to libmagic, but it was
+  # a whole lot slower.
   def pipe_magick(arg="")
     ret=""
     Open3.popen3("file #{arg} -") do |w,r,e|
@@ -468,12 +511,14 @@ class String
 end # class String
 
 class Symbol
+  # looks up this symbol as a constant defined in 'ns' (Object by default)
   def const_lookup(ns=Object)
     self.to_s.const_lookup(ns)
   end
 end
 
 class Array
+  # randomizes the order of contents in the Array (self)
   def randomize  ; self.sort_by { rand } ; end
 end
 
