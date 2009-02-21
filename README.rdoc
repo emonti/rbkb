@@ -7,7 +7,8 @@ related to pen-testing and reversing.
 == Rationale
 
     Disclaimer: 
-    Most of what's in the black bag came from a desire to do less typing
+    Most of what's in the black bag came from a desire to do less typing.
+    But there might actually be a few clever things accidentally added.
 
 rbkb is inspired by Matasano BlackBag (a set of similar tools written in C).
 
