@@ -32,6 +32,5 @@ the things in 'bkb' have not yet made it to 'rbkb' (and may not).
 
   $ gem install eventmachine
 
-* Some of the plug stuff also requires ruby pcap available from:
-    http://raa.ruby-lang.org/project/pcap/
+* Some of the plug stuff also requires ruby pcap available from: http://raa.ruby-lang.org/project/pcap/
 
