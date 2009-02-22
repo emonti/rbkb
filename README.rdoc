@@ -25,15 +25,63 @@ Along the way, some of tools in the blackbag spirit make their way into 'rbkb'
 that may or may not make it to 'bkb' right away (or ever). Similarly some of
 the things in 'bkb' have not yet made it to 'rbkb' (and may not).
 
-=== More Info
+=== Command Line Tools
 
-See usage.txt
+The tools almost all support '-h', but I'll admit this only goes so far.
+See usage.txt for a bit of extra info on the various tools. 
 
-=== Requirements
+When I get some spare time, I'll try and do up some examples of using all
+the tools.
 
-* For the plug based network stuff, you'll need EventMachine >= 0.12.0
 
-  $ gem install eventmachine
+== Installation
 
-* Some of the plug stuff also requires ruby pcap available from: http://raa.ruby-lang.org/project/pcap
+==== Pre-Requirements Note
+
+For the plug based network stuff, you'll need EventMachine >= 0.12.2
+Installing the rbkb gem usually takes care of this automatically, but
+if you're doing a manual installation, run:
+
+  gem install eventmachine
+
+
+=== Gem Installation
+
+RBkB is available as a gem from github:
+
+    gem sources -a http://gems.github.com #(you only have to do this once)
+    gem install emonti-rbkb
+
+
+==== Install Note
+
+Installing as root may be risky depending on your rubygems configuration so I
+don't really recommend using 'sudo gem install'. Worst case scenario I know
+of is I blew away my OS X shipped '/usr/bin/crc32' this way. It was written in 
+perl, so I considered this providence and didn't look back. But you may feel
+differently about 'rubygems' arbitrarily clobbering your files.
+
+When installing as a regular user, however, rubygems may stick rbkb's 
+executable bin/* files somewhere unexpected. To find out where these are and 
+either add them to your PATH or copy/symlink them somewhere else (like 
+/usr/local/bin/) do this:
+
+    gem contents emonti-rbkb
+
+
+=== Manual installation:
+
+... or ... you can also install manually without rubygems.
+
+You can access the rbkb project at github. You'll want git installed:
+
+  git clone git://github.com/emonti/rbkb.git
+  cd rbkb
+  cp -r wxirb/lib/* /usr/lib/ruby/1.8/site_ruby/1.8 # or another ruby libdir
+  cp bin/* ~/bin      # or wherever else in your PATH
+
+Run this to generate docs with rdoc the same way the gem would have:
+
+  rdoc --main README.rdoc README.rdoc usage.txt lib
+
 
