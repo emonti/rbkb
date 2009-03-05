@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+#
+#
+
 require 'rubygems'
 require 'eventmachine'
 require 'socket'
@@ -9,7 +12,6 @@ def bail(*msg)
   STDERR.puts msg
   exit 1
 end
-
 
 class Plug
   module UI
