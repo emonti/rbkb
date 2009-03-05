@@ -33,6 +33,6 @@ SPEC = Gem::Specification.new do |s|
                       '--main', 'README.rdoc',
                       '--line-numbers' ] + extrafiles
 
-  s.add_dependency "eventmachine", ">= 0.12.2"
+  s.add_dependency "eventmachine", ">= 0.12.0"
 end
 
