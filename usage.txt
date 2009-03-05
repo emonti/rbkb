@@ -1,5 +1,7 @@
 == Command Line Tools
 
+Below is a list of the command line utilities with short descriptions and
+usage information. Examples to come.
 
 === b64
 
