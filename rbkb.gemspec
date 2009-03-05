@@ -4,8 +4,8 @@ extrafiles = %w{ README.rdoc usage.txt }
 
 executables = %w{
   bin/b64 bin/bgrep bin/blit bin/c bin/crc32 bin/d64 bin/dedump bin/hexify 
-  bin/len bin/rex bin/rstrings bin/slice bin/telson bin/unhexify bin/urldec 
-  bin/urlenc bin/xor bin/plugsrv
+  bin/len bin/plugsrv bin/rex bin/rstrings bin/slice bin/telson bin/unhexify 
+  bin/urldec bin/urlenc bin/xor
 }
 
 libfiles = %w{

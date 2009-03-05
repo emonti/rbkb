@@ -2,7 +2,6 @@
 #
 #
 
-require 'rubygems'
 require 'eventmachine'
 require 'socket'
 require 'optparse'
@@ -13,7 +12,7 @@ def bail(*msg)
   exit 1
 end
 
-class Plug
+class PlugSrv
   module UI
     def log( *msg )
       unless PLUG_OPTS[:quiet]
@@ -65,7 +64,7 @@ class Plug
 
       srv.controller = cli.controller = ctrl
     end
-  end # class Plug::Controller
+  end # class PlugSrv::Controller
 
 
   module BaseTCP
@@ -108,7 +107,7 @@ class Plug
 
 
   module TCPListener
-    include Plug::BaseTCP
+    include PlugSrv::BaseTCP
     attr_accessor :tgtaddr, :tgtport
 
     def post_init
@@ -117,7 +116,7 @@ class Plug
       @sock_peer = Socket.unpack_sockaddr_in(get_peername).reverse
       @sock_peername = @sock_peer.join(':')
 
-      @controller = Plug::Controller.proxy(self)
+      @controller = PlugSrv::Controller.proxy(self)
 
       notify_connection
     end
@@ -126,7 +125,7 @@ class Plug
 
 
   module TCPClient
-    include Plug::BaseTCP
+    include PlugSrv::BaseTCP
     attr_accessor :connected
 
     def post_init
@@ -142,11 +141,9 @@ class Plug
 
   end # module TCPClient
 
-end # module Plug
+end # module PlugSrv
 
 PLUG_OPTS={ :quiet => false, :out => STDOUT }
-
-  if __FILE__ == $0
 
 
   #############################################################################
@@ -207,14 +204,12 @@ PLUG_OPTS={ :quiet => false, :out => STDOUT }
 
 
   # Start controller
-  ctrl = Plug::Controller.new(PLUG_OPTS[:tgtaddr], PLUG_OPTS[:tgtport], Plug::TCPClient)
+  ctrl = PlugSrv::Controller.new(PLUG_OPTS[:tgtaddr], PLUG_OPTS[:tgtport], PlugSrv::TCPClient)
 
   # Start event loop
-  Plug::UI.log "%Starting TCP PlugServer #{PLUG_OPTS[:svraddr]}:#{PLUG_OPTS[:svrport]} -> #{PLUG_OPTS[:tgtaddr]}:#{PLUG_OPTS[:tgtport]}"
+  PlugSrv::UI.log "%Starting TCP PlugServer #{PLUG_OPTS[:svraddr]}:#{PLUG_OPTS[:svrport]} -> #{PLUG_OPTS[:tgtaddr]}:#{PLUG_OPTS[:tgtport]}"
 
   EventMachine::run {
-    EventMachine::start_server(PLUG_OPTS[:svraddr], PLUG_OPTS[:svrport], Plug::TCPListener)
+    EventMachine::start_server(PLUG_OPTS[:svraddr], PLUG_OPTS[:svrport], PlugSrv::TCPListener)
   }
 
-
-end
