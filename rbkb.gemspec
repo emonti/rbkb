@@ -15,7 +15,7 @@ libfiles = %w{
 
 SPEC = Gem::Specification.new do |s|
   s.name      = "rbkb"
-  s.version   = "0.6.1.2"
+  s.version   = "0.6.1.3"
   s.author    = "Eric Monti"
   s.email     = "emonti@matasano.com"
   s.homepage  = "http://www.matasano.com"
