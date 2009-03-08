@@ -5,7 +5,7 @@ require 'zlib'
 require 'open3'
 require 'sha1'
 
-module RBkB
+module Rbkb
   DEFAULT_BYTE_ORDER=:big
   HEXCHARS = [("0".."9").to_a, ("a".."f").to_a].flatten
 end
@@ -33,7 +33,6 @@ end if not defined? with
 # Mixins and class-specific items
 
 class String
-
   # shortcut for hex sanity with regex
   def ishex? ; (self =~ /^[a-f0-9]+$/i)? true : false ; end 
 
@@ -44,7 +43,7 @@ class String
     unless (opts[:rx] ||= /[^A-Za-z0-9_\.~-]/).kind_of? Regexp
       raise "rx must be a regular expression for a character class"
     end
-    hx = RBkB::HEXCHARS
+    hx = Rbkb::HEXCHARS
 
     s.gsub(opts[:rx]) do |c| 
       c=c[0]
@@ -100,7 +99,7 @@ class String
       raise "rx must be a regular expression for a character class"
     end
 
-    hx=RBkB::HEXCHARS
+    hx=Rbkb::HEXCHARS
 
     out=Array.new
 
@@ -344,6 +343,7 @@ class String
         pos += endoff
       end
     end
+    return ret
   end
 
   # A 'strings' method a-la unix strings utility. Finds printable strings in
@@ -563,7 +563,7 @@ class Numeric
   #                       (only :big has meaning)
   #   siz:  pack to this size. larger numbers will wrap
   def to_chars(order=nil, siz=nil)
-    order ||= RBkB::DEFAULT_BYTE_ORDER
+    order ||= Rbkb::DEFAULT_BYTE_ORDER
     n=self
     siz ||= self.size
     ret=[]
@@ -600,12 +600,12 @@ class Numeric
   #
   def to_hex(o=nil, s=nil)
     to_chars(o,s) {|c| 
-      RBkB::HEXCHARS[c.clear_bits(0xf) >> 4]+RBkB::HEXCHARS[c.clear_bits(0xf0)]
+      Rbkb::HEXCHARS[c.clear_bits(0xf) >> 4]+Rbkb::HEXCHARS[c.clear_bits(0xf0)]
     }.join
   end
 
   # XXX TODO Fixme for new to_bytes/char etc.
-#  def to_guid(order=RBkB::DEFAULT_BYTE_ORDER)
+#  def to_guid(order=Rbkb::DEFAULT_BYTE_ORDER)
 #    raw = self.to_bytes(order, 16)
 #    a,b,c,d,*e = raw.unpack("VvvnC6").map{|x| x.to_hex}
 #    e = e.join
@@ -657,7 +657,6 @@ class Object
   end
 end
 
-
 module Enumerable
   def each_recursive(&block)
     self.each do |n|
@@ -666,7 +665,4 @@ module Enumerable
     end
   end
 end
-
-__END__
-
 

@@ -1,73 +1,216 @@
+= rbkb
 
-= Ruby BlackBag (rbkb)
+* http://www.github.com/emonti/rbkb
+
+== DESCRIPTION:
+
+Ruby BlackBag (rbkb)
 
 A miscellaneous collection of command-line tools and ruby library helpers 
 related to pen-testing and reversing. 
 
-== Rationale
+=== Rationale
 
     Disclaimer: 
     Most of what's in the black bag came from a desire to do less typing.
     But there might be a few clever things that were added by accident.
 
-
-RBkB is inspired by Matasano BlackBag (a set of similar tools written in C).
+rbkb is inspired by Matasano BlackBag (a set of similar tools written in C).
 
 See:
 * http://www.matasano.com/log/1048/blackbag-091-new-link-and-minor-fixes/
 * http://www.matasano.com/log/552/code-release-blackbag-09-binary-protocol-reversing-unix-thingies/
 
 Things go into the black bag as they are stolen (as a compliment!) or dreamed 
-up, usually based on simplifying some repetetive task or desire for a new tool.
-
+up, usually for simplifying some repetetive task or a desire for a new tool.
 
 Along the way, some of tools in the blackbag spirit make their way into 'rbkb' 
-that may or may not make it to 'bkb' right away (or ever). Similarly some of
+that may or may not make it to 'bkb' right away (if ever). Similarly some of
 the things in 'bkb' have not yet made it to 'rbkb' (and may not).
+
+
+== SYNOPSIS:
 
 === Command Line Tools
 
 The tools almost all support '-h', but I'll admit this only goes so far.
-See usage.txt for a bit of extra info on the various tools. 
+See usage.txt for usage and a bit of extra info on the various tools. 
 
 When I get some spare time, I'll try and do up some examples of using all
 the tools.
 
 
-== Installation
+=== Monkey Patches
 
-==== Pre-Requirements Note
+Most of rbkb is implemented as a bunch of monkeypatches to Array, String, 
+Numeric and other base classes. If this suits your fancy (some people despise
+monkeypatches, this is not their fancy) then you can 'require "rbkb"' from 
+your irb sessions and own scripts. This will let you do things like the 
+following (just some samples, see rdoc for more).
 
-For the plug based network stuff, you'll need EventMachine >= 0.12.2
-Installing the rbkb gem usually takes care of this automatically, but
-if you're doing a manual installation, run:
+My dirty secret: I use IRB for like... everything
 
-  gem install eventmachine
+Do stuff with strings:
 
+  ## sexify with hexify
+  foo = "helu foo"            #=> "helu foo"
+  foo.hexify                  #=> "68656c7520666f6f"
+
+  ## a little easier to read
+  foo.hexify(:delim => ' ')   #=> "68 65 6c 75 20 66 6f 6f"
+
+  # and back
+  _.unhexify                  #=> "helu foo"
+
+  ## break out your hexdump -C styles
+  foodump = "helu foo".hexdump(:out => StringIO.new)
+  #=> "00000000  68 65 6c 75 20 66 6f 6f  |helu foo|\n00000008\n"
+  puts foodump
+  # 00000000  68 65 6c 75 20 66 6f 6f  |helu foo|
+  # 00000008
+  # => nil
+  foo.hexdump(:out => $stdout)
+  # 00000000  68 65 6c 75 20 66 6f 6f  |helu foo|
+  # 00000008
+  # => nil
+
+  ## reverse a hexdump
+  foodump.dehexdump             #=> "helu foo"
+
+  ## 'strings' like /usr/bin/strings
+  dat = File.read("/bin/ls")
+  pp dat.strings
+  # [[4132, 4143, :ascii, "__PAGEZERO\000"],
+  #  [4188, 4195, :ascii, "__TEXT\000"],
+  # ...
+  #  [72427, 72470, :ascii, "*Apple Code Signing Certification Authority"],
+  #  [72645, 72652, :ascii, "X[N~EQ "]]
+
+
+  ## look for stuff in binaries
+  dat.bgrep("__PAGEZERO")         #=> [[4132, 4142, "__PAGEZERO"], [40996, 41006, "__PAGEZERO"]]
+  dat.bgrep(0xCAFEBABE.to_bytes)  #=> [[0, 4, "\312\376\272\276"]]
+
+
+Do stuff with numbers:
+
+  ## Do you have an irrational distaste for pack/unpack? I do.
+  0xff.to_bytes                     #=> "\000\000\000\377"
+  be = 0xff.to_bytes(:big)          #=> "\000\000\000\377"
+  le = 0xff.to_bytes(:little)       #=> "\377\000\000\000"
+  le16 = 0xff.to_bytes(:little,2)   #=> "\377\000"
+
+  ## Strings can go the other way too
+  [be, le, le16].map {|n| n.dat_to_num(:big) } # default
+  #=> [255, 4278190080, 65280]
+  [be, le, le16].map {|n| n.dat_to_num(:little) }
+  #=> [4278190080, 255, 255]
+
+  ## Calculate padding for a given alignment
+  10.pad(16)     #=> 6
+  16.pad(16)     #=> 0
+  30.pad(16)     #=> 2
+  32.pad(16)     #=> 0
+
+
+Web 2."oh no you di'int!":
+
+  xss="<script>alert('helu ' + document.cookie)</script"
+
+  # URL percent-encode stuff
+  xss.urlenc 
+  #=> "%3cscript%3ealert%28%27helu%3a%20%27%20%2b%20document.cookie%29%3c%2fscript%3e"
+
+  _.b64
+  #=> "JTNjc2NyaXB0JTNlYWxlcnQlMjglMjdoZWx1JTNhJTIwJTI3JTIwJTJiJTIwZG9jdW1lbnQuY29va2llJTI5JTNjJTJmc2NyaXB0JTNl"
+
+  ## And back
+  _.d64
+  #=> "%3cscript%3ealert%28%27helu%3a%20%27%20%2b%20document.cookie%29%3c%2fscript%3e"
+
+  _.urldec
+  #=> "<script>alert('helu: ' + document.cookie)</script>"
+
+
+Miscellaneous stuff:
+
+  # rediculous laziness!
+  0x41.printable?         #=> true
+  0x01.printable?         #=> false
+
+  # Make random gobbledygook and insults
+  "helu foo".randomize    #=> "ouofleh "
+  "helu foo".randomize    #=> "foul hoe"
+
+
+Pretend (badly) to be smart:
+
+  # Cletus say's he's "sneaky"
+  cletus = "my secrets are safe".xor("sneaky")
+  #=> "\036\027E\022\016\032\001\v\021\022K\030\001\vE\022\n\037\026"
+
+  # Only not really so sneaky
+  cletus.xor "my secrets"     #=> "sneakysnea&a!x qxzb"
+  cletus.xor "my secrets are" #=> "sneakysneakysn(k*ls"
+  cletus.xor "sneaky"         #=> "my secrets are safe"
+
+  # Now make Cletus feel worse. With... MATH!
+  # (ala entropy scores)
+  "A".entropy                               #=> 0.0
+  "AB".entropy                              #=> 1.0
+  "BC".entropy                              #=> 1.0
+  (0..255).map {|x| x.chr}.join.entropy     #=> 8.0
+
+  # "You see, Cletus, you might have done this..."
+  sdat = "my secrets are very secret "*60
+  require 'openssl'
+  c = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
+  c.encrypt
+  c.key = Digest::SHA1.hexdigest("sneaky")
+  c.iv = c.random_iv
+
+  # "So, Cletus, when you say 'sneaky'... this is exactly how 'sneaky' you are"
+  c.update(sdat).entropy
+  #=> 7.64800383393901
+  sdat.xor("sneaky").entropy
+  #=> 3.77687372599433
+  sdat.entropy
+  #=> 3.07487577558377
+  
+I do recommend the rdoc if you're interested in more of these little helpers. 
+I'll to keep the comments useful and up to date.
+
+
+== REQUIREMENTS:
+
+* eventmachine >= 0.12.0
+
+
+== INSTALL:
 
 === Gem Installation
 
-RBkB is available as a gem from github:
+rbkb is available as a gem from github:
 
     gem sources -a http://gems.github.com #(you only have to do this once)
     gem install emonti-rbkb
 
 
-==== Install Note
+==== Gem Install Note
 
-Installing as root may be risky depending on your rubygems configuration so I
-don't really recommend using 'sudo gem install'. Worst case scenario I know
-of is I blew away my OS X shipped '/usr/bin/crc32' this way. It was written in 
-perl, so I considered this providence and didn't look back. But you may feel
-differently about 'rubygems' arbitrarily clobbering your files.
+Installing the gem as root may be risky depending on your rubygems 
+configuration so I don't really recommend using 'sudo gem install'. 
+Worst case scenario I know of is I blew away my OSX-shipped '/usr/bin/crc32' 
+this way. It was written in perl, so I considered this providence and didn't 
+look back. But you may feel differently about 'rubygems' clobbering a file in 
+/usr/bin.
 
 When installing as a regular user, however, rubygems may stick rbkb's 
 executable bin/* files somewhere unexpected. To find out where these are and 
-either add them to your PATH or copy/symlink them somewhere else (like 
-/usr/local/bin/) do this:
+either add them to your PATH or copy/symlink them somewhere else like 
+/usr/local/bin/ do this:
 
     gem contents emonti-rbkb
-
 
 === Manual installation:
 
@@ -84,4 +227,28 @@ Run this to generate docs with rdoc the same way the gem would have:
 
   rdoc --main README.rdoc README.rdoc usage.txt lib
 
+== LICENSE:
+
+(The MIT License) 
+
+Copyright (c) 2009 Eric Monti, Matasano Security
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
