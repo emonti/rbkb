@@ -157,8 +157,9 @@ eventmachine.
 
 Telson is for doing the following things with minimum fuss: 
 
-* Run as a server or client using UDP or TCP
-* Debugging network protocols
+* Run as a stubbed network client using UDP or TCP
+* Use blit to communicate with the other side.
+* Debug network protocols
 * Observe client/server behaviors using different messages at various phases 
   of a conversation.
 
