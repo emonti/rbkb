@@ -11,6 +11,7 @@ module Rbkb
         new(param).go
       end
 
+
       attr_accessor :stdout, :stderr, :stdin, :argv, :opts, :oparse
 
       # Instantiates a new Executable object.
@@ -38,6 +39,7 @@ module Rbkb
         yield self if block_given?
       end
 
+
       # Wrapper for Kernel.exit() so we can unit test cli tools
       def exit(ret)
         if defined? Rbkb::Cli::TESTING
@@ -47,11 +49,13 @@ module Rbkb
         end
       end
 
+
       # This method exits with a message on stderr
       def bail(msg)
         @stderr.puts msg if msg
         self.exit(1)
       end
+
 
       # This method wraps a 'bail' with a basic argument error mesage and hint
       # for the '-h or --help' flag
@@ -60,9 +64,6 @@ module Rbkb
         bail "Error: bad arguments - #{arg_err}\n  Hint: Use -h or --help"
       end
 
-      def do_file_read(f)
-        File.read(f) rescue(bail "File Read Error: #{$!}")
-      end
 
       # Prepares an OptionsParser object with blackbag standard options
       # This is called from within initialize() and should be overridden in
@@ -84,6 +85,7 @@ module Rbkb
         return @oparse
       end
 
+
       # Abstract argument parser. Override this method with super() from 
       # inherited executables. The base method just calls OptionParser.parse!
       # on the internal @oparse object.
@@ -92,9 +94,10 @@ module Rbkb
         @oparse.parse!(@argv) rescue bail_args($!)
         @parsed=true
 
-        # overriding class implements additional arguments from here
+        # the overriding class may implement additional arguments from here
       end
       
+
       # Abstract 'runner'. Override this method with super() from inherited
       # executables. The base method just slurps in an optional argv and
       # runs 'parse' if it hasn't already
@@ -102,22 +105,81 @@ module Rbkb
         if argv 
           @argv = argv
         end
+
         parse
 
-        # overriding class implements actual functionality from here
+        # the overriding class implements actual functionality beyond here
       end
+
 
       private
-      # Implements a basic input file argument. 
-      # (Used commonly throughout several executables)
-      def add_std_file_arg(args=@oparse)
-        args.on("-f", "--file FILENAME", "Input from FILENAME") do |f|
-          @opts[:indat] = do_file_read(f)
-        end
-        return args
+
+      # Wraps a file read with a standard bail error message
+      def do_file_read(f)
+        File.read(f) rescue(bail "File Read Error: #{$!}")
       end
 
-      # Parses a string argument
+      # Implements a basic input file argument. File reading is handled
+      # by do_file_read().
+      #
+      # Takes one argument, which is the @opts hash keyname to store
+      # the file data into.
+      # (Used commonly throughout several executables)
+      def add_std_file_opt(inkey)
+        @oparse.on("-f", "--file FILENAME", "Input from FILENAME") do |f|
+          @opts[inkey] = do_file_read(f)
+        end
+        return @oparse
+      end
+
+      # Implements range options via '-r' and '-x'
+      #
+      # Takes two arguments which are the @opts hash key names for
+      # first and last parameters.
+      #
+      # (Used commonly throughout several executables)
+      def add_range_opts(fkey, lkey)
+        @oparse.on("-r", "--range=START[:END]", 
+                   "Start and optional end range") do |r|
+
+          raise "-x and -r are mutually exclusive" if @parser_got_range
+          @parser_got_range=true
+
+          unless m=/^(-?[0-9]+)(?::(-?[0-9]+))?$/.match(r)
+            raise "invalid range #{r.inspect}"
+          end
+
+          @opts[fkey] = $1.to_i
+          @opts[lkey] = $2.to_i if $2
+        end
+
+        @oparse.on("-x", "--hexrange=START[:END]", 
+               "Start and optional end range in hex") do |r|
+
+          raise "-x and -r are mutually exclusive" if @parser_got_range
+          @parser_got_range=true
+
+          unless m=/^(-?[0-9a-f]+)(?::(-?[0-9a-f]+))?$/i.match(r)
+            raise "invalid range #{r.inspect}"
+          end
+
+          @opts[fkey] = if ($1[0,1] == '-')
+                          ($1[1..-1]).hex_to_num * -1
+                        else
+                          $1.hex_to_num
+                        end
+
+          if $2
+            @opts[lkey] = if($2[0,1] == '-')
+                            ($2[1..-1]).hex_to_num * -1
+                          else
+                            $2.hex_to_num
+                          end
+          end
+        end
+      end
+
+      # Parses a string argument.
       # (Used commonly throughout several executables)
       def parse_string_argument
         if @opts[:indat].nil? and a=@argv.shift
