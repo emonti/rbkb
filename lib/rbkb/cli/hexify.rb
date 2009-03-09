@@ -10,7 +10,6 @@ class Rbkb::Cli::Hexify < Rbkb::Cli::Executable
     add_std_file_arg()
     arg = @oparse
 
-    #----------------------------------------------------------------------
     # Add local options
     arg.banner += " <data | blank for stdin>"
 
@@ -33,19 +32,15 @@ class Rbkb::Cli::Hexify < Rbkb::Cli::Executable
 
   def parse(*args)
     super(*args)
-    # blackbag-style spacing compatability
+
+    # blackbag-style space delimiter compatability
     if @argv[0] == "+" and @opts[:delim].nil?
       @opts[:delim]=" "
       @argv.shift
     end
 
-    # default string arg
-    if @opts[:indat].nil? and a=@argv.shift
-      @opts[:indat] = a.dup 
-    end
-
-    # catchall
-    bail_args @argv.join(' ') if @argv.length != 0 
+    parse_string_argument()
+    parse_catchall()
   end
 
   def go(*args)

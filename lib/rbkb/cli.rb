@@ -6,6 +6,11 @@ module Rbkb
     # Rbkb::Cli::Executable is an abstract class for creating command line
     # executables using the Ruby Black Bag framework.
     class Executable
+
+      def self.run(param={})
+        new(param).go
+      end
+
       attr_accessor :stdout, :stderr, :stdin, :argv, :opts, :oparse
 
       # Instantiates a new Executable object.
@@ -36,7 +41,7 @@ module Rbkb
       # Wrapper for Kernel.exit() so we can unit test cli tools
       def exit(ret)
         if defined? Rbkb::Cli::TESTING
-          return(ret)
+          raise("Exited with return code: #{ret}") if ret != 0
         else
           Kernel.exit(ret)
         end
@@ -75,6 +80,30 @@ module Rbkb
         return @oparse
       end
 
+      # Abstract argument parser. Override this method with super() from 
+      # inherited executables. The base method just calls OptionParser.parse!
+      # on the internal @oparse object.
+      def parse
+        # parse flag arguments
+        @oparse.parse!(@argv) rescue bail_args($!)
+        @parsed=true
+
+        # overriding class implements additional arguments from here
+      end
+      
+      # Abstract 'runner'. Override this method with super() from inherited
+      # executables. The base method just slurps in an optional argv and
+      # runs 'parse' if it hasn't already
+      def go(argv=nil)
+        if argv 
+          @argv = argv
+        end
+        parse
+
+        # overriding class implements actual functionality from here
+      end
+
+      private
       # Implements a basic input file argument. 
       # (Used commonly throughout several executables)
       def add_std_file_arg(args=@oparse)
@@ -88,25 +117,19 @@ module Rbkb
         return args
       end
 
-      # Abstract argument parser. Override this method with super() from 
-      # inherited executables. The base method just calls OptionParser.parse!
-      # on the internal @oparse object.
-      def parse
-        # parse flag arguments
-        @oparse.parse!(@argv) rescue bail_args($!)
-        @parsed=true
-
-        # overriding class implements additional arguments from here
-      end
-      
-      def go(argv=nil)
-        @argv = argv if argv
-        parse unless @parsed
-        # overriding class implements actual functionality from here
+      # Parses a string argument
+      # (Used commonly throughout several executables)
+      def parse_string_argument
+        if @opts[:indat].nil? and a=@argv.shift
+          @opts[:indat] = a.dup 
+        end
       end
 
-      def self.run(opts={})
-        new(opts).go
+      # For use at the end of a parser - calls bail_args with remaining
+      # arguments if there are unexpected extra args.
+      # (Used commonly throughout several executables)
+      def parse_catchall
+        bail_args @argv.join(' ') if @argv.length != 0 
       end
     end
   end

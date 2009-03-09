@@ -1,57 +1,5 @@
 #!/usr/bin/env ruby
-# Author Eric Monti emonti at matasano
-#
-# b64 converts strings or raw data to base-64 encoding.
-#
-# Usage: b64 -h
-#
-require 'rbkb'
-require 'rbkb/command_line'
-require 'base64'
 
-include RBkB::CommandLine
+require "rbkb/cli/b64"
 
-#-------------------------------------------------------------------------------
-# Init options and arg parsing
-OPTS = {}
-arg = bkb_stdargs(nil, OPTS)
-arg = bkb_inputargs(arg, OPTS)
-
-arg.banner += " <data | blank for stdin>"
-
-#------------------------------------------------------------------------------
-# Add local options
-arg.separator ""
-arg.separator "  Output options:"
-
-arg.on("-l", "--length LEN", Numeric, 
-  "Encode in lines of LEN characters") do |l|
-    (OPTS[:len] = l) > 15 or raise "length must be at least 16"
-end
-
-#------------------------------------------------------------------------------
-# Parse arguments
-arg.parse!(ARGV) rescue bail "Error: #{$!}\n#{arg}"
-
-# default string arg
-if OPTS[:indat].nil? and a=ARGV.shift
-	OPTS[:indat] = a.dup 
-end
-
-# catchall
-if ARGV.length != 0
-    bail "Error: bad arguments - #{ARGV.join(' ')}\n-h|--help for more info."
-end
-
-OPTS[:indat] ||= STDIN.read()
-
-#------------------------------------------------------------------------------
-# Do Stuff
-
-if OPTS[:len]
-    Base64.b64encode(OPTS[:indat], OPTS[:len])
-else
-    puts OPTS[:indat].b64
-end
-
-
+Rbkb::Cli::B64.run()

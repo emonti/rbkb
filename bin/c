@@ -1,14 +1,5 @@
 #!/usr/bin/env ruby
-# Author Eric Monti (emonti at matasano)
 
-require 'rbkb'
-require 'rbkb/command_line'
+require "rbkb/cli/chars"
 
-include RBkB::CommandLine
-
-if ARGV[0] !~ /[1-9][0-9]*/ or ARGV[1].nil? or ARGV.size > 2 
-    bail "Usage: #{$0} 100 A; # print 100 A's'\n"
-end
-
-print ARGV[1] * ARGV[0].to_i
-
+Rbkb::Cli::Chars.run()
