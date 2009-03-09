@@ -3,7 +3,7 @@
 require 'rbkb/cli'
 
 # The hexify command converts a string or raw data to hex characters. 
-# Input can be # supplied via stdin, a string argument, or a file (with -f).
+# Input can be supplied via stdin, a string argument, or a file (with -f).
 class Rbkb::Cli::Hexify < Rbkb::Cli::Executable
   def make_parser
     super()
