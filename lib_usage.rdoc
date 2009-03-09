@@ -88,17 +88,16 @@ Interact with 'telson' and 'plugsrv' directly from IRB:
 
   ## You can blit any string from within IRB!
 
-  ## A minor setup step is required... (I stick this in my .irbrc")
-  Plug::Blit.blit_init
-  #=> nil
+  ## A minor setup step is required... (I put this in my .irbrc)
+  Plug::Blit.blit_init              #=> nil
 
-  "GET / HTTP/1.0\r\n\r\n".blit
-  #=> 28 
-  ## Watch your basic HTTP request get made and responded to in the other window...
+  "GET / HTTP/1.0\r\n\r\n".blit                 #=> 28 
+  ## Watch the basic HTTP request get made and responded to in the 
+  ## other window.
 
-  ("GET /" + "A"*30 + " HTTP/1.0\r\n\r\n").blit
-  #=> 58 
-  ## Watch your bogus HTTP request get made and responded to in the other window...
+  ("GET /"+ "A"*30 +" HTTP/1.0\r\n\r\n").blit   #=> 58 
+  ## Watch the bogus HTTP request get made and responded to in the 
+  ## other window.
 
 
 Some simple web encoding stuff:
