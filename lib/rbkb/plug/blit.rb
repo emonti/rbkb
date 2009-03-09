@@ -74,7 +74,7 @@ module Plug
 
     def self.make_mute(peerno)
       self.blit_header(:squelch) +
-        peerno.to_bytes(2, :big)
+        peerno.to_bytes(:big, 2)
     end
 
     def unmute
@@ -87,7 +87,7 @@ module Plug
 
     def self.make_squelch(peerno)
       self.blit_header(:squelch) +
-        peerno.to_bytes(2, :big)
+        peerno.to_bytes(:big, 2)
     end
 
     def sendmsg
@@ -121,8 +121,8 @@ module Plug
     #   str      data
     def self.make_sendmsg(idx, dat)
       self.blit_header(:sendmsg) +
-        idx.to_bytes(2, :big) + 
-        dat.size.to_bytes(4, :big) + 
+        idx.to_bytes(:big, 2) + 
+        dat.size.to_bytes(:big, 4) + 
         dat
     end
 
@@ -150,7 +150,7 @@ module Plug
 
     def self.make_delete(idx=0)
       self.blit_header(:delete) +
-        idx.to_bytes(2, :big)
+        idx.to_bytes(:big, 2)
     end
 
     def list_peers
