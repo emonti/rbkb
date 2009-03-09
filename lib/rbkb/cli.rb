@@ -18,12 +18,11 @@ module Rbkb::Cli
     # significant:
     #
     #  :argv   - An array of cli arguments (default ARGV)
-    #
-    #  :stdout, - Unit tests
-    #  :stderr, 
+    #  :opts    - executable/function options for use when running 'go'
+    #  :stdout, - IO redirection (mostly for unit tests)
+    #  :stderr,   
     #  :stdin
     #
-    #  :opts    - executable/function options for use when running 'go'
     #
     # The above keys are deleted from the 'param' hash and stored as instance
     # variables with attr_accessors.  All other parameters are ignored.
