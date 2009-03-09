@@ -1,5 +1,8 @@
 require 'rbkb/cli'
 
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 # crc32 returns a crc32 checksum in hex from stdin or a file
 class Rbkb::Cli::Crc32 < Rbkb::Cli::Executable
   def initialize(*args)

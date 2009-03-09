@@ -1,5 +1,8 @@
 require 'rbkb/cli'
 
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 # urldec converts a url percent-encoded string back to its raw form.
 # Input can be supplied via stdin, a string argument, or a file (with -f).
 # (url percent-encoding is just fancy hex encoding)

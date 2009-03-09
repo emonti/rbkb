@@ -1,7 +1,8 @@
-#!/usr/bin/env ruby
-
 require 'rbkb/cli'
 
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 # unhexify converts a string of hex bytes back to raw data. Input can be 
 # supplied via stdin, a hex-string argument, or a file containing hex (use -f).
 class Rbkb::Cli::Unhexify < Rbkb::Cli::Executable

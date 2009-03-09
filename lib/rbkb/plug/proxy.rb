@@ -1,3 +1,6 @@
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 
 module Plug
   module Proxy

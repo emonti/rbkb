@@ -1,4 +1,6 @@
-# Author Eric Monti (emonti at matasano)
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 require "stringio"
 require 'zlib'
 require 'open3'

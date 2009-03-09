@@ -1,5 +1,8 @@
 require 'rbkb/cli'
 
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 # len prepends a binary length number in front of its input and outputs
 # raw on STDOUT
 class Rbkb::Cli::Len < Rbkb::Cli::Executable

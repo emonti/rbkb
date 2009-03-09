@@ -1,6 +1,9 @@
 require 'rbkb/cli'
 require 'rbkb/plug'
 
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 # blit is for use with any of the "plug" tools such as telson, feed, blitplug.
 # It is used to send data over a socket via their OOB blit listener.
 class Rbkb::Cli::Blit < Rbkb::Cli::Executable

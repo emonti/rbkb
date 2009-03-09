@@ -2,7 +2,9 @@ require 'rbkb/cli'
 require 'rbkb/plug'
 require 'eventmachine'
 
-
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 # This is an implementation of the original blackbag "telson" around 
 # ruby and eventmachine. 
 #

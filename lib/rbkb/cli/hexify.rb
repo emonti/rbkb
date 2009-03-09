@@ -1,7 +1,8 @@
-#!/usr/bin/env ruby
-
 require 'rbkb/cli'
 
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 # The hexify command converts a string or raw data to hex characters. 
 # Input can be supplied via stdin, a string argument, or a file (with -f).
 class Rbkb::Cli::Hexify < Rbkb::Cli::Executable

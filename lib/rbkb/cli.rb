@@ -1,6 +1,9 @@
 require 'rbkb'
 require 'optparse'
 
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 module Rbkb::Cli
   # Rbkb::Cli::Executable is an abstract class for creating command line
   # executables using the Ruby Black Bag framework.

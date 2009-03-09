@@ -1,5 +1,8 @@
 require 'rbkb/cli'
 
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 # b64 converts strings or raw data to base-64 encoding.
 class Rbkb::Cli::B64 < Rbkb::Cli::Executable
   def make_parser

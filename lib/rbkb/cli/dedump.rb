@@ -1,5 +1,8 @@
 require 'rbkb/cli'
 
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 # Reverses a hexdump back to raw data. Designed to work with hexdumps created 
 # by Unix utilities like 'xxd' as well as 'hexdump -C'.
 class Rbkb::Cli::Dedump < Rbkb::Cli::Executable

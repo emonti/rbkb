@@ -1,5 +1,8 @@
 require 'rbkb/cli'
 
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 # searches for a binary string in input. string can be provided 'hexified'
 class Rbkb::Cli::Bgrep < Rbkb::Cli::Executable
   def initialize(*args)

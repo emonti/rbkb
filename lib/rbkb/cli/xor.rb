@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 require 'rbkb/cli'
 
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 # Repeating string xor. Takes input from a string, stdin, or a file (-f).
 class Rbkb::Cli::Xor < Rbkb::Cli::Executable
   def make_parser()

@@ -1,5 +1,8 @@
 require 'rbkb/cli'
 
+# Copyright 2009 emonti at matasano.com 
+# See README.rdoc for license information
+#
 # urlenc converts a string or raw data to a url percent-encoded string 
 # Input can be supplied via stdin, a string argument, or a file (with -f).
 # (url percent-encoding is just fancy hex encoding)
