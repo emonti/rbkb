@@ -60,6 +60,10 @@ module Rbkb
         bail "Error: bad arguments - #{arg_err}\n  Hint: Use -h or --help"
       end
 
+      def do_file_read(f)
+        File.read(f) rescue(bail "File Read Error: #{$!}")
+      end
+
       # Prepares an OptionsParser object with blackbag standard options
       # This is called from within initialize() and should be overridden in
       # inherited classes to add additional OptionParser-based parsers.
@@ -108,11 +112,7 @@ module Rbkb
       # (Used commonly throughout several executables)
       def add_std_file_arg(args=@oparse)
         args.on("-f", "--file FILENAME", "Input from FILENAME") do |f|
-          begin
-            @opts[:indat] = File.read(f) 
-          rescue 
-            bail "File Error: #{$!}"
-          end
+          @opts[:indat] = do_file_read(f)
         end
         return args
       end
