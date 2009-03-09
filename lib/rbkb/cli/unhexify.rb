@@ -7,7 +7,7 @@ require 'rbkb/cli'
 class Rbkb::Cli::Unhexify < Rbkb::Cli::Executable
   def make_parser
     super()
-    add_std_file_arg()
+    add_std_file_opt(:indat)
     arg = @oparse
 
     #----------------------------------------------------------------------
