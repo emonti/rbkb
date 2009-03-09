@@ -2,7 +2,8 @@
 
 extrafiles = %w{
   README.rdoc
-  usage.txt
+  cli_usage.rdoc
+  lib_usage.rdoc
 }
 
 executables = %w{
@@ -55,7 +56,7 @@ libfiles = %w{
 
 SPEC = Gem::Specification.new do |s|
   s.name      = "rbkb"
-  s.version   = "0.6.2"
+  s.version   = "0.6.2.1"
   s.author    = "Eric Monti"
   s.email     = "emonti@matasano.com"
   s.homepage  = "http://www.matasano.com"
