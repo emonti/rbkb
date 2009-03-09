@@ -1,55 +1,5 @@
 #!/usr/bin/env ruby
-# Author Eric Monti (emonti at matasano)
-#
-# urlenc converts a string or raw data to a url-encoded string 
-# (url encoding is really just fancy hex encoding)
-#
-# Usage: urlenc [options] <data | blank for stdin>
-#     -h, --help                       Show this message
-#     -v, --version                    Show version and exit
-#     -f, --file FILENAME              Input from FILENAME
-#     -p, --[no-]plus                  Convert spaces to '+' (default is false)
-#
 
-require 'rbkb'
-require 'rbkb/command_line'
+require "rbkb/cli/urlenc"
 
-include RBkB::CommandLine
-
-#------------------------------------------------------------------------------
-# Init options and arg parsing
-OPTS = {}
-arg = bkb_stdargs(nil, OPTS)
-arg = bkb_inputargs(arg, OPTS)
-
-arg.banner += " <data | blank for stdin>"
-
-arg.on("-p", "--[no-]plus", "Convert spaces to '+' (default is false)") do |p|
-  OPTS[:plus] = p
-end
-
-#------------------------------------------------------------------------------
-# Add local options here
-
-#------------------------------------------------------------------------------
-# Parse arguments
-arg.parse!(ARGV) rescue bail "Error: #{$!}\nUse -h|--help for more info."
-
-# default string arg
-if OPTS[:indat].nil? and a=ARGV.shift
-	OPTS[:indat] = a.dup 
-end
-
-# catchall
-if ARGV.length != 0 
-    bail "Error: bad arguments - #{ARGV.join(' ')}\n-h|--help for more info."
-end
-
-# Default to standard input
-OPTS[:indat] ||= STDIN.read()
-
-#------------------------------------------------------------------------------
-# Do stuff
-
-puts OPTS[:indat].urlenc(:plus => OPTS[:plus])
-
+Rbkb::Cli::Urlenc.run()
