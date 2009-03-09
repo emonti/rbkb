@@ -69,7 +69,7 @@ Ruby BlackBag has a similar set of network tools:
 Much of rbkb is implemented as a bunch of monkeypatches to Array, String, 
 Numeric and other base classes. If this suits your fancy (some people despise
 monkeypatches, this is not their fancy) then you can 'require "rbkb"' from 
-your irb sessions and own scripts. See 'lib_fun.rdoc' for more info.
+your irb sessions and own scripts. See 'lib_usage.rdoc' for more info.
 
 
 == REQUIREMENTS:
