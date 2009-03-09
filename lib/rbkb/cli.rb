@@ -30,7 +30,7 @@ module Rbkb::Cli
     def initialize(param={})
       @argv   ||= param.delete(:argv) || ARGV
       @stdout ||= param.delete(:stdout) || STDOUT
-      @stderr ||= param.delete(:stderr) || STDOUT
+      @stderr ||= param.delete(:stderr) || STDERR
       @stdin  ||= param.delete(:stdin) || STDIN
       @opts   ||= param.delete(:opts) || {}
       make_parser()
