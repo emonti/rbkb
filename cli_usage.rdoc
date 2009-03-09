@@ -122,16 +122,16 @@ Takes input from a blob of data and output it with its binary length prepended.
 A blit-able reverse TCP proxy. Displays traffic hexdumps. Currently uses
 the default blit port for its blit receiver.
 
-Usage: /usr/bin/plugsrv [options] target:tport[@[laddr:]lport]
-  <target:tport>  = the address of the target service
-  <@laddr:lport> = optional address and port to listen on
+    Usage: /usr/bin/plugsrv [options] target:tport[@[laddr:]lport]
+      <target:tport>  = the address of the target service
+      <@laddr:lport> = optional address and port to listen on
 
-Options:
-    -o, --output FILE                send output to a file
-    -l, --listen ADDR:PORT           optional listener address:port
-                                     (default: 0.0.0.0:<tport>)
-    -q, --[no-]quiet                 Suppress/Enable conversation dumps.
-    -h, --help                       Show this message
+    Options:
+        -o, --output FILE                send output to a file
+        -l, --listen ADDR:PORT           optional listener address:port
+                                         (default: 0.0.0.0:<tport>)
+        -q, --[no-]quiet                 Suppress/Enable conversation dumps.
+        -h, --help                       Show this message
 
 
 === rex
