@@ -34,7 +34,7 @@ the things in 'bkb' have not yet made it to 'rbkb' (and may not).
 === Command Line Tools
 
 The tools almost all support '-h', but I'll admit this only goes so far.
-See usage.txt for usage and a bit of extra info on the various tools. 
+See cli_usage.rdoc for usage and a bit of extra info on the various tools. 
 
 When I get some spare time, I'll try and do up some examples of using all
 the tools.
