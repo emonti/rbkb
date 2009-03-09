@@ -7,7 +7,7 @@ require 'eventmachine'
 # ruby and eventmachine. 
 #
 # Telson can do the following things with minimum fuss: 
-#   - Run as a server or client using UDP or TCP
+#   - Run as a "stubbed" network client using UDP or TCP
 #   - Debugging network protocols
 #   - Observe client/server behaviors using different messages at
 #     various phases of a conversation.
