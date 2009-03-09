@@ -1,18 +1,16 @@
 #!/usr/bin/env ruby
-# TODO refactor into rbkb/plug and add blit support
-#
+# XXX TODO - refactor me!
 
+begin
+  require 'rubygems'
+rescue LoadError
+end
 require 'eventmachine'
 require 'socket'
 require 'optparse'
-require 'rbkb'
+require 'rbkb/plug'
 
-def bail(*msg)
-  STDERR.puts msg
-  exit 1
-end
-
-class PlugSrv
+class BlitPlug
   module UI
     def log( *msg )
       unless PLUG_OPTS[:quiet]
@@ -23,16 +21,24 @@ class PlugSrv
   end
 
   class Controller
-    attr_accessor :tgtaddr, :tgtport, :tgtclient
-    @@controllers=nil
+    attr_accessor :tgtaddr, :tgtport, :tgtclient, :blit, :peers
+    @@controller = nil
 
     def initialize(tgtaddr, tgtport, tgtclient)
-
       @tgtaddr = tgtaddr
       @tgtport = tgtport
       @tgtclient = tgtclient
 
-      @@controllers = self
+      @@controller = self
+
+      @peers = Array.new
+
+      ## Just tack on a blit server???
+      @blit = EventMachine::start_server(
+        Plug::Blit::DEFAULT_IPADDR, Plug::Blit::DEFAULT_PORT, Plug::Blit,
+        :TCP, self
+      )
+
     end
 
     ##----------------------------------------
@@ -50,7 +56,7 @@ class PlugSrv
     ##----------------------------------------
 
     def self.proxy(cli)
-      unless (ctrl = @@controllers)
+      unless (ctrl = @@controller)
         raise "No controller exists for this connection: #{cli.sock_peername}"
       end
 
@@ -62,9 +68,12 @@ class PlugSrv
       srv.plug_peers.push cli
       cli.plug_peers.push srv
 
+      ctrl.peers.push srv
+      ctrl.peers.push cli ### I suppose this is probably useful too..
+
       srv.controller = cli.controller = ctrl
     end
-  end # class PlugSrv::Controller
+  end # class BlitPlug::Controller
 
 
   module BaseTCP
@@ -78,6 +87,14 @@ class PlugSrv
       @kind = :conn  # default
     end
  
+    def name
+      @name
+    end
+
+    def say(data, sender)
+      log "%#{sender.kind.to_s.upcase}-SAYS", data.hexdump(:out => StringIO.new), "%"
+      send_data data 
+    end
 
     def receive_data data
       log "%#{kind.to_s.upcase}-#{sock_peername}-SAYS", data.hexdump, "%"
@@ -89,12 +106,14 @@ class PlugSrv
 
 
     def notify_connection
-      log "%#{kind.to_s.upcase}-#{@sock_peername}-CONNECTED"
+      @name = "#{kind.to_s.upcase}-#{sock_peername}"
+      log "%#{@name}-CONNECTED"
     end
 
 
     def unbind
-      log "%#{kind.to_s.upcase}-#{@sock_peername}-CLOSED"
+      @name = "#{kind.to_s.upcase}-#{sock_peername}"
+      log "%#{@name}-CLOSED"
 
       cret = (@controller and @controller.dispatch_close(self))
 
@@ -107,7 +126,7 @@ class PlugSrv
 
 
   module TCPListener
-    include PlugSrv::BaseTCP
+    include BlitPlug::BaseTCP
     attr_accessor :tgtaddr, :tgtport
 
     def post_init
@@ -116,7 +135,7 @@ class PlugSrv
       @sock_peer = Socket.unpack_sockaddr_in(get_peername).reverse
       @sock_peername = @sock_peer.join(':')
 
-      @controller = PlugSrv::Controller.proxy(self)
+      @controller = BlitPlug::Controller.proxy(self)
 
       notify_connection
     end
@@ -125,7 +144,7 @@ class PlugSrv
 
 
   module TCPClient
-    include PlugSrv::BaseTCP
+    include BlitPlug::BaseTCP
     attr_accessor :connected
 
     def post_init
@@ -141,16 +160,22 @@ class PlugSrv
 
   end # module TCPClient
 
-end # module PlugSrv
+end # module BlitPlug
 
 PLUG_OPTS={ :quiet => false, :out => STDOUT }
+
+def bail(*msg)
+  STDERR.puts msg
+  exit 1
+end
+
 
 
 #############################################################################
 ### MAIN
 #############################################################################
 #
-# Get arguments
+# Get option arguments
 opts = OptionParser.new do |opts|
   opts.banner = "Usage: #{$0} [options] target:tport[@[laddr:]lport]\n",
                 "  <target:tport>  = the address of the target service\n",
@@ -203,13 +228,15 @@ PLUG_OPTS[:svraddr] ||= (m[3] || "0.0.0.0")
 PLUG_OPTS[:svrport] ||= (m[4] || PLUG_OPTS[:tgtport]).to_i
 
 
-# Start controller
-ctrl = PlugSrv::Controller.new(PLUG_OPTS[:tgtaddr], PLUG_OPTS[:tgtport], PlugSrv::TCPClient)
-
-# Start event loop
-PlugSrv::UI.log "%Starting TCP PlugServer #{PLUG_OPTS[:svraddr]}:#{PLUG_OPTS[:svrport]} -> #{PLUG_OPTS[:tgtaddr]}:#{PLUG_OPTS[:tgtport]}"
-
 EventMachine::run {
-  EventMachine::start_server(PLUG_OPTS[:svraddr], PLUG_OPTS[:svrport], PlugSrv::TCPListener)
+  # Instantiate controller
+  ctrl = BlitPlug::Controller.new(PLUG_OPTS[:tgtaddr], PLUG_OPTS[:tgtport], BlitPlug::TCPClient)
+
+  # Start event loop
+  BlitPlug::UI.log "%Starting TCP PlugServer #{PLUG_OPTS[:svraddr]}:#{PLUG_OPTS[:svrport]} -> #{PLUG_OPTS[:tgtaddr]}:#{PLUG_OPTS[:tgtport]}"
+
+  
+  EventMachine::start_server(PLUG_OPTS[:svraddr], PLUG_OPTS[:svrport], BlitPlug::TCPListener)
 }
+
 
