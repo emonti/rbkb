@@ -11,6 +11,7 @@ module Rbkb::Cli
     end
 
     attr_accessor :stdout, :stderr, :stdin, :argv, :opts, :oparse
+    attr_reader   :exit_status
 
     # Instantiates a new Executable object.
     #
@@ -39,6 +40,7 @@ module Rbkb::Cli
 
     # Wrapper for Kernel.exit() so we can unit test cli tools
     def exit(ret)
+      @exit_status = ret
       if defined? Rbkb::Cli::TESTING
         raise("Exited with return code: #{ret}") if ret != 0
       else

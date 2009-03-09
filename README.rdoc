@@ -45,10 +45,12 @@ the tools.
 Most of rbkb is implemented as a bunch of monkeypatches to Array, String, 
 Numeric and other base classes. If this suits your fancy (some people despise
 monkeypatches, this is not their fancy) then you can 'require "rbkb"' from 
-your irb sessions and own scripts. This will let you do things like the 
-following (just some samples, see rdoc for more).
+your irb sessions and own scripts. 
 
-My dirty secret: I use IRB for like... everything
+Requiring the rbkb library will let you do things like the following (just some 
+samples, see rdoc for more).
+
+My dirty secret: I use IRB for like... everything!
 
 Do stuff with strings:
 
