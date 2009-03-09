@@ -1,41 +1,5 @@
 #!/usr/bin/env ruby
-# Author Eric Monti (emonti at matasano)
-#
-# d64 converts a base-64 encoded string back to its orginal form.
-#
-# Usage: d64 -h
-#
-require 'rbkb'
-require 'rbkb/command_line'
 
-include RBkB::CommandLine
+require "rbkb/cli/d64"
 
-#-------------------------------------------------------------------------------
-# Init options and arg parsing
-OPTS = {}
-arg = bkb_stdargs(nil, OPTS)
-arg = bkb_inputargs(arg, OPTS)
-
-arg.banner += " <data | blank for stdin>"
-
-#------------------------------------------------------------------------------
-# Parse arguments
-arg.parse!(ARGV) rescue bail "Error: #{$!}\n#{arg}"
-
-# default string arg
-if OPTS[:indat].nil? and a=ARGV.shift
-	OPTS[:indat] = a.dup 
-end
-
-# catchall
-if ARGV.length != 0 
-    bail "Error: bad arguments - #{ARGV.join(' ')}\n-h|--help for more info."
-end
-
-OPTS[:indat] ||= STDIN.read()
-
-#------------------------------------------------------------------------------
-# Do Stuff
-
-print OPTS[:indat].d64
-
+Rbkb::Cli::D64.run()
