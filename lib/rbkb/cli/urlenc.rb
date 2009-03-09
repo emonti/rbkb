@@ -18,7 +18,7 @@ class Rbkb::Cli::Urlenc < Rbkb::Cli::Executable
 
   def parse(*args)
     super(*args)
-    parse_string_argument()
+    parse_string_argument(:indat)
     parse_catchall()
   end
 

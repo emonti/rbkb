@@ -39,7 +39,7 @@ class Rbkb::Cli::Hexify < Rbkb::Cli::Executable
       @argv.shift
     end
 
-    parse_string_argument()
+    parse_string_argument(:indat)
     parse_catchall()
   end
 
@@ -58,7 +58,6 @@ class Rbkb::Cli::Hexify < Rbkb::Cli::Executable
       @stdout << m.hexify(@opts)
       @stdout.puts((opts[:delim] and ! indat.empty?)? opts[:delim] : "\n")
     end
-
     self.exit(0)
   end
 end

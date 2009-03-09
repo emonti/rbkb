@@ -15,7 +15,7 @@ class Rbkb::Cli::B64 < Rbkb::Cli::Executable
 
   def parse(*args)
     super(*args)
-    parse_string_argument()
+    parse_string_argument(:indat)
     parse_catchall()
   end
 
