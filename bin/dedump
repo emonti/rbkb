@@ -1,53 +1,5 @@
 #!/usr/bin/env ruby
-# Author Eric Monti (emonti at matasano)
-#
-# Reverses a hexdump back to raw data. Designed to work with hexdumps created 
-# by Unix utilities like 'xxd' as well as 'hexdump -C'.
 
-require 'rbkb'
-require 'rbkb/command_line'
+require "rbkb/cli/dedump"
 
-include RBkB::CommandLine
-
-#------------------------------------------------------------------------------
-# Init options and arg parsing
-OPTS = {:len => 16}
-arg = bkb_stdargs(nil, OPTS)
-
-arg.banner += " <input-file | blank for stdin>"
-
-#------------------------------------------------------------------------------
-# Add local options
-
-arg.on("-l", "--length LEN", Numeric, 
-  "Bytes per line in hexdump (default: #{OPTS[:len]})") do |l|
-    bail("Length must be greater than zero") unless (OPTS[:len] = l) > 0
-end
-
-#------------------------------------------------------------------------------
-# Parse arguments
-arg.parse!(ARGV) rescue bail "Error: #{$!}\nUse -h|--help for more info."
-
-if OPTS[:indat].nil? and a=ARGV.shift
-  OPTS[:indat] = File.open(a, "rb") rescue "Error: Can't open file '#{a}'"
-end
-
-# catchall
-if ARGV.length != 0 
-    bail "Error: bad arguments - #{ARGV.join(' ')}\n-h|--help for more info."
-end
-
-# Default to standard input
-OPTS[:indat] ||= STDIN.read() 
-
-#------------------------------------------------------------------------------
-# Do stuff
-
-exit 1 unless((OPTS[:len] ||= OPTS[:indat].length) > 0)
-
-OPTS[:indat].dehexdump(
-  :len => OPTS[:len], 
-  :out => STDOUT
-) rescue bail "Error: #{$!}"
-
-
+Rbkb::Cli::Dedump.run()
