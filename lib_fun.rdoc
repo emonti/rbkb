@@ -168,7 +168,7 @@ Pretend (badly) to be smart:
   
 
 
-I do recommend the more of the rdoc if you're interested in more of these 
+I recommend reading some of the rdoc if you're interested in more of these 
 little helpers.  Time permitting, I'll try to keep the comments useful and 
 up to date. 
 
