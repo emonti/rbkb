@@ -1,5 +1,4 @@
 # Author Eric Monti (emonti at matasano)
-require "base64"
 require "stringio"
 require 'zlib'
 require 'open3'
@@ -59,10 +58,17 @@ class String
   end
 
   # Base64 encode
-  def b64; Base64.encode64(self).tr("\n", ""); end
+  def b64(len=nil)
+    ret = [self].pack("m").gsub("\n", "")
+    if len and Numeric === len 
+      ret.scan(/.{1,#{len}}/).join("\n") + "\n"
+    else
+      ret
+    end
+  end
 
   # Base64 decode
-  def d64; Base64.decode64(self); end
+  def d64;  self.unpack("m")[0];  end
 
   # right-align to 'a' alignment padded with 'p'
   def ralign(a, p=' ')
