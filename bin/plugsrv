@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-#
+# TODO refactor into rbkb/plug and add blit support
 #
 
 require 'eventmachine'
@@ -146,70 +146,70 @@ end # module PlugSrv
 PLUG_OPTS={ :quiet => false, :out => STDOUT }
 
 
-  #############################################################################
-  ### MAIN
-  #############################################################################
-  #
-  # Get arguments
-  opts = OptionParser.new do |opts|
-    opts.banner = "Usage: #{$0} [options] target:tport[@[laddr:]lport]\n",
-                  "  <target:tport>  = the address of the target service\n",
-                  "  <@laddr:lport> = optional address and port to listen on\n"
+#############################################################################
+### MAIN
+#############################################################################
+#
+# Get arguments
+opts = OptionParser.new do |opts|
+  opts.banner = "Usage: #{$0} [options] target:tport[@[laddr:]lport]\n",
+                "  <target:tport>  = the address of the target service\n",
+                "  <@laddr:lport> = optional address and port to listen on\n"
 
-    opts.separator ""
-    opts.separator "Options:"
+  opts.separator ""
+  opts.separator "Options:"
 
-    opts.on_tail("-h", "--help", "Show this message") do
-      puts opts
-      exit 1
-    end
-
-    opts.on("-o", "--output FILE", "send output to a file") do |o|
-      PLUG_OPTS[:out] = File.open(o, "w") rescue (bail $!)
-    end
-
-    opts.on("-l", "--listen ADDR:PORT", 
-            "optional listener address:port", 
-            "(default: 0.0.0.0:<tport>)"
-           ) do |addr|
-
-      unless m = /^([\w\.]+)?(?::(\d+))?$/.match(addr)
-        STDERR.puts "invalid listener address"
-        exit 1
-      end
-      PLUG_OPTS[:svraddr] = m[1]
-      PLUG_OPTS[:svrport] = (m[2])? m[2].to_i : nil
-    end
-
-    opts.on("-q", "--[no-]quiet", "Suppress/Enable conversation dumps.") do |q|
-      PLUG_OPTS[:quiet] = q
-    end
-
-  end
-
-  opts.parse!(ARGV) rescue (STDERR.puts $!; exit 1)
-
-
-  # Get target/listen argument
-  rx = /^([\w\.]+):(\d+)(?:@(?:([\w\.]+):)?(\d+))?$/
-  unless (m = rx.match(ARGV.shift)) and ARGV.shift.nil?
-    $stderr.puts opts.banner
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
     exit 1
   end
 
-  PLUG_OPTS[:tgtaddr] = m[1]
-  PLUG_OPTS[:tgtport] = m[2].to_i
-  PLUG_OPTS[:svraddr] ||= (m[3] || "0.0.0.0")
-  PLUG_OPTS[:svrport] ||= (m[4] || PLUG_OPTS[:tgtport]).to_i
+  opts.on("-o", "--output FILE", "send output to a file") do |o|
+    PLUG_OPTS[:out] = File.open(o, "w") rescue (bail $!)
+  end
+
+  opts.on("-l", "--listen ADDR:PORT", 
+          "optional listener address:port", 
+          "(default: 0.0.0.0:<tport>)"
+         ) do |addr|
+
+    unless m = /^([\w\.]+)?(?::(\d+))?$/.match(addr)
+      STDERR.puts "invalid listener address"
+      exit 1
+    end
+    PLUG_OPTS[:svraddr] = m[1]
+    PLUG_OPTS[:svrport] = (m[2])? m[2].to_i : nil
+  end
+
+  opts.on("-q", "--[no-]quiet", "Suppress/Enable conversation dumps.") do |q|
+    PLUG_OPTS[:quiet] = q
+  end
+
+end
+
+opts.parse!(ARGV) rescue (STDERR.puts $!; exit 1)
 
 
-  # Start controller
-  ctrl = PlugSrv::Controller.new(PLUG_OPTS[:tgtaddr], PLUG_OPTS[:tgtport], PlugSrv::TCPClient)
+# Get target/listen argument
+rx = /^([\w\.]+):(\d+)(?:@(?:([\w\.]+):)?(\d+))?$/
+unless (m = rx.match(ARGV.shift)) and ARGV.shift.nil?
+  $stderr.puts opts.banner
+  exit 1
+end
 
-  # Start event loop
-  PlugSrv::UI.log "%Starting TCP PlugServer #{PLUG_OPTS[:svraddr]}:#{PLUG_OPTS[:svrport]} -> #{PLUG_OPTS[:tgtaddr]}:#{PLUG_OPTS[:tgtport]}"
+PLUG_OPTS[:tgtaddr] = m[1]
+PLUG_OPTS[:tgtport] = m[2].to_i
+PLUG_OPTS[:svraddr] ||= (m[3] || "0.0.0.0")
+PLUG_OPTS[:svrport] ||= (m[4] || PLUG_OPTS[:tgtport]).to_i
 
-  EventMachine::run {
-    EventMachine::start_server(PLUG_OPTS[:svraddr], PLUG_OPTS[:svrport], PlugSrv::TCPListener)
-  }
+
+# Start controller
+ctrl = PlugSrv::Controller.new(PLUG_OPTS[:tgtaddr], PLUG_OPTS[:tgtport], PlugSrv::TCPClient)
+
+# Start event loop
+PlugSrv::UI.log "%Starting TCP PlugServer #{PLUG_OPTS[:svraddr]}:#{PLUG_OPTS[:svrport]} -> #{PLUG_OPTS[:tgtaddr]}:#{PLUG_OPTS[:tgtport]}"
+
+EventMachine::run {
+  EventMachine::start_server(PLUG_OPTS[:svraddr], PLUG_OPTS[:svrport], PlugSrv::TCPListener)
+}
 
