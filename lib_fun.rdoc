@@ -1,7 +1,7 @@
 
 === Using the rbkb library's Monkey Patches
 
-Most of rbkb is implemented as a bunch of monkeypatches to Array, String, 
+Much of rbkb is implemented as a bunch of monkeypatches to Array, String, 
 Numeric and other base classes. If this suits your fancy (some people despise
 monkeypatches, this is not their fancy) then you can 'require "rbkb"' from 
 your irb sessions and own scripts. 
@@ -51,7 +51,6 @@ Do stuff with strings:
   #  [72427, 72470, :ascii, "*Apple Code Signing Certification Authority"],
   #  [72645, 72652, :ascii, "X[N~EQ "]]
 
-
   ## look for stuff in binaries
   dat.bgrep("__PAGEZERO")         #=> [[4132, 4142, "__PAGEZERO"], [40996, 41006, "__PAGEZERO"]]
   dat.bgrep(0xCAFEBABE.to_bytes)  #=> [[0, 4, "\312\376\272\276"]]
@@ -76,6 +75,30 @@ Do stuff with numbers:
   16.pad(16)     #=> 0
   30.pad(16)     #=> 2
   32.pad(16)     #=> 0
+
+
+Interact with 'telson' and 'plugsrv' directly from IRB:
+
+  ## In a separate window from your irb session do something like:
+  # 
+  #  $ telson rubyforge.com:80 -r
+  #  ** TELSON-192.168.11.2:58118(TCP) Started
+  #  ** BLITSRV-127.0.0.1:25195(TCP) Started
+  #  ** TELSON-192.168.11.2:58118(TCP) CONNECTED TO PEER-205.234.109.19:80(TCP)
+
+  ## You can blit any string from within IRB!
+
+  ## A minor setup step is required... (I stick this in my .irbrc")
+  Plug::Blit.blit_init
+  #=> nil
+
+  "GET / HTTP/1.0\r\n\r\n".blit
+  #=> 28 
+  ## Watch your basic HTTP request get made and responded to in the other window...
+
+  ("GET /" + "A"*30 + " HTTP/1.0\r\n\r\n").blit
+  #=> 58 
+  ## Watch your bogus HTTP request get made and responded to in the other window...
 
 
 Some simple web encoding stuff:
@@ -144,7 +167,11 @@ Pretend (badly) to be smart:
   #=> 3.07487577558377
   
 
-I do recommend the rdoc if you're interested in more of these little helpers. 
-I'll try to keep the comments useful and up to date. Comments are welcome.
+
+I do recommend the more of the rdoc if you're interested in more of these 
+little helpers.  Time permitting, I'll try to keep the comments useful and 
+up to date. 
+
+Comments are welcome.
 
 
