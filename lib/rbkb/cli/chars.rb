@@ -12,7 +12,7 @@ class Rbkb::Cli::Chars < Rbkb::Cli::Executable
 
   def parse(*args)
     super(*args)
-    bail_args @argv.join unless @argv.size == 2
+    bail_args @argv.join(' ') unless @argv.size == 2
   end
 
   def go(*args)
