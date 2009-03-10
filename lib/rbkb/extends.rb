@@ -535,8 +535,11 @@ end
 class Array
   # randomizes the order of contents in the Array (self)
   def randomize  ; self.sort_by { rand } ; end
-end
 
+  # Returns a randomly chosen element from self.
+  # Drew *is* sparta.
+  def rand_elem;  self[rand(self.length)] ; end
+end
 
 class Float
   def log2; Math.log(self)/Math.log(2); end
