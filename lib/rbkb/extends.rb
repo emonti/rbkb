@@ -390,7 +390,7 @@ class String
   #   If strings are null terminated, the trailing null *IS* included
   #   in the end_offset. Unicode matches will also include null bytes.
   #
-  # TODO? 
+  # Todos?
   #    - better unicode support (i.e. not using half-assed unicode)
   #    - support other encodings such as all those the binutils strings does?
   #    - not sure if we want the trailing null in null terminated strings
@@ -466,7 +466,7 @@ class String
 
   # returns CRC32 checksum for the string object
   def crc32
-    ## XXX slower, but here for reference (found on some forum)
+    ## pure ruby version. slower, but here for reference (found on some forum)
     #  r = 0xFFFFFFFF
     #  self.each_byte do |b|
     #    r ^= b
@@ -615,7 +615,7 @@ class Numeric
     }.join
   end
 
-  # XXX TODO Fixme for new to_bytes/char etc.
+  # TODO Fix Numeric.to_guid for new to_bytes/char etc.
 #  def to_guid(order=Rbkb::DEFAULT_BYTE_ORDER)
 #    raw = self.to_bytes(order, 16)
 #    a,b,c,d,*e = raw.unpack("VvvnC6").map{|x| x.to_hex}
