@@ -25,8 +25,8 @@ class Rbkb::Cli::Telson < Rbkb::Cli::Executable
     @s_port = 0
     @proto = :TCP
 
-    # XXX TODO Plug::UI obviously need fixing. It shouldn't be a module
-    # with constants for configuration
+    # TODO Plug::UI obviously need fixing. 
+    # TODO It shouldn't be driven by constants for configuration
     Plug::UI::LOGCFG[:verbose] = true
     Plug::UI::LOGCFG[:dump] = :hex
     Plug::UI::LOGCFG[:out] = @stderr
