@@ -1,8 +1,8 @@
 require 'pp'
 require 'stringio'
 require 'test/unit'
+$:.unshift  File.dirname(__FILE__) + '/../lib'
 require 'rbkb/cli.rb'
-$: << File.dirname(__FILE__) + '/../lib'
 
 Rbkb::Cli::TESTING = true unless defined? Rbkb::Cli::TESTING
 
@@ -48,7 +48,8 @@ module CliTest
     File.delete(fname)
   end
 
-  ### These are all basic CLI tests which every class should pass
+  ### These are all basic CLI tests which every derived class should be able
+  ### to pass.
   ### They'll be imported into individual TestCli.... suites 
   ### along with the standard set up convenience methods above
   def test_usage
