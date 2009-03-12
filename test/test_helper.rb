@@ -1,7 +1,10 @@
 require 'pp'
 require 'stringio'
 require 'test/unit'
+require 'rbkb/cli.rb'
 $: << File.dirname(__FILE__) + '/../lib'
+
+Rbkb::Cli::TESTING = true unless defined? Rbkb::Cli::TESTING
 
 module CliTest
   def setup

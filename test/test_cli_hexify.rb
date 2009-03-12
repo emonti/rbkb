@@ -1,8 +1,6 @@
 require File.join(File.dirname(__FILE__), "test_helper.rb")
 require 'rbkb/cli/hexify'
 
-Rbkb::Cli::TESTING = true
-
 class TestCliHexify < Test::Unit::TestCase
   include CliTest
 

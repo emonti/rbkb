@@ -1,8 +1,6 @@
 require File.join(File.dirname(__FILE__), "test_helper.rb")
 require 'rbkb/cli/crc32'
 
-Rbkb::Cli::TESTING = true
-
 class TestCliCrc32 < Test::Unit::TestCase
   include CliTest
 
@@ -39,18 +37,13 @@ class TestCliCrc32 < Test::Unit::TestCase
     assert_equal(@crc_out, @stdout_io.string)
   end
 
-
-
   def test_range_zero_start
     assert_equal 0, go_with_args(%w(-r 0:48))
     assert_equal(@crc_out, @stdout_io.string)
   end
 
   def test_range
-#    catch(:exit_err) do
     assert_equal 0, go_with_args(%w{-x 30})
-#    end
-#    pp [@stderr_io.string]
     assert_equal("00000000\n", @stdout_io.string)
   end
 
