@@ -5,6 +5,7 @@ require 'optparse'
 # See README.rdoc for license information
 #
 module Rbkb::Cli
+
   # Rbkb::Cli::Executable is an abstract class for creating command line
   # executables using the Ruby Black Bag framework.
   class Executable
@@ -45,7 +46,7 @@ module Rbkb::Cli
     def exit(ret)
       @exit_status = ret
       if defined? Rbkb::Cli::TESTING
-        raise("Exited with return code: #{ret}") if ret != 0
+        throw(((ret==0)? :exit_zero : :exit_err), ret)
       else
         Kernel.exit(ret)
       end
@@ -81,7 +82,8 @@ module Rbkb::Cli
       end
 
       @oparse.on("-v", "--version", "Show version and exit") do
-        bail("Ruby BlackBag version #{Rbkb::VERSION}")
+        @stdout.puts("Ruby BlackBag version #{Rbkb::VERSION}")
+        self.exit(0)
       end
 
       return @oparse
@@ -104,9 +106,8 @@ module Rbkb::Cli
     # executables. The base method just slurps in an optional argv and
     # runs 'parse' if it hasn't already
     def go(argv=nil)
-      if argv 
-        @argv = argv
-      end
+      @exit_status = nil
+      @argv = argv if argv 
 
       parse
 
