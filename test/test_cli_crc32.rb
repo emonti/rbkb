@@ -67,4 +67,36 @@ class TestCliCrc32 < Test::Unit::TestCase
     assert_equal "7d4bb02a\n", @stdout_io.string
   end
 
+  def test_invalid_range
+    assert_equal 1, go_with_args(%w(-r 38:z48),1)
+    assert_match(/invalid range/, @stderr_io.string)
+  end
+
+  def test_range_last_ten_hex
+    assert_equal 1, go_with_args(%w(-x 26:z30), 1)
+    assert_match(/invalid range/, @stderr_io.string)
+  end
+
+  def test_range_last_ten_using_negative
+    assert_equal 0, go_with_args(%w(-r 38:-1))
+    assert_equal "7d4bb02a\n", @stdout_io.string
+  end
+
+  def test_range_last_ten_using_negative_hex
+    assert_equal 0, go_with_args(%w(-x 26:-1))
+    assert_equal "7d4bb02a\n", @stdout_io.string
+  end
+
+  def test_start_from_end_negative_size
+    assert_equal 0, go_with_args(%w(-r -48))
+    assert_equal(@crc_out, @stdout_io.string)
+  end
+
+  def test_start_from_end_negative_size_hex
+    assert_equal 0, go_with_args(%w(-x -30))
+    assert_equal(@crc_out, @stdout_io.string)
+  end
+
+
+
 end
