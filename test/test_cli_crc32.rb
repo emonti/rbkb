@@ -19,7 +19,16 @@ class TestCliCrc32 < Test::Unit::TestCase
     assert_equal(@crc_out, @stdout_io.string)
   end
 
-  def test_file_input
+  def test_file_input_arg
+    with_testfile do |fname, tf| 
+      tf.write @rawdat;  tf.close
+      assert_equal 0, go_with_args([fname])
+      assert_equal(@crc_out, @stdout_io.string)
+    end
+  end
+
+
+  def test_file_input_flag
     with_testfile do |fname, tf| 
       tf.write @rawdat;  tf.close
       assert_equal 0, go_with_args(["-f", fname])
@@ -96,7 +105,4 @@ class TestCliCrc32 < Test::Unit::TestCase
     assert_equal 0, go_with_args(%w(-x -30))
     assert_equal(@crc_out, @stdout_io.string)
   end
-
-
-
 end

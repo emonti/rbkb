@@ -12,13 +12,15 @@ class Rbkb::Cli::Crc32 < Rbkb::Cli::Executable
   end
 
   def make_parser()
-    super()
+    arg = super()
+    arg.banner += " [filename]"
     add_std_file_opt(:indat)
     add_range_opts(:first, :last)
   end
 
   def parse(*args)
     super(*args)
+    parse_file_argument(:indat)
     parse_catchall()
   end
 
