@@ -21,7 +21,7 @@
 # Usage: feed -h
 #
 #----------------------------------------------------------------------
-# TODOS/IDEAS:
+# To-dos / Ideas:
 #  - Unix Domain Socket support?
 #  - more import options?
 #  - dynamic feed elements?
