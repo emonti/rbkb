@@ -30,5 +30,6 @@ class Rbkb::Cli::Urlenc < Rbkb::Cli::Executable
     # Default to standard input
     @opts[:indat] ||= @stdin.read()
     @stdout << @opts[:indat].urlenc(:plus => @opts[:plus]) + "\n"
+    self.exit(0)
   end
 end

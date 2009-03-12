@@ -29,6 +29,7 @@ class Rbkb::Cli::Urldec < Rbkb::Cli::Executable
     # Default to standard input
     @opts[:indat] ||= @stdin.read()
     @stdout << @opts[:indat].urldec(:noplus => @opts[:noplus])
+    self.exit(0)
   end
 end
 
