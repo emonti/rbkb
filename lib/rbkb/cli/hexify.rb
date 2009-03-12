@@ -15,7 +15,7 @@ class Rbkb::Cli::Hexify < Rbkb::Cli::Executable
     arg.banner += " <data | blank for stdin>"
 
     arg.on("-l", "--length LEN", Numeric, "Output lines of LEN bytes") do |l|
-      bail("Length must be greater than zero") unless (@opts[:len] = l) > 0
+      @opts[:len] = l
     end
 
     arg.on("-d", "--delim=DELIMITER", "DELIMITER between each byte") do |d|
@@ -51,9 +51,9 @@ class Rbkb::Cli::Hexify < Rbkb::Cli::Executable
     @opts[:indat] ||= @stdin.read() 
 
     indat = @opts.delete(:indat)
-    len = @opts.delete(:len)
+    len = (@opts.delete(:len) || indat.length)
 
-    self.exit(1) unless((len ||= indat.length) > 0)
+    bail("Length must be greater than zero") unless(len > 0)
 
     until (m = indat.slice!(0..len-1)).empty?
       @stdout << m.hexify(@opts)
