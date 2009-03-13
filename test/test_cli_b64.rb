@@ -14,6 +14,13 @@ class TestCliB64 < Test::Unit::TestCase
     assert_equal "Zm9vYnk=\n", @stdout_io.string
   end
 
+  def test_stdin
+    @stdin_io.write("fooby") ; @stdin_io.rewind
+    assert_equal 0, run_with_args(["--"])
+    assert_equal "Zm9vYnk=\n", @stdout_io.string
+  end
+
+
   def test_length_arg
     assert_equal 0, run_with_args(%w(-l 2 fooby))
     assert_equal "Zm\n9v\nYn\nk=\n", @stdout_io.string
