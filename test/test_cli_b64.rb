@@ -16,7 +16,7 @@ class TestCliB64 < Test::Unit::TestCase
 
   def test_stdin
     @stdin_io.write("fooby") ; @stdin_io.rewind
-    assert_equal 0, run_with_args(["--"])
+    assert_equal 0, run_with_args()
     assert_equal "Zm9vYnk=\n", @stdout_io.string
   end
 
