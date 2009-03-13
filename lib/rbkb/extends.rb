@@ -393,8 +393,6 @@ class String
   # Todos?
   #    - better unicode support (i.e. not using half-assed unicode)
   #    - support other encodings such as all those the binutils strings does?
-  #    - not sure if we want the trailing null in null terminated strings
-  #    - not sure if we want wide characters to include their null bytes
   def strings(opts={})
     opts[:encoding] ||= :both
     prx = (opts[:valid] || /[\r\n [:print:]]/)
