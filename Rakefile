@@ -25,10 +25,16 @@ PROJ.description = 'emonti@matasano.com'
 PROJ.url = 'rbkb.rubyforge.org'
 PROJ.version = Rbkb::VERSION
 PROJ.rubyforge.name = 'rbkb'
+
 PROJ.spec.opts << '--color'
+
 PROJ.rdoc.opts << '--line-numbers'
+
 #PROJ.rdoc.opts << '--diagram'
-PROJ.notes.tags << "X"+"XX" # hah! so we don't note our-self
+PROJ.notes.tags << "X"+"XX" # muhah! so we don't note our-self
+
+# exclude rcov.rb from rcov report
+PROJ.rcov.opts += ["--exclude",  "rcov.rb"]
 
 depend_on 'eventmachine', '>= 0.12.0'
 
