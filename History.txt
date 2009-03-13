@@ -2,4 +2,5 @@
 
 * enhancements
   * Started using bones to help manage this mess. History.txt is born!
+  * begun adding test cases for cli utils
   * crc32 takes an optional filename argument as first arg
