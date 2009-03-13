@@ -14,6 +14,7 @@ class Rbkb::Cli::D64 < Rbkb::Cli::Executable
     super(*args)
     parse_string_argument(:indat)
     parse_catchall()
+    @opts[:indat] ||= @stdin.read
   end
 
   def go(*args)
