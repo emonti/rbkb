@@ -25,6 +25,7 @@ class Rbkb::Cli::B64 < Rbkb::Cli::Executable
   def go(*args)
     super(*args)
     @stdout << @opts[:indat].b64(opts[:len]).chomp + "\n"
+    self.exit(0)
   end
 end
 
