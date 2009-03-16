@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), "test_helper.rb")
+require File.join(File.dirname(__FILE__), "test_cli_helper.rb")
 require 'rbkb/cli/hexify'
 
 class TestCliHexify < Test::Unit::TestCase
@@ -20,9 +20,9 @@ class TestCliHexify < Test::Unit::TestCase
   end
 
   def test_bad_length_arguments
-    assert_equal 1, go_with_args(%w(-l 0 foo), 1)
+    assert_equal 1, go_with_args(%w(-l 0 foo))
     assert_match(/must be greater than zero/, @stderr_io.string)
-    assert_equal 1, go_with_args(%w(-l -1 foo), 1)
+    assert_equal 1, go_with_args(%w(-l -1 foo))
     assert_match(/must be greater than zero/, @stderr_io.string)
   end
 

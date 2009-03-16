@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), "test_helper.rb")
+require File.join(File.dirname(__FILE__), "test_cli_helper.rb")
 require 'rbkb/cli/dedump'
 
 class TestCliDedump < Test::Unit::TestCase
@@ -99,19 +99,19 @@ _EOF_
 _EOF_
 
     @stdin_io.write(len_dump) ; @stdin_io.rewind
-    assert_equal 1, go_with_args(["-l", "2"], 1)
+    assert_equal 1, go_with_args(["-l", "2"])
     assert_equal("helu foo", @stdout_io.string)
   end
 
   def test_bad_len
     @stdin_io.write(@bigtst_dump) ; @stdin_io.rewind
-    assert_equal 1, go_with_args(["-l", "-4"], 1)
+    assert_equal 1, go_with_args(["-l", "-4"])
     assert_match(/length must be greater than zero/i, @stderr_io.string)
   end
 
   def test_bad_input
     @stdin_io.write("bad monkey") ; @stdin_io.rewind
-    assert_equal 1, go_with_args([], 1)
+    assert_equal 1, go_with_args([])
     assert_match(/parse error/i, @stderr_io.string)
   end
 

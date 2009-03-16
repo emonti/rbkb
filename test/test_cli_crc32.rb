@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), "test_helper.rb")
+require File.join(File.dirname(__FILE__), "test_cli_helper.rb")
 require 'rbkb/cli/crc32'
 
 class TestCliCrc32 < Test::Unit::TestCase
@@ -77,12 +77,12 @@ class TestCliCrc32 < Test::Unit::TestCase
   end
 
   def test_invalid_range
-    assert_equal 1, go_with_args(%w(-r 38:z48),1)
+    assert_equal 1, go_with_args(%w(-r 38:z48))
     assert_match(/invalid range/, @stderr_io.string)
   end
 
   def test_range_last_ten_hex
-    assert_equal 1, go_with_args(%w(-x 26:z30), 1)
+    assert_equal 1, go_with_args(%w(-x 26:z30))
     assert_match(/invalid range/, @stderr_io.string)
   end
 

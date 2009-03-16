@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), "test_helper.rb")
+require File.join(File.dirname(__FILE__), "test_cli_helper.rb")
 require 'rbkb/cli/unhexify'
 
 class TestCliUnhexify < Test::Unit::TestCase

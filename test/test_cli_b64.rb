@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), "test_helper.rb")
+require File.join(File.dirname(__FILE__), "test_cli_helper.rb")
 require 'rbkb/cli/b64'
 
 class TestCliB64 < Test::Unit::TestCase
@@ -27,7 +27,7 @@ class TestCliB64 < Test::Unit::TestCase
   end
 
   def test_bad_length_arg
-    assert_equal 1, run_with_args(%w(-l -2 fooby), 1)
+    assert_equal 1, run_with_args(%w(-l -2 fooby))
     assert_match(/length must be > 0/, @stderr_io.string)
   end
 
