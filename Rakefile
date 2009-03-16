@@ -34,7 +34,7 @@ PROJ.rdoc.opts << '--line-numbers'
 PROJ.notes.tags << "X"+"XX" # muhah! so we don't note our-self
 
 # exclude rcov.rb from rcov report
-PROJ.rcov.opts += ["--exclude",  "rcov.rb"]
+PROJ.rcov.opts += ["--exclude",  "rcov.rb", "--exclude", "eventmachine"]
 
 depend_on 'eventmachine', '>= 0.12.0'
 
