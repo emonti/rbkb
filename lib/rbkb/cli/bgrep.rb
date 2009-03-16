@@ -6,9 +6,11 @@ require 'rbkb/cli'
 # searches for a binary string in input. string can be provided 'hexified'
 class Rbkb::Cli::Bgrep < Rbkb::Cli::Executable
   def initialize(*args)
-    super(*args)
-    @opts[:start_off] ||= 0
-    @opts[:end_off] ||= -1
+    super(*args) do |this|
+      this.opts[:start_off] ||= 0
+      this.opts[:end_off] ||= -1
+      this.opts[:include_fname] ||= true
+    end
   end
 
   def make_parser
@@ -28,8 +30,9 @@ class Rbkb::Cli::Bgrep < Rbkb::Cli::Executable
       @opts[:align] = a
     end
 
-    arg.on("-n", "--[no-]filename", "Suppress prefixing of filenames.") do |n|
-      @opts[:suppress_fname] = n
+    arg.on("-n", "--[no-]filename", 
+           "Toggle filenames. (Default: #{@opts[:include_fname]})") do |n|
+      @opts[:include_fname] = n
     end
     return arg
   end
@@ -66,16 +69,18 @@ class Rbkb::Cli::Bgrep < Rbkb::Cli::Executable
 
     loop do 
       dat.bgrep(@find, @opts[:align]) do |hit_start, hit_end, match|
-        print "#{fname}:" if fname and not @opts[:suppress_fname]
+        @stdout.write "#{fname}:" if fname and @opts[:include_fname]
 
-        puts("#{(hit_start).to_hex.rjust(8,"0")}:"+
-             "#{(hit_end).to_hex.rjust(8,"0")}:b:"+
-             "#{match.inspect}")
+        @stdout.write(
+          "#{(hit_start).to_hex.rjust(8,"0")}:"+
+          "#{(hit_end).to_hex.rjust(8,"0")}:b:"+
+          "#{match.inspect}\n")
       end
 
       break unless fname=@argv.shift
       dat = do_file_read(fname)
     end
+    self.exit(0)
   end
 end
 
