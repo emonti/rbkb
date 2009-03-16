@@ -42,9 +42,12 @@ module CliTest
   def with_testfile
     fname = ".cli_tst_#{rand(0xffffffffffffffff).to_s(16).rjust(16,'0')}.tmp"
     f=File.open(fname,"w")
-    yield(fname.dup, f)
-    f.close unless f.closed?
-    File.delete(fname)
+    begin
+      yield(fname.dup, f)
+    ensure
+      f.close unless f.closed?
+      File.delete(fname)
+    end
   end
 
   ### These are all basic CLI tests which every derived class should be able
