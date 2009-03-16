@@ -18,6 +18,7 @@ class Rbkb::Cli::Chars < Rbkb::Cli::Executable
   def go(*args)
     super(*args)
     @stdout << @argv[1] * @argv[0].to_i
+    self.exit(0)
   end
 end
 
