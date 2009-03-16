@@ -7,8 +7,10 @@ require 'rbkb/cli'
 # by Unix utilities like 'xxd' as well as 'hexdump -C'.
 class Rbkb::Cli::Dedump < Rbkb::Cli::Executable
   def initialize(*args)
-    super(*args)
-    @opts[:len] ||= 16
+    super(*args) {|this|
+      this.opts[:len] ||= 16
+      yield this if block_given?
+    }
   end
 
   def make_parser()
@@ -16,7 +18,7 @@ class Rbkb::Cli::Dedump < Rbkb::Cli::Executable
     arg.banner += " <input-file | blank for stdin>"
 
     arg.on("-l", "--length LEN", Numeric, 
-      "Bytes per line in hexdump (default: #{@opts[:len]})") do |l|
+      "Bytes per line in hexdump (Default: #{@opts[:len]})") do |l|
         bail("Length must be greater than zero") unless (@opts[:len] = l) > 0
     end
     return arg

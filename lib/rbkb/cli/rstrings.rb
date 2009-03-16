@@ -6,16 +6,19 @@ require 'rbkb/cli'
 # rstrings is Unix "strings" in ruby... with some extra stuff
 class Rbkb::Cli::Rstrings < Rbkb::Cli::Executable
   def initialize(*args)
-    super(*args)
-    {
-      :start_off => 0, 
-      :end_off => -1, 
-      :encoding => :both, 
-      :minimum => 6,
-      :align => nil,
-      :indat => Array.new,
-      :fnames => Array.new,
-    }.each {|k,v| @opts[k] ||= v }
+    super(*args) do |this|
+      {
+        :start_off => 0, 
+        :end_off => -1, 
+        :encoding => :both, 
+        :minimum => 6,
+        :align => nil,
+        :indat => Array.new,
+        :fnames => Array.new,
+      }.each {|k,v| this.opts[k] ||= v }
+
+      yield this if block_given?
+    end
   end
 
   def make_parser()

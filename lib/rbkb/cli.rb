@@ -38,8 +38,8 @@ module Rbkb::Cli
       @stdin  ||= param.delete(:stdin) || STDIN
       @opts   ||= param.delete(:opts) || {}
       @parser_got_range=nil
-      make_parser()
       yield self if block_given?
+      make_parser()
     end
 
 

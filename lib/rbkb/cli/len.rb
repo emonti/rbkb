@@ -2,23 +2,25 @@ require 'rbkb/cli'
 
 # Copyright 2009 emonti at matasano.com 
 # See README.rdoc for license information
-#
+
 # len prepends a binary length number in front of its input and outputs
 # raw on STDOUT
 class Rbkb::Cli::Len < Rbkb::Cli::Executable
 
   def initialize(*args)
-    super(*args)
-
     # endianness pair. index 0 is always the default
     @endpair = [:big, :little]
-    {
-      :nudge => 0, 
-      :size => 4, 
-      :endian => @endpair[0],
-    }.each {|k,v| @opts[k] ||= v}
-  end
 
+    super(*args) do |this|
+      {
+        :nudge => 0, 
+        :size => 4, 
+        :endian => @endpair[0],
+      }.each {|k,v| this.opts[k] ||= v}
+
+      yield this if block_given?
+    end
+  end
 
   def make_parser()
     super()
@@ -67,6 +69,7 @@ class Rbkb::Cli::Len < Rbkb::Cli::Executable
       len += @opts[:nudge]
     end
     @stdout << len.to_bytes(@opts[:endian], @opts[:size]) << @opts[:indat]
+    self.exit(0)
   end
 
 end
