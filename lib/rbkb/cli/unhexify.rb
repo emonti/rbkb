@@ -40,13 +40,9 @@ class Rbkb::Cli::Unhexify < Rbkb::Cli::Executable
     @opts[:indat] ||= @stdin.read() 
 
     @opts[:indat].delete!("\r\n")
-    @opts[:delim] ||= /\s*/
+    @opts[:delim] ||= Regexp.new('\s*')
 
-    unless out = @opts[:indat].unhexify(@opts[:delim])
-      bail "Error: Failed parsing as hex"
-    end
-
-    @stdout << out
+    @stdout << @opts[:indat].unhexify(@opts[:delim])
 
     self.exit(0)
   end
