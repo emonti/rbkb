@@ -40,6 +40,7 @@ class Rbkb::Cli::Slice < Rbkb::Cli::Executable
   def go(*args)
     super(*args)
     @stdout << @opts[:indat][ @opts[:first] .. @opts[:last] ]
+    self.exit(0)
   end
 
 end
