@@ -54,26 +54,40 @@ module CliTest
   ### to pass.
   ### They'll be imported into individual TestCli.... suites 
   ### along with the standard set up convenience methods above
+
+  # Every command should print usage when -h supplied
   def test_usage
     assert_equal 1, go_with_args(%w(-h))
     assert_match(/^Usage: /, @stderr_io.string )
   end
 
+  # Every command should exit cleanly when bad arguments are specified
   def test_bad_argument
     assert_equal 1, go_with_args(%w(--this_is_really_redonculouslywrong))
     assert_match(/Error: bad arguments/, @stderr_io.string )
   end
 
+  # Every command should display version information with -v
   def test_version_arg
     assert_equal 0, go_with_args(%w(-v))
     assert_match(/Ruby BlackBag version #{Rbkb::VERSION}/, @stdout_io.string)
   end
 
+  # Every command should exit cleanly with a numeric 0/non-zero exit code 
+  # when called without arguments.
+  # (and nothing on STDIN for cases when it is expected)
+  def test_clean_exit_with_no_arguments
+    @stdin_io = StringIO.new
+    assert( Numeric === go_with_args() )
+  end
+
+  # Every cli object should support the go() method with obj.argv = [...]
   def test_vers_go_set_variant
     assert_equal 0, go_set_args(%w(-v))
     assert_match(/Ruby BlackBag version #{Rbkb::VERSION}/, @stdout_io.string)
   end
 
+  # Every cli class should support the 'run([...])' method
   def test_vers_class_run_variant
     assert_equal 0, run_with_args(%w(-v))
     assert_match(/Ruby BlackBag version #{Rbkb::VERSION}/, @stdout_io.string)
