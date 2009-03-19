@@ -6,7 +6,7 @@ require 'eventmachine'
 # Copyright 2009 emonti at moatasano dot com
 # See README.rdoc for license information
 #
-# This is an eventmachine message feeder from static data sources.
+# This is a plug-board message feeder from static data sources.
 # The "feed" handles messages opaquely and just plays them in the given 
 # sequence.
 #
