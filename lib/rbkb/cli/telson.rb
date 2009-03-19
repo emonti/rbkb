@@ -78,7 +78,7 @@ class Rbkb::Cli::Telson < Rbkb::Cli::Executable
 
     # Get target argument
     unless (m = /^([\w\.]+):(\d+)$/.match(@argv.shift)) and @argv.shift.nil?
-      bail "Invalid target #{arg}"
+      bail "Invalid target #{args}"
     end
 
     @t_addr = m[1]
