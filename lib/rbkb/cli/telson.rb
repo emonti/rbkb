@@ -77,12 +77,14 @@ class Rbkb::Cli::Telson < Rbkb::Cli::Executable
     super(*args)
 
     # Get target argument
-    unless (m = /^([\w\.]+):(\d+)$/.match(@argv.shift)) and @argv.shift.nil?
-      bail "Invalid target #{args}"
+    unless (m = /^([\w\.]+):(\d+)$/.match(tgt=@argv.shift)) and @argv.shift.nil?
+      bail "Invalid target: #{tgt}\n  Hint: use -h"
     end
 
     @t_addr = m[1]
     @t_port = m[2].to_i
+
+    parse_catchall
   end
 
 
