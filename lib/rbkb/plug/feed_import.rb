@@ -3,32 +3,38 @@
 #
 
 require 'yaml'
-
-## This requires the 'ruby-pcap' library from:
-##   http://raa.ruby-lang.org/project/pcap/
-## ... which is old and krufty...
-$VERBOSE=nil
-require 'pcaplet'
-$VERBOSE=false
-
 require 'rbkb'
 
 module FeedImport
 
-  # Imports an array from pcap
-  def import_pcap(file, filter=nil)
-    ret = Array.new
-    pcap = Pcap::Capture.open_offline(file)
-    pcap.setfilter filter if filter
-    pcap.each_packet do |pkt|
-      if ( (pkt.udp? and dat=pkt.udp_data) or 
-           (pkt.tcp? and dat=pkt.tcp_data and not dat.empty?)
-         ) 
-           ret <<  dat 
+  begin
+    ## This requires the 'ruby-pcap' library from:
+    ##   http://raa.ruby-lang.org/project/pcap/
+    ## ... which is old and krufty...
+    $VERBOSE=nil
+    require 'pcaplet'
+    $VERBOSE=false
+
+    # Imports an array from pcap
+    def import_pcap(file, filter=nil)
+      ret = Array.new
+      pcap = Pcap::Capture.open_offline(file)
+      pcap.setfilter filter if filter
+      pcap.each_packet do |pkt|
+        if ( (pkt.udp? and dat=pkt.udp_data) or 
+             (pkt.tcp? and dat=pkt.tcp_data and not dat.empty?)
+           ) 
+             ret <<  dat 
+        end
       end
+      return ret
     end
-    return ret
+  rescue LoadError
+    def import_pcap(*args)
+      raise "you must install ruby-pcap to use this feature"
+    end
   end
+
   module_function :import_pcap
 
 

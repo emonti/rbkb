@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "rbkb/cli/feed"
+
+Rbkb::Cli::Feed.run()
