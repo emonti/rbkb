@@ -112,12 +112,12 @@ You can access the rbkb project at github. You'll want git installed:
 
   git clone git://github.com/emonti/rbkb.git
   cd rbkb
-  cp -r wxirb/lib/* /usr/lib/ruby/1.8/site_ruby/1.8 # or another ruby libdir
+  cp -r rbkb/lib/* /usr/lib/ruby/1.8/site_ruby/1.8 # or another ruby libdir
   cp bin/* ~/bin      # or wherever else in your PATH
 
 Run this to generate docs with rdoc the same way the gem would have:
 
-  rdoc --main README.rdoc README.rdoc usage.txt lib
+  rdoc --main README.rdoc README.rdoc cli_usage.rdoc lib_usage.rdoc lib
 
 == LICENSE:
 
