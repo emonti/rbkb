@@ -7,6 +7,7 @@ require 'rbkb'
 
 module FeedImport
 
+  ## TODO switch to pcaprub or some other up to date pcap lib. make it a dep.
   begin
     ## This requires the 'ruby-pcap' library from:
     ##   http://raa.ruby-lang.org/project/pcap/
