@@ -2,8 +2,8 @@
 # See README.rdoc for license information
 #
 
-require "rbkb.rb"
+require "rbkb"
 
-require "rbkb/plug/plug.rb"
-require "rbkb/plug/blit.rb"
+require "rbkb/plug/plug"
+require "rbkb/plug/blit"
 
