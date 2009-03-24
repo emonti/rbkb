@@ -1,8 +1,9 @@
-== 0.6.5 / 2009-03-23
+== 0.6.5 / 2009-03-24
 
 * enhancements
   * Added TLS support to telson (-S/--start-tls in cli)
   * Added raw dump output to telson (-d raw/hex in cli : hex is default)
+  * Added a dirt-simple http protocol implementation
 
 == 0.6.4 / 2009-03-20
 
