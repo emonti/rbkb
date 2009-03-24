@@ -1,6 +1,4 @@
-require 'rbkb/cli'
-require 'rbkb/plug'
-require 'eventmachine'
+require 'rbkb/plug/cli'
 
 # Copyright 2009 emonti at matasano.com 
 # See README.rdoc for license information
@@ -14,48 +12,21 @@ require 'eventmachine'
 #   - Observe client/server behaviors using different messages at
 #     various phases of a conversation.
 #
-class Rbkb::Cli::Telson < Rbkb::Cli::Executable
+class Rbkb::Cli::Telson < Rbkb::Cli::PlugCli
 
   def initialize(*args)
-    super(*args)
-    @b_addr = Plug::Blit::DEFAULT_IPADDR
-    @b_port = Plug::Blit::DEFAULT_PORT
-    @srced = @persist = false
-    @s_addr = "0.0.0.0"
-    @s_port = 0
-    @proto = :TCP
+    super(*args) do |this|
+      this.local_addr = "0.0.0.0"
+      this.local_port = 0
+    end
 
-    # TODO Plug::UI obviously need fixing. 
-    # TODO It shouldn't be driven by constants for configuration
-    Plug::UI::LOGCFG[:verbose] = true
-    Plug::UI::LOGCFG[:dump] = :hex
-    Plug::UI::LOGCFG[:out] = @stderr
+    @srced = false
+    @persist = false
   end
 
 
   def make_parser()
     arg = super()
-    arg.banner += " host:port"
-
-    arg.on("-u", "--udp", "UDP mode") do
-      @proto=:UDP
-    end
-
-    arg.on("-b", "--blit=ADDR:PORT", "Where to listen for blit") do |b|
-      unless m=/^(?:([\w\.]+):)?(\d+)$/.match(b)
-        bail("Invalid blit address/port")
-      end
-      @b_port = m[2].to_i
-      @b_addr = m[1] if m[1]
-    end
-
-    arg.on("-o", "--output=FILE", "Output to file instead of screen") do |f|
-      Plug::UI::LOGCFG[:out] = File.open(f, "w") # XXX
-    end
-
-    arg.on("-q", "--quiet", "Turn off verbose logging") do
-      Plug::UI::LOGCFG[:verbose] = false # XXX
-    end
 
     arg.on("-r", "--reconnect", "Attempt to reconnect endlessly.") do
       @persist=true
@@ -63,8 +34,8 @@ class Rbkb::Cli::Telson < Rbkb::Cli::Executable
 
     arg.on("-s", "--source=(ADDR:?)PORT", "Bind on port (and addr?)") do |p|
       if m=/^(?:([\w\.]+):)?(\d+)$/.match(p)
-        @s_addr = $1 if $1
-        @s_port = $2.to_i
+        @local_addr = $1 if $1
+        @local_port = $2.to_i
         @srced = true
       else
         bail("Invalid listen argument: #{p.inspect}")
@@ -76,15 +47,8 @@ class Rbkb::Cli::Telson < Rbkb::Cli::Executable
   def parse(*args)
     super(*args)
 
-    # Get target argument
-    unless (m = /^([\w\.]+):(\d+)$/.match(tgt=@argv.shift)) and @argv.shift.nil?
-      bail "Invalid target: #{tgt}\n  Hint: use -h"
-    end
-
-    @t_addr = m[1]
-    @t_port = m[2].to_i
-
-    parse_catchall
+    parse_target_argument()
+    parse_catchall()
   end
 
 
@@ -93,24 +57,24 @@ class Rbkb::Cli::Telson < Rbkb::Cli::Executable
 
     loop do
       EventMachine.run {
-        if @proto == :TCP
+        if @transport == :TCP
           bail("Sorry: --source only works with UDP.") if @srced
 
-          c=EventMachine.connect(@t_addr, @t_port, Plug::Telson, @proto)
+          c=EventMachine.connect(@target_addr, @target_port, Plug::Telson, @transport)
 
-        elsif @proto == :UDP
+        elsif @transport == :UDP
           c=EventMachine.open_datagram_socket(
-            @s_addr, @s_port, Plug::Telson, @proto
+            @local_addr, @local_port, Plug::Telson, @transport
           )
-          c.peers.add_peer_manually(@t_addr, @t_port)
+          c.peers.add_peer_manually(@target_addr, @target_port)
 
         ### someday maybe raw or others?
         else
-          raise "bad protocol"
+          raise "bad transport protocol"
         end
 
-        EventMachine.start_server(@b_addr, @b_port, Plug::Blit, :TCP, c)
-        Plug::UI::verbose("** BLITSRV-#{@b_addr}:#{@b_port}(TCP) Started") # XXX
+        EventMachine.start_server(@blit_addr, @blit_port, Plug::Blit, @blit_proto, c)
+        Plug::UI::verbose("** BLITSRV-#{@blit_addr}:#{@blit_port}(TCP) Started") # XXX
       }
       break unless @persist
       Plug::UI::verbose("** RECONNECTING") # XXX

@@ -32,10 +32,19 @@ module Plug
   module Base
     attr_accessor :peers, :transport, :kind
 
-    def initialize(transport)
+    def initialize(transport, opts={})
 #      raise "Invalid transport #{transport.inspect}" unless (:UDP, :TCP).include?(transport)
       @transport = transport
       @peers = PeerList.new(self)
+
+      opts.each_pair do |k,v|
+        accessor = k.to_s + "="
+        if self.respond_to?(accessor)
+          self.send(accessor, v)
+        else
+          raise "Bad attribute: #{k}"
+        end
+      end
     end
 
     def name
@@ -137,21 +146,13 @@ module Plug
     attr_accessor :pos, :feed, :step, :close_at_end, :go_first, 
                   :squelch_exhausted
     
-    def initialize(transport, opts={})
-      super(transport)
+    def initialize(*args)
+      super(*args)
 
-      @pos = 0
-      @feed = []
+      @pos ||= 0
+      @feed ||= []
 
-      opts.each_pair do |k,v|
-        accessor = k.to_s + "="
-        if self.respond_to?(accessor)
-          self.send(accessor, v)
-        else
-          raise "Bad attribute: #{k}"
-        end
-      end
-      raise "feed must be enumerable" unless @feed.kind_of? Enumerable
+      raise "feed must be enumerable" unless Enumerable === @feed
     end
     
     def go
