@@ -60,12 +60,10 @@ class Rbkb::Cli::Telson < Rbkb::Cli::PlugCli
         if @transport == :TCP
           bail("Sorry: --source only works with UDP.") if @srced
 
-          c=EventMachine.connect(@target_addr, @target_port, Plug::Telson, @transport)
+          c=EventMachine.connect(@target_addr, @target_port, Plug::Telson, @transport, @plug_opts)
 
         elsif @transport == :UDP
-          c=EventMachine.open_datagram_socket(
-            @local_addr, @local_port, Plug::Telson, @transport
-          )
+          c=EventMachine.open_datagram_socket( @local_addr, @local_port, Plug::Telson, @transport, @plug_opts)
           c.peers.add_peer_manually(@target_addr, @target_port)
 
         ### someday maybe raw or others?

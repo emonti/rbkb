@@ -219,13 +219,14 @@ Telson is for doing the following things with minimum fuss:
   Usage: telson [options] host:port
     -h, --help                       Show this message
     -v, --version                    Show version and exit
-    -u, --udp                        UDP mode
-    -b, --blit=ADDR:PORT             Where to listen for blit
-    -o, --output=FILE                Output to file instead of screen
+    -o, --output=FILE                Output to file
     -q, --quiet                      Turn off verbose logging
+    -d, --dump-format=hex/raw        Output conversations in hexdump or raw
+    -b, --blit=ADDR:PORT             Where to listen for blit
+    -u, --udp                        UDP mode
+    -S, --start-tls                  Initiate TLS
     -r, --reconnect                  Attempt to reconnect endlessly.
     -s, --source=(ADDR:?)PORT        Bind on port (and addr?)
-
 
 === unhexify
 

@@ -30,7 +30,7 @@ module Plug
 
 
   module Base
-    attr_accessor :peers, :transport, :kind
+    attr_accessor :peers, :transport, :kind, :tls, :tls_opts
 
     def initialize(transport, opts={})
 #      raise "Invalid transport #{transport.inspect}" unless (:UDP, :TCP).include?(transport)
@@ -90,6 +90,9 @@ module Plug
       UI.verbose "** #{name} Started"
       if @kind==:server and peer=plug_peer
         UI.log "** #{name} CONNECTED TO #{peer.name}"
+        if tls
+          start_tls(tls_opts || {})
+        end
       end
     end
 
@@ -103,6 +106,9 @@ module Plug
     def connection_completed
       peer = plug_peer
       UI.log "** #{name} CONNECTED TO #{peer.name}"
+      if tls
+        start_tls(tls_opts || {})
+      end
       return peer
     end
 

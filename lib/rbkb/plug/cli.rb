@@ -16,13 +16,14 @@ module Rbkb::Cli
 
     attr_accessor :blit_addr, :blit_port, :blit_proto, 
                   :local_addr, :local_port, :transport,
-                  :target_addr, :target_port
+                  :target_addr, :target_port, :plug_opts
 
     def initialize(*args)
       super(*args) do |this|
         this.blit_addr ||= Plug::Blit::DEFAULT_IPADDR
         this.blit_port ||= Plug::Blit::DEFAULT_PORT
         this.transport ||= :TCP
+        this.plug_opts ||= {}
         yield this if block_given?
       end
 
@@ -63,6 +64,8 @@ module Rbkb::Cli
       end
 
       arg.on("-u", "--udp", "UDP mode") { @transport=:UDP }
+
+      arg.on("-S", "--start-tls", "Initiate TLS") {|s| @plug_opts[:tls]=true }
 
       return arg
     end
