@@ -29,15 +29,15 @@ require 'eventmachine'
 
 class Rbkb::Cli::Feed < Rbkb::Cli::Executable
   def initialize(*args)
-    @my_addr = "0.0.0.0"
-    @my_port = nil
+    @local_addr = "0.0.0.0"
+    @local_port = nil
     @listen = false
     @persist = false
     @transport = :TCP
     @svr_method = :start_server
     @cli_method = :connect
-    @b_addr = Plug::Blit::DEFAULT_IPADDR
-    @b_port = Plug::Blit::DEFAULT_PORT
+    @blit_addr = Plug::Blit::DEFAULT_IPADDR
+    @blit_port = Plug::Blit::DEFAULT_PORT
 
 
     ## Default options sent to the Feed handler
@@ -65,9 +65,9 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
     end
 
     arg.on("-l", "--listen=(ADDR:?)PORT", "Server - on port (and addr?)") do |p|
-      if m=/^(?:([\w\.]+):)?(\d+)$/.match(p)
-        @my_addr = $1 if $1
-        @my_port = $2.to_i
+      if m=/^(?:([\w\._-]+):)?(\d+)$/.match(p)
+        @local_addr = $1 if $1
+        @local_port = $2.to_i
         @listen = true
       else
         raise "Invalid listen argument: #{p.inspect}"
@@ -76,11 +76,11 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
 
     arg.on("-b", "--blit=(ADDR:)?PORT", "Where to listen for blit") do |b|
       puts b
-      unless(m=/^(?:([\w\.]+):)?(\d+)$/.match(b))
+      unless(m=/^(?:([\w\._-]+):)?(\d+)$/.match(b))
         raise "Invalid blit argument: #{b.inspect}"
       end
-      @b_port = m[2].to_i
-      @b_addr = m[1] if m[1]
+      @blit_port = m[2].to_i
+      @blit_addr = m[1] if m[1]
     end
 
     arg.on("-i", "--[no-]initiate", "Send the first message on connect") do |i|
@@ -97,7 +97,6 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
 
     arg.on("-u", "--udp", "Use UDP instead of TCP" ) do
       @transport = :UDP
-      @svr_method = @cli_method = :open_datagram_socket
     end
 
     arg.on("-r", "--reconnect", "Attempt to reconnect endlessly.") do
@@ -146,28 +145,30 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
   def parse(*args)
     super(*args)
 
+    @svr_method = @cli_method = :open_datagram_socket if @transport == :UDP
+
     # Prepare EventMachine arguments based on whether we are a client or server
     if @listen
-      @evma_addr = @my_addr
-      @evma_port = @my_port
+      @evma_addr = @local_addr
+      @evma_port = @local_port
       @meth = @svr_method
       @feed_opts[:kind] = :server
     else
 
       ## Get target/listen argument for client mode
-      unless (m = /^([\w\.]+):(\d+)$/.match(tgt=@argv.shift)) and @argv.shift.nil?
+      unless (m = /^([\w\.]+):(\d+)$/.match(tgt=@argv.shift))
         bail_args tgt
       end
 
-      @t_addr = m[1]
-      @t_port = m[2].to_i
+      @target_addr = m[1]
+      @target_port = m[2].to_i
 
       if @transport == :UDP
-        @evma_addr = @my_addr
-        @evma_port = @my_port || 0
+        @evma_addr = @local_addr
+        @evma_port = @local_port || 0
       else
-        @evma_addr = @t_addr
-        @evma_port = @t_port
+        @evma_addr = @target_addr
+        @evma_port = @target_port
       end
 
       @meth = @cli_method
@@ -198,12 +199,12 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
     loop do
       EventMachine::run do
         EventMachine.send(*@em_args) do |c|
-          EventMachine.start_server(@b_addr, @b_port, Plug::Blit, :TCP, c)
-          Plug::UI::verbose("** BLITSRV-#{@b_addr}:#{@b_port}(TCP) Started")
+          EventMachine.start_server(@blit_addr, @blit_port, Plug::Blit, :TCP, c)
+          Plug::UI::verbose("** BLITSRV-#{@blit_addr}:#{@blit_port}(TCP) Started")
 
           # if this is a UDP client, we will always send the first message
           if @transport == :UDP and c.kind == :client and 
-            c.feed_data(c.peers.add_peer_manually(@t_addr, @t_port))
+            c.feed_data(c.peers.add_peer_manually(@target_addr, @target_port))
             c.go_first = false
           end
         end
