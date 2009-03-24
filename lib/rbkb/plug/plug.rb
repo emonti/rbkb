@@ -21,9 +21,16 @@ module Plug
 
     def self.dump(from, to, dat)
       if dump=LOGCFG[:dump]
-        LOGCFG[:out].puts "%% #{from} SAYS TO #{to} LEN=#{dat.size}", 
-          (dump == :hex)? dat.hexdump(:out => StringIO.new) : dat,
-          "%%"
+        LOGCFG[:out].puts "%% #{from} SAYS TO #{to} LEN=#{dat.size}" if LOGCFG[:verbose]
+        case dump
+        when :hex
+          dat.hexdump(:out => LOGCFG[:out])
+        when :raw
+          LOGCFG[:out].puts dat
+        else
+          LOGCFG[:out].puts dat
+        end
+        LOGCFG[:out].puts "%%" if LOGCFG[:verbose]
       end
     end
   end
