@@ -106,18 +106,21 @@ either add them to your PATH or copy/symlink them somewhere else like
 
 === Manual installation:
 
-... or ... you can also install manually without rubygems.
+  git clone git://github.com/emonti/rbkb.git
+  cd rbkb
+  rake gem:install
+
+
+or ... you can also install manually without rubygems.
 
 You can access the rbkb project at github. You'll want git installed:
 
-  git clone git://github.com/emonti/rbkb.git
-  cd rbkb
   cp -r rbkb/lib/* /usr/lib/ruby/1.8/site_ruby/1.8 # or another ruby libdir
   cp bin/* ~/bin      # or wherever else in your PATH
 
 Run this to generate docs with rdoc the same way the gem would have:
 
-  rdoc --main README.rdoc README.rdoc cli_usage.rdoc lib_usage.rdoc lib
+  rake doc:rdoc
 
 == LICENSE:
 
