@@ -7,6 +7,8 @@ module Rbkb::Http
   # form of 'q=foo&l=1&z=baz' as found in GET actions and POST 
   # www-form-urlencoded data
   class Parameters < Rbkb::NamedValueArray
+    attr_accessor :opts
+
     def to_raw
       self.map {|k,v| "#{k}=#{v}"}.join('&')
     end
@@ -31,6 +33,8 @@ module Rbkb::Http
   # Includes common implementations of to_raw, to_raw_array, capture, and
   # the class method parse
   class Headers < Rbkb::NamedValueArray
+    attr_accessor :opts
+
     def to_raw_array
       self.map {|h,v| "#{h}: #{v}" }
     end
@@ -103,14 +107,28 @@ module Rbkb::Http
 
   # A class for HTTP request actions, i.e. the first 
   # header sent in an HTTP request, as in "GET / HTTP/1.1"
-  class RequestAction < Struct.new(:verb,:uri,:version)
+  class RequestAction
+    attr_accessor :verb, :uri, :version
+    attr_reader   :opts
+
+    def initialize(verb=nil, uri=nil, version=nil, opts=nil)
+      @verb = verb || "GET"
+      @uri = URI.parse(uri.to_s)
+      @version = version || "HTTP/1.1"
+      @opts = opts || {}
+    end
+
+    def path
+      @uri.path if @uri
+    end
+
     def parameters
-      Parameters.parse(uri.query) if uri.query
+      Parameters.parse(@uri.query) if @uri and @uri.query
     end
 
     def to_raw
-      ary = [ verb, uri ]
-      ary << version if version
+      ary = [ @verb, @uri ]
+      ary << @version if @version
       ary.join(" ")
     end
 
@@ -133,9 +151,9 @@ module Rbkb::Http
       unless m=/^([^\s]+)\s+([^\s]+)(?:\s+([^\s]+))?\s*$/.match(str)
         raise "invalid action #{str.inspect}"
       end
-      verb = m[1]
-      uri = URI.parse m[2]
-      version = m[3]
+      @verb = m[1]
+      @uri = URI.parse m[2]
+      @version = m[3]
       return self
     end
 
@@ -150,9 +168,19 @@ module Rbkb::Http
 
   # A class for HTTP response status messages, i.e. the first 
   # header returned by a server, as in "HTTP/1.0 200 OK"
-  class ResponseStatus < Struct.new(:version, :code, :text)
+  class ResponseStatus
+    attr_accessor :version, :code, :text
+    attr_reader   :opts
+
+    def initialize(version=nil, code=nil, text=nil, opts=nil)
+      @version = version || "HTTP/1.1"
+      @code = code
+      @text = text
+      @opts = opts || {}
+    end
+
     def to_raw
-      [version, code, text].join(" ")
+      [@version, @code, @text].join(" ")
     end
 
     def capture(str)
@@ -160,9 +188,9 @@ module Rbkb::Http
       unless m=/^([^\s]+)\s+(\d+)(?:\s+(.*))?$/.match(str)
         raise "invalid status #{str.inspect}"
       end
-      version = m[1]
-      code = m[2] =~ /^\d+$/ ? m[2].to_i : m[2]
-      text = m[3]
+      @version = m[1]
+      @code = m[2] =~ /^\d+$/ ? m[2].to_i : m[2]
+      @text = m[3]
       return self
     end
 
