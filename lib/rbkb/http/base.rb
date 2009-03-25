@@ -79,8 +79,6 @@ module Rbkb::Http
 
   # A class which encapsulates all the entities in a HTTP response
   # including the status header, general headers, and body.
-  #
-  # TODO: handle chunked encoding in capture and to_raw
   class Response
     attr_accessor :status, :headers, :body
     attr_reader :opts, :chunked_in_progress
