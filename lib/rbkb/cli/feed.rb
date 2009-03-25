@@ -107,7 +107,7 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
       Plug::UI::LOGCFG[:verbose] = false
     end
 
-    arg.on("-S", "--squelch-exhausted", "Squelch 'FEED EXHAUSTED' messages") do |s|
+    arg.on("-Q", "--squelch-exhausted", "Squelch 'FEED EXHAUSTED' messages") do |s|
       @feed_opts[:squelch_exhausted] = true
     end
 
@@ -145,7 +145,9 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
   def parse(*args)
     super(*args)
 
-    @svr_method = @cli_method = :open_datagram_socket if @transport == :UDP
+    if @transport == :UDP
+      @svr_method = @cli_method = :open_datagram_socket
+    end
 
     # Prepare EventMachine arguments based on whether we are a client or server
     if @listen
@@ -203,8 +205,9 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
           Plug::UI::verbose("** BLITSRV-#{@blit_addr}:#{@blit_port}(TCP) Started")
 
           # if this is a UDP client, we will always send the first message
-          if @transport == :UDP and c.kind == :client and 
-            c.feed_data(c.peers.add_peer_manually(@target_addr, @target_port))
+          if [:UDP, :client] == [@transport, c.kind]
+            peer = c.peers.add_peer_manually(@target_addr, @target_port)
+            c.feed_data(peer)
             c.go_first = false
           end
         end
