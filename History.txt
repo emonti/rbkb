@@ -1,18 +1,18 @@
 == 0.6.5 / 2009-03-24
 
-* enhancements
-  * Added a dirt-simple http protocol library implementation
+* Enhancements
+  * Added a http protocol library (Rbkb::Http)
   * Added TLS support to telson (-S/--start-tls in cli)
   * Added raw dump output to telson (-d raw/hex in cli : hex is default)
 
 == 0.6.4 / 2009-03-20
 
-* enhancements
-  * Added unit tests for all cli utilities. Most are fairly complete
+* Enhancements
+  * Added unit tests for all cli utilities. Most are fairly complete.
 
 == 0.6.3 / 2009-03-10
 
-* enhancements
+* Enhancements
   * Started using bones to help manage this mess. History.txt is born!
   * begun adding test cases for cli utils
   * crc32 takes an optional filename argument as first arg
