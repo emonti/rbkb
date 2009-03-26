@@ -33,6 +33,10 @@ module Rbkb
         super(*args)
       end
     end
+
+    def delete_key(key)
+      delete_if {|x| x[0] == key }
+    end
   end
 
 end

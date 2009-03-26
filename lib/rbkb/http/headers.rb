@@ -3,52 +3,80 @@ require 'rbkb/helpers/named_value_array'
 
 module Rbkb::Http
 
-  # The Parameters class is for handling parameter named values in the 
-  # form of 'q=foo&l=1&z=baz' as found in GET actions and POST 
-  # www-form-urlencoded data
-  class Parameters < Rbkb::NamedValueArray
-    attr_accessor :opts
-
-    def to_raw
-      self.map {|k,v| "#{k}=#{v}"}.join('&')
-    end
-
-    def capture(str)
-      raise "arg 0 must be a string" unless String === str
-      str.split('&').each do |p| 
-        var,val = p.split('=',2)
-        self[var] = val
-      end
-      return self
-    end
-
-    def self.parse(str)
-      return new().capture(str)
-    end
-  end
-
-
   # A base class for RequestHeaders and ResponseHeaders
   #
   # Includes common implementations of to_raw, to_raw_array, capture, and
   # the class method parse
   class Headers < Rbkb::NamedValueArray
-    attr_accessor :opts
+    include CommonInterface
 
+    # Instantiates a new Headers object and returns the result of capture(str)
+    def self.parse(str)
+      new().capture(str)
+    end
+
+    # Instantiates a new Headers object and returns the result of 
+    # capture_full_headers(str, first_klass)
+    def self.parse_full_headers(str, first_klass)
+      new().capture_full_headers(str, first_klass)
+    end
+
+    # Instantiates a new Headers object. 
+    #
+    # Parameters:
+    #   raw:  String or Enumerable. Strings are parsed with capture. 
+    #         Enumerables are converted with 'to_a' and stored directly.
+    #
+    #   opts: Options which affect the behavior of the Headers object.
+    #         (none currently defined)
+    #
+    def initialize(raw=nil, opts=nil)
+      super()
+      if args.first.is_a? Enumerable
+        raw=args.first
+        args[0]=nil
+        _common_init(*args)
+        self.data = raw.to_a
+      else
+        _common_init(*args)
+      end
+    end
+
+    attr_reader :base, :data
+
+    def base=(b)
+      if b.nil? or b.is_a? Request or b.is_a? Request # XXX
+        @base = b
+      else
+        raise "base must be a Response or Request object or nil" 
+      end
+    end
+
+    # Sets internal array data without any HTTP decoration
+    def data=(d)
+      self.replace d
+    end
+
+    # Returns an interim formatted array of raw "Cookie: Value" strings
     def to_raw_array
       self.map {|h,v| "#{h}: #{v}" }
     end
 
+    # Returns a raw string of headers
     def to_raw
       to_raw_array.join("\r\n") << "\r\n"
     end
 
+    # Captures a raw string of headers into this instance's internal array.
+    # Note: This method expects not to include the first element such as a
+    # RequestAction or ResponseStatus. See capture_full_headers for a version
+    # that can handle this.
     def capture(str)
       raise "arg 0 must be a string" unless String === str
       heads = str.split(/\s*\r?\n/)
 
       # pass interim parsed headers to a block if given
-      heads = yield(heads) if block_given?
+      yield(heads) if block_given?
 
       heads.each do |s| 
         h ,v = s.split(/\s*:\s*/, 2)
@@ -57,73 +85,78 @@ module Rbkb::Http
       return self
     end
 
-    def self.parse(str)
-      return new().capture(str)
+    # See capture_full_headers. This method is used to resolve the parser
+    # for 
+    def get_first_klass; nil; end
+
+    # This method parses a full set of raw headers from the 'str' argument. 
+    # Unlike the regular capture method, the string is expected to start
+    # with a line which will be parsed by first_klass using its parse 
+    # class method. For example, first_klass would parse something like 
+    # "GET / HTTP/1.1" for RequestAction or "HTTP/1.1 200 OK" for 
+    # ResponseStatus. If first_klass is not defined, there will be an attempt 
+    # to resolve it by calling get_first_klass
+    #
+    # Returns a 2 element array containing [first_entity, headers]
+    # where first entity is the instantiated first_klass object and headers
+    # is self.
+    def capture_full_headers(str, first_klass=nil)
+      if (first_klass ||= get_first_klass()).nil?
+        raise "first_klass cannot be nil"
+      end
+
+      first = nil
+      capture(str) do |heads|
+        first = first_klass.parse(heads.shift).extend
+        yield(heads) if block_given?
+      end
+      return [first, self]
+    end
+
+    def self.request_hdr()
+      new().extend(RequestHeaders)
+    end
+
+    def self.response_hdr(*args)
+      new().extend(ResponseHeaders)
     end
   end
 
 
-  # A class for HTTP Request headers.
-  # Inherits from the Headers base class to add request header specific
+  # A mixin for HTTP Request headers to add specific request header
   # behaviors and features.
-  class RequestHeaders < Headers
-    # This method parses a full set of raw request headers from the 'str'
-    # argument. Headers are expected to include the action in the first line
-    # (as in 'GET / HTTP/1.1'). The status object is returned as a 
-    # RequestAction object.
-    #
-    # Returns a 2 element array containing [status, headers]
-    def self.parse_full_headers(str)
-      action = nil
-      headers = new().capture(str) do |heads|
-        action = RequestAction.parse(heads.shift)
-        heads
-      end
-      return [action, headers]
-    end
+  #
+  # To instantiate a new request header, use Headers.request_hdr
+  module RequestHeaders
+    def get_first_klass; RequestAction; end
   end
 
 
-  # A class for HTTP Response headers.
-  # Inherits from the Headers base class to add response header specific
+  # A mixin for HTTP Response headers to add specific response header
   # behaviors and features.
-  class ResponseHeaders < Headers
-    # This method parses a full set of raw response headers from the 'str'
-    # argument. Headers are expected to include the status in the first line
-    # (as in 'HTTP/1.0 200 OK'). The status object is returned as a 
-    # ResponseStatus object.
-    #
-    # Returns a 2 element array containing [status, headers]
-    def self.parse_full_headers(str)
-      status = nil
-      headers = new().capture(str) do |heads|
-        status = ResponseStatus.parse(heads.shift)
-        heads
-      end
-      return [status, headers]
-    end
+  #
+  # To instantiate a new response header, use Headers.response_hdr
+  module ResponseHeaders
+    def get_first_klass; ResponseStatus; end
   end
 
 
   # A class for HTTP request actions, i.e. the first 
   # header sent in an HTTP request, as in "GET / HTTP/1.1"
   class RequestAction
+    include CommonInterface
+
+    def self.parse(str)
+      new().capture(str)
+    end
+
     attr_accessor :verb, :uri, :version
-    attr_reader   :opts
 
-    def initialize(verb=nil, uri=nil, version=nil, opts=nil)
-      @verb = verb || "GET"
-      @uri = URI.parse(uri.to_s)
-      @version = version || "HTTP/1.1"
-      @opts = opts || {}
-    end
-
-    def path
-      @uri.path if @uri
-    end
-
-    def parameters
-      Parameters.parse(@uri.query) if @uri and @uri.query
+    def initialize(*args)
+      _common_init(*args)
+      @verb ||= "GET"
+      @uri ||= URI.parse("/")
+      @version ||= "HTTP/1.1"
     end
 
     def to_raw
@@ -133,19 +166,6 @@ module Rbkb::Http
     end
 
     # This method parses a request action String into the current instance.
-    # For example:
-    #
-    #   include Rbkb::Http
-    #   act=RequestAction
-    #   act.capture("GET /foo/bar.pl?q=1&search=true HTTP/1.1")
-    #   #=> #<struct Rbkb::Http::RequestAction verb="GET", \
-    #   #     uri=#<URI::Generic:0x2fd582 URL:/foo/bar.pl?q=1&search=true>, \
-    #   #     version="HTTP/1.1">
-    #   params=act.parameters
-    #   # => [["q", "1"], ["search", "true"]]
-    #   params.class
-    #   #=> Rbkb::Http::Parameters
-    #
     def capture(str)
       raise "arg 0 must be a string" unless String === str
       unless m=/^([^\s]+)\s+([^\s]+)(?:\s+([^\s]+))?\s*$/.match(str)
@@ -157,11 +177,19 @@ module Rbkb::Http
       return self
     end
 
+    # Returns the URI path as a String if defined
+    def path
+      @uri.path if @uri
+    end
 
-    # This method parses a request action string and returns a 
-    # RequestAction object. 
-    def self.parse(str)
-      return new().capture(str)
+    # Returns the URI query as a String if it is defined
+    def query
+      @uri.query if @uri
+    end
+
+    # Returns the URI parameter in a Parameters object if defined.
+    def parameters
+      Parameters.parse(query) if query
     end
   end
 
@@ -169,14 +197,17 @@ module Rbkb::Http
   # A class for HTTP response status messages, i.e. the first 
   # header returned by a server, as in "HTTP/1.0 200 OK"
   class ResponseStatus
-    attr_accessor :version, :code, :text
-    attr_reader   :opts
+    include CommonInterface
 
-    def initialize(version=nil, code=nil, text=nil, opts=nil)
-      @version = version || "HTTP/1.1"
-      @code = code
-      @text = text
-      @opts = opts || {}
+    def self.parse(str)
+      new().capture(str)
+    end
+
+    attr_accessor :version, :code, :text
+
+    def initialize(*args)
+      _common_init(*args)
+      @version ||= DEFAULT_HTTP_VERSION
     end
 
     def to_raw
@@ -193,10 +224,6 @@ module Rbkb::Http
       @text = m[3]
       return self
     end
-
-    def self.parse(str)
-      return new().capture(str)
-    end
   end
-
 end
+

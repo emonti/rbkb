@@ -1,21 +1,95 @@
-require 'stringio'
+require 'rbkb/helpers/named_value_array'
 
 module Rbkb::Http
+  DEFAULT_HTTP_VERSION = "HTTP/1.1"
+
+  module CommonInterface
+    # This provides a common method for use in 'initialize' to slurp in 
+    # opts parameters and optionally capture a raw blob. This method also 
+    # accepts a block to which it yields 'self'
+    def _common_init(raw=nil, opts=nil)
+      self.opts = opts
+      yield self if block_given?
+      capture(raw) if raw
+      return self
+    end
+
+    def opts;  
+      @opts
+    end
+
+    def opts=(o=nil)
+      @opts = opts || {}
+      raise "opts must be a hash" unless Hash === @opts
+    end
+  end
+
+
+  # A base class containing some common features for Request and Response 
+  # objects.
+  #
+  # Don't use this class directly, it's intended for use in inheriting 
+  # from its derived classes.
+  class Base
+    include CommonInterface
+
+    def self.parse(str)
+      new().capture(str)
+    end
+
+    def initialize(*args)
+      _common_init(*args)
+    end
+
+    # This method parses just HTTP message body. Expects body to be split
+    # from the headers before-hand.
+    def capture_body(bstr)
+      self.body ||= Body.new
+      @body.base = self
+      @body.capture(bstr)
+    end
+
+    def content_length(hdrs=@headers)
+      if hdrs and hdrs["Content-Length"] =~ /^(\d+)$/
+        $1.to_i
+      end
+    end
+
+    def reset_capture()
+      # nop
+    end
+
+    def reset_capture!()
+      # nop
+    end
+
+    def ready_to_capture?
+      if @body and not @body.ready_to_capture?
+        false
+      else
+        true
+      end
+    end
+
+    attr_reader :body, :headers
+
+    def body=(b)
+      @body.data = b
+    end
+
+    def headers=(h)
+      @headers.data = h
+    end
+
+  end
+
 
   # A class which encapsulates all the entities in a HTTP request
   # including the action header, general headers, and body.
   #
   # This class can also handle proxied requests using the CONNECT verb.
-  class Request
-    attr_accessor :action, :headers, :body, :proxy_request
-    attr_reader   :opts
-
-    def initialize(action=nil, headers=nil, body=nil, opts=nil)
-      @action = action || RequestAction.new
-      @headers = action || RequestHeaders.new
-      @body = body
-      @opts = opts || {}
-    end
+  class Request < Base
+    attr_accessor :action, :proxy_request
 
     def request_path
       @action.path
@@ -29,7 +103,10 @@ module Rbkb::Http
     # an action element defined at the bare minimum.
     def to_raw(body=@body)
       raise "this request has no action element" unless @action
-      @headers["Content-Length"] = body.to_s.size.to_s if body
+      @headers ||= Headers.new {|x| x.base = self }
+      if len=@opts[:static_length] or body
+        @headers["Content-Length"] = len.to_i || body.to_s.size.to_s 
+      end
       hdrs = (@headers).to_raw_array.unshift(@action.to_raw)
       return "#{hdrs.join("\r\n")}\r\n\r\n#{@body}"
     end
@@ -39,21 +116,21 @@ module Rbkb::Http
     # and return a complete raw proxied request blob. If there is
     # no proxy_request defined for this object, this method will 
     # return nil.
-    def to_raw_proxied
+    def to_raw_proxied(*args)
       return nil unless @proxy_request
-      pbody = to_raw()
+      pbody = to_raw(*args)
       return @proxy_request.to_raw(pbody)
     end
 
-    # Parses a raw HTTP response into the current instance.
+    # Parses a raw HTTP request and captures data into the current instance.
     #
-    # If a CONNECT HEADER is encountered at the beginning, this method
-    # will populate the instance's proxy_request entity. See 'to_raw_proxied'
-    #
+    # If a CONNECT header is encountered at the beginning, this method
+    # will populate the instance's proxy_request entity. See also 
+    # to_raw_proxied
     def capture(str)
       raise "arg 0 must be a string" unless String === str
       hstr, bstr = str.split(/\s*\r?\n\r?\n/, 2)
-      act, hdr = RequestHeaders.parse_full_headers(hstr)
+      act, hdr = Headers.request_hdr.capture_full_headers(hstr)
 
       bstr = nil if bstr and bstr.empty? and hdr["Content-Length"].nil?
 
@@ -70,109 +147,107 @@ module Rbkb::Http
       end
       return self
     end
-
-    def self.parse(str)
-      return new().capture(str)
-    end
   end
 
 
-  # A class which encapsulates all the entities in a HTTP response
+  # A class which encapsulates all the entities in a HTTP response,
   # including the status header, general headers, and body.
-  class Response
-    attr_accessor :status, :headers, :body
-    attr_reader :opts, :chunked_in_progress
-
-    def initialize(status=nil, headers=nil, body=nil, opts=nil)
-      @status = status || ResponseStatus.new
-      @headers = headers || ResponseHeaders.new
-      @body = body
-      @opts = opts ||= {}
-    end
+  class Response < Base
+    attr_accessor :status
 
     # Returns a raw HTTP response for this instance. Must have a status
     # element defined at a bare minimum.
-    def to_raw(body=@body)
+    def to_raw(tmp_body=nil)
       raise "this response has no status element" unless @status
 
-      if( (not @opts[:no_chunked]) and 
-          @headers["Transfer-Encoding"] =~ /(?:^|\W)chunked(?:\W|$)/ )
-        bstr = "#{self.body.size.to_hex}\r\n#{self.body}\r\n\r\n0\r\n"
+      tmp_hdrs = @headers ? @headers.dup : Headers.new
+      tmp_hdrs = yield(self, tmp_hdrs) if block_given?
+
+      tmp_body ||= @body
+
+      if do_chunked_encoding?(tmp_hdrs)
+        tmp_hdrs.delete_key("Content-Length")
+        tmp_body = ChunkedBody.new(tmp_body.to_s) {|x| x.base = self }
       else
-        @headers["Content-Length"] = @body.to_s.size.to_s
-        bstr = @body
+        tmp_hdrs["Content-Length"] = tmp_body.to_s.size.to_s
+        tmp_hdrs.delete_key("Transfer-Encoding")
+        tmp_body = BoundBody.new(tmp_body.to_s) {|x| x.base = self }
       end
 
-      hdrs = @headers.to_raw_array.unshift(@status.to_raw)
-      return "#{hdrs.join("\r\n")}\r\n\r\n#{bstr}"
+      hdrs = tmp_hdrs.to_raw_array.unshift(@status.to_raw)
+      return "#{hdrs.join("\r\n")}\r\n\r\n#{tmp_body}"
     end
 
 
-
-    # Handles "Transfer-Encoding: chunked" for body captures
-    # Throws :more_chunks when given incomplete data and expects to be
-    # called again with more body data to parse. Caller can check for this
-    # condition by checking the chunked_in_progress attribute.
-    def capture_chunked(str)
-      # chunked encoding is so gross...
-      if @chunked_in_progress
-        sio = StringIO.new(@last_chunk.to_s + str)
-        @last_chunk = nil
-      else
-        @body = ""
-        sio = StringIO.new(str)
-      end
-
-      @chunked_in_progress = true
-      while not sio.eof?
-        unless m=/^([a-fA-F0-9]+)\s*(;[[:print:]\s]*)?\r?\n$/.match(line=sio.readline)
-          raise "invalid chunk at #{line.chomp.inspect}"
-        end
-        if (chunksz = m[1].hex) == 0
-          @chunked_in_progress = false
-          # XXX ignore Trailer fields
-          break
-        end
-
-        if ( (not sio.eof?) and 
-             (chunk=sio.read(chunksz)) and 
-             chunk.size == chunksz and 
-             (not sio.eof?) and (extra = sio.readline) and
-             (not sio.eof?) and (extra << sio.readline)
-           )
-          if extra =~ /^\r?\n\r?\n$/
-            @body << chunk
-          else
-            raise "expected CRLF"
-          end
-        else
-          @last_chunk = line + chunk.to_s + extra.to_s
-          break
-        end
-      end
-      throw(:more_chunks, self) if @chunked_in_progress
-      return self
+    # Indicates whether to use chunked encoding based on presence of 
+    # the "Transfer-Encoding: chunked" header and/or :ignore_chunked opts
+    # parameter.
+    def do_chunked_encoding?(hdrs=@headers)
+      ( (not @opts[:ignore_chunked]) and 
+        (hdrs["Transfer-Encoding"] =~ /(?:^|\W)chunked(?:\W|$)/) )
     end
 
-    # Parses a raw HTTP response into the current instance.
+
+    # This method parses only HTTP response headers. Expects headers to be 
+    # split from the body before-hand.
+    def capture_headers(hstr)
+      @status, @headers = Headers.response_hdr.capture_full_headers(hstr)
+    end
+
+    # Parses a raw HTTP response and captures data into the current instance.
     def capture(str)
       raise "arg 0 must be a string" unless String === str
       hstr, bstr = str.split(/\s*\r?\n\r?\n/, 2)
-      @status, @headers = ResponseHeaders.parse_full_headers(hstr)
-      if ( (not @opts[:no_chunked]) and 
-           @headers["Transfer-Encoding"] =~ /(?:^|\W)chunked(?:\W|$)/ )
-        @chunked_in_progress = @last_chunk = nil
-        capture_chunked(bstr)
-      else
-        @body = bstr
+
+      capture_headers(hstr)
+
+      # Yield self along with the 
+      yield(self, bstr) if block_given?
+
+      @body =
+        if do_chunked_encoding?
+          ChunkedBody.new {|b| b.base = self }
+        elsif content_length()
+          BoundBody.new {|b| b.base = self }
+        else
+          Body.new {|b| b.base = self }
+        end
+
+      capture_body(bstr)
+
+      return self
+    end
+  end
+
+
+  # The Parameters class is for handling named parameter values in the 
+  # form of 'q=foo&l=1&z=baz' as found in GET action queries and
+  # www-form-urlencoded POST body data
+  class Parameters < Rbkb::NamedValueArray
+    include CommonInterface
+
+    def self.parse(str)
+      new().capture(str)
+    end
+
+    def initialize(*args)
+      _common_init(*args)
+    end
+
+    def to_raw
+      self.map {|k,v| "#{k}=#{v}"}.join('&')
+    end
+
+    def capture(str)
+      raise "arg 0 must be a string" unless String === str
+      str.split('&').each do |p| 
+        var,val = p.split('=',2)
+        self[var] = val
       end
       return self
     end
 
-    # Parses a raw HTTP response and returns a new Response object.
-    def self.parse(str)
-      return new().capture(str)
-    end
   end
+
 end
 

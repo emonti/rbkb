@@ -1,6 +1,6 @@
-require "rbkb"
 require "rbkb/http/base.rb"
 require "rbkb/http/headers.rb"
+require "rbkb/http/body.rb"
 
 # ???Why???? would anyone create their own HTTP implementation in ruby with 
 # so many options out there? Short answer: Net:HTTP and others just don't cut 
