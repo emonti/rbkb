@@ -4,6 +4,9 @@ class TestHttpRequest < Test::Unit::TestCase
   include Rbkb::Http
 
   def setup
+    @obj_klass = Request
+    @obj = @obj_klass.new
+
     @rawdat =<<_EOF_
 GET /csi?v=3&s=webhp&action=&tran=undefined HTTP/1.1
 Host: www.google.com
@@ -56,7 +59,7 @@ _EOF_
     assert_kind_of(@body_klass, req.body) if @body_klass
   end
 
-  def do_capture_tests(req)
+  def do_capture_value_tests(req)
     assert_equal @headers, req.headers
     assert_equal @body, req.body.to_s
     assert_equal @uri, req.action.uri.to_s
@@ -68,33 +71,49 @@ _EOF_
   end
 
   def test_init_parse
-    req = Request.new(@rawdat)
-    do_capture_tests(req)
+    req = @obj_klass.new(@rawdat)
+    do_capture_value_tests(req)
     do_type_tests(req)
   end
 
   def test_parse
-    req = Request.parse(@rawdat)
-    do_capture_tests(req)
+    req = @obj_klass.parse(@rawdat)
+    do_capture_value_tests(req)
     do_type_tests(req)
   end
 
   def test_capture
-    req = Request.new().capture(@rawdat)
-    do_capture_tests(req)
+    req = @obj.capture(@rawdat)
+    do_capture_value_tests(req)
     do_type_tests(req)
   end
 
   def test_back_to_raw
-    req = Request.parse(@rawdat)
+    req = @obj.capture(@rawdat)
     assert_equal @rawdat_crlf, req.to_raw
   end
 
   def test_capture_crlf_headers
-    req = Request.parse(@rawdat_crlf)
-    do_capture_tests(req)
+    req = @obj.capture(@rawdat_crlf)
+    do_capture_value_tests(req)
     do_type_tests(req)
     assert_equal @rawdat_crlf, req.to_raw
+  end
+
+  def test_capture_and_reuse_nondestructive
+    @obj.capture(@rawdat_crlf)
+    @obj.reset_capture
+    @obj.capture(@rawdat_crlf)
+    do_capture_value_tests(@obj)
+    do_type_tests(@obj)
+  end
+
+  def test_capture_and_reuse_destructive
+    @obj.capture(@rawdat_crlf)
+    @obj.reset_capture!
+    @obj.capture(@rawdat_crlf)
+    do_capture_value_tests(@obj)
+    do_type_tests(@obj)
   end
 end
 

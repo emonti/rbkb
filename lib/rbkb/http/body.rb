@@ -37,7 +37,7 @@ module Rbkb::Http
       (block_given?) ? yield(self.data) : self.data
     end
 
-    attr_reader :base, :data
+    attr_reader :base
 
     def base=(b)
       if b.nil? or b.is_a? Base
@@ -47,9 +47,13 @@ module Rbkb::Http
       end
     end
 
+    def data
+      self
+    end
+
     # Sets internal raw string data without any HTTP decoration.
     def data=(str)
-      self.replace(str)
+      self.replace(str.to_s)
     end
 
     # Returns the content length from the HTTP base object if
@@ -58,19 +62,15 @@ module Rbkb::Http
       @base.content_length if @base
     end
 
-    # Forcibly resets the state for this object to ensure that it is ready
-    # for a new capture.
-    #
-    # This method is non-destructive in that it will not affect existing 
-    # captured data if there is any.
+    # This method will non-destructively reset the capture state on this object.
+    # It is non-destructive in that it will not affect existing captured data 
+    # if present.
     def reset_capture
       @expect_length = nil
-      @base.reset_capture() if @base and @base.ready_to_capture?
+      @base.reset_capture() if @base and @base.capture_complete?
     end
 
-    # Forcibly resets the state for this object to ensure that it is ready
-    # for a new capture.
-    #
+    # This method will destructively reset the capture state on this object.
     # This method is destructive in that it will clear any previously captured
     # data.
     def reset_capture!
@@ -78,7 +78,7 @@ module Rbkb::Http
       self.data=""
     end
 
-    def ready_to_capture?
+    def capture_complete?
       not @expect_length
     end
   end
@@ -143,6 +143,7 @@ module Rbkb::Http
   # ChunkedBody is designed for handling an HTTP body when using a
   # "Transfer-Encoding: chunked" HTTP header.
   class ChunkedBody < Body
+    DEFAULT_CHUNK_SIZE = 2048
 
     # Throws :expect_length with 'true' when given incomplete data and expects 
     # to be called again with more body data to parse. 
@@ -191,6 +192,26 @@ module Rbkb::Http
       end
       throw(:expect_length, @expect_length) if @expect_length
       return self
+    end
+
+
+    def to_raw(csz=nil)
+      csz ||= (@opts[:output_chunk_size] || DEFAULT_CHUNK_SIZE)
+      unless csz.kind_of? Integer and csz > 0
+        raise "chunk size must be an integer >= 1"
+      end
+
+      out=[]
+      i=0
+      while i <= self.size
+        chunk = self[i, csz]
+        out << "#{chunk.size.to_s(16)}\r\n#{chunk}\r\n\r\n"
+        yield(self, out.last) if block_given?
+        i+=csz
+      end
+      out << "0\r\n"
+      yield(self, out.last) if block_given?
+      return out.join
     end
   end
 end

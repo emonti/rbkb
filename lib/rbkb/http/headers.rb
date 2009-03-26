@@ -7,18 +7,48 @@ module Rbkb::Http
   #
   # Includes common implementations of to_raw, to_raw_array, capture, and
   # the class method parse
+  #
+  # The Headers array are stored internally as an named value pairs array.
+  #
+  # The headers are generally name/value pairs in the form of:
+  #
+  #   [  ["Name1", "value1"], ["Name2", "value2"], ...  ]
+  #
+  # Which will be rendered with to_raw() to (or captured with capture() from):
+  #
+  #   Name1: value1
+  #   Name2: value2
+  #   ...
+  #
+  # This has the benefit of letting the data= accessor automatically render a 
+  # Hash or any other Enumerable to a Headers object through the use of to_a.
+  # However it has the caveat that named pairs are expected on various 
+  # operations.
   class Headers < Rbkb::NamedValueArray
     include CommonInterface
 
+    # Class method to instantiate a new RequestHeaders object
+    def self.request_hdr(*args)
+      Headers.new(*args).extend(RequestHeaders)
+    end
+
+    # Class method to instantiate a new ResponseHeaders object
+    def self.response_hdr(*args)
+      Headers.new(*args).extend(ResponseHeaders)
+    end
+
     # Instantiates a new Headers object and returns the result of capture(str)
+    # Note, this method does not distinguish between ResponseHeaders or
+    # RequestHeaders, and so the object may need to be extended with one
+    # or the other, if you need access to specific behviors from either.
     def self.parse(str)
       new().capture(str)
     end
 
     # Instantiates a new Headers object and returns the result of 
-    # capture_full_headers(str, first_klass)
-    def self.parse_full_headers(str, first_klass)
-      new().capture_full_headers(str, first_klass)
+    # capture_full_headers(str, first_obj)
+    def self.parse_full_headers(str, first_obj)
+      new().capture_full_headers(str, first_obj)
     end
 
     # Instantiates a new Headers object. 
@@ -32,7 +62,7 @@ module Rbkb::Http
     #
     def initialize(*args)
       super()
-      if args.first.is_a? Enumerable
+      if args.first.kind_of? Enumerable
         raw=args.first
         args[0]=nil
         _common_init(*args)
@@ -42,27 +72,57 @@ module Rbkb::Http
       end
     end
 
-    attr_reader :base, :data
+    attr_reader :base
 
+    # Conditionally sets the @base class variable if it is a kind of Base
+    # object.
     def base=(b)
-      if b.nil? or b.is_a? Request or b.is_a? Request # XXX
+      if b.nil? or b.kind_of? Base
         @base = b
       else
-        raise "base must be a Response or Request object or nil" 
+        raise "base must be a kind of Base object or nil" 
       end
     end
 
-    # Sets internal array data without any HTTP decoration
-    def data=(d)
-      self.replace d
+    # The data method provides a common interface to access internal
+    # non-raw information stored in the object.
+    #
+    # The Headers incarnation returns the internal headers array 
+    # (actually self).
+    def data
+      self
     end
 
-    # Returns an interim formatted array of raw "Cookie: Value" strings
+    # The data= method provides a common interface to access internal
+    # non-raw information stored in the object.
+    #
+    # This method stores creates a shallow copy for anything but another 
+    # Headers object which it references directly. A few rules are enforced:
+    #   * 1-dimensional elements will be expanded to tuples with 'nil' as the 
+    #     second value. 
+    #
+    #   * Names which are enumerables will be 'join()'ed, but not values.
+    def data=(d)
+      if d.kind_of? Headers
+        self.replace d
+      else
+        self.replace []
+        d.to_a.each do |k, v| 
+          k = k.to_s if k.is_a? Numeric
+          self[k] = v
+        end
+      end
+      return self
+    end
+
+    # The to_raw_array method returns an interim formatted array of raw 
+    # "Cookie: Value" strings.
     def to_raw_array
       self.map {|h,v| "#{h}: #{v}" }
     end
 
-    # Returns a raw string of headers
+    # The to_raw method returns a raw string of headers as they appear
+    # on the wire.
     def to_raw
       to_raw_array.join("\r\n") << "\r\n"
     end
@@ -72,53 +132,70 @@ module Rbkb::Http
     # RequestAction or ResponseStatus. See capture_full_headers for a version
     # that can handle this.
     def capture(str)
-      raise "arg 0 must be a string" unless String === str
+
+      raise "arg 0 must be a string" unless str.is_a?(String)
       heads = str.split(/\s*\r?\n/)
 
       # pass interim parsed headers to a block if given
-      yield(heads) if block_given?
+      yield(self, heads) if block_given?
 
+      self.replace [] if capture_complete? 
       heads.each do |s| 
-        h ,v = s.split(/\s*:\s*/, 2)
-        self[h]=v
+        k,v = s.split(/\s*:\s*/, 2) 
+        self[k] = v
       end
       return self
     end
 
     # See capture_full_headers. This method is used to resolve the parser
-    # for 
-    def get_first_klass; nil; end
+    # for the first entity above the HTTP headers. This instance is designed
+    # to raise an exception when capturing.
+    def get_first_obj; raise "get_first_obj called on base stub"; end
 
     # This method parses a full set of raw headers from the 'str' argument. 
     # Unlike the regular capture method, the string is expected to start
-    # with a line which will be parsed by first_klass using its parse 
-    # class method. For example, first_klass would parse something like 
+    # with a line which will be parsed by first_obj using its own capture 
+    # method. For example, first_obj would parse something like 
     # "GET / HTTP/1.1" for RequestAction or "HTTP/1.1 200 OK" for 
-    # ResponseStatus. If first_klass is not defined, there will be an attempt 
-    # to resolve it by calling get_first_klass
+    # ResponseStatus. If first_obj is not defined, there will be an attempt 
+    # to resolve it by calling get_first_obj which should return the 
+    # appropriate type of object or raise an exception.
     #
     # Returns a 2 element array containing [first_entity, headers]
-    # where first entity is the instantiated first_klass object and headers
+    # where first entity is the instantiated first_obj object and headers
     # is self.
-    def capture_full_headers(str, first_klass=nil)
-      if (first_klass ||= get_first_klass()).nil?
-        raise "first_klass cannot be nil"
-      end
+    def capture_full_headers(str, first_obj=nil)
+      first_obj ||= get_first_obj() {|x|}
 
       first = nil
-      capture(str) do |heads|
-        first = first_klass.parse(heads.shift)
+      capture(str) do |this, heads|
+        first = first_obj.capture(heads.shift)
         yield(heads) if block_given?
       end
       return [first, self]
     end
 
-    def self.request_hdr(*args)
-      new(*args).extend(RequestHeaders)
+    # This method will non-destructively reset the capture state on this object.
+    # The existing headers are maintained when this is called.
+    # See also: capture_complete? reset_capture!
+    def reset_capture
+      @capture_state = nil
+      self
     end
 
-    def self.response_hdr(*args)
-      new(*args).extend(ResponseHeaders)
+    # This method will destructively reset the capture state on this object.
+    # The existing headers array is emptied when this is called.
+    # See also: capture_complete?, reset_capture
+    def reset_capture!
+      @capture_state = nil
+      self.data = []
+    end
+
+    # Indicates whether this object is ready to capture fresh data, or is
+    # waiting for additional data or a reset from a previous incomplete or 
+    # otherwise broken capture. See also: reset_capture, reset_capture!
+    def capture_complete?
+      not @capture_state
     end
   end
 
@@ -128,7 +205,12 @@ module Rbkb::Http
   #
   # To instantiate a new request header, use Headers.request_hdr
   module RequestHeaders
-    def get_first_klass; RequestAction; end
+    # This method is used to resolve the parser for the first entity above the 
+    # HTTP headers. The incarnation for ResponseHeaders returns ResponseStatus
+    # See Headers.capture_full_headers for more information.
+    def get_first_obj(*args)
+      RequestAction.new(*args)
+    end
   end
 
 
@@ -137,7 +219,13 @@ module Rbkb::Http
   #
   # To instantiate a new response header, use Headers.response_hdr
   module ResponseHeaders
-    def get_first_klass; ResponseStatus; end
+
+    # This method is used to resolve the parser for the first entity above the 
+    # HTTP headers. The incarnation for ResponseHeaders returns ResponseStatus
+    # See Headers.capture_full_headers for more information.
+    def get_first_obj(*args)
+      ResponseStatus.new(*args)
+    end
   end
 
 
@@ -167,7 +255,7 @@ module Rbkb::Http
 
     # This method parses a request action String into the current instance.
     def capture(str)
-      raise "arg 0 must be a string" unless String === str
+      raise "arg 0 must be a string" unless str.is_a?(String)
       unless m=/^([^\s]+)\s+([^\s]+)(?:\s+([^\s]+))?\s*$/.match(str)
         raise "invalid action #{str.inspect}"
       end
@@ -187,9 +275,17 @@ module Rbkb::Http
       @uri.query if @uri
     end
 
-    # Returns the URI parameter in a Parameters object if defined.
+    # Returns the URI query parameters as a Parameters object if defined.
+    # XXX note parameters cannot currently be modified in this form.
     def parameters
       Parameters.parse(query) if query
+    end
+
+    attr_reader :base
+
+    def base=(b)
+      raise "base must be a kind of Base object" if not b.is_a? Base
+      @base = b
     end
   end
 
@@ -215,7 +311,7 @@ module Rbkb::Http
     end
 
     def capture(str)
-      raise "arg 0 must be a string" unless String === str
+      raise "arg 0 must be a string" unless str.is_a?(String)
       unless m=/^([^\s]+)\s+(\d+)(?:\s+(.*))?$/.match(str)
         raise "invalid status #{str.inspect}"
       end
@@ -223,6 +319,13 @@ module Rbkb::Http
       @code = m[2] =~ /^\d+$/ ? m[2].to_i : m[2]
       @text = m[3]
       return self
+    end
+
+    attr_reader :base
+
+    def base=(b)
+      raise "base must be a kind of Base object" if not b.is_a? Base
+      @base = b
     end
   end
 end

@@ -14,13 +14,22 @@ module Rbkb::Http
       return self
     end
 
-    def opts;  
+    # Implements a common interface for an opts hash which is stored internally
+    # as the class variable @opts.
+    #
+    # The opts hash is designed to contain various named values for 
+    # configuration, etc. The values and names are determined entirely
+    # by the class that uses it.
+    def opts
       @opts
     end
 
+    # Implements a common interface for setting a new opts hash containing
+    # various named values for configuration, etc. This also performs a 
+    # minimal sanity check to ensure the object is a Hash.
     def opts=(o=nil)
-      @opts = opts || {}
-      raise "opts must be a hash" unless Hash === @opts
+      raise "opts must be a hash" unless (o ||= {}).is_a? Hash
+      @opts = o
     end
   end
 
@@ -28,8 +37,8 @@ module Rbkb::Http
   # A base class containing some common features for Request and Response 
   # objects.
   #
-  # Don't use this class directly, it's intended for use in inheriting 
-  # from its derived classes.
+  # Don't use this class directly, it's intended for being overridden
+  # from its derived classes or mixins.
   class Base
     include CommonInterface
 
@@ -37,6 +46,7 @@ module Rbkb::Http
       new().capture(str)
     end
 
+    # Initializes a new Base object
     def initialize(*args)
       _common_init(*args)
     end
@@ -44,28 +54,98 @@ module Rbkb::Http
     # This method parses just HTTP message body. Expects body to be split
     # from the headers before-hand.
     def capture_body(bstr)
-      self.body ||= Body.new
-      @body.base = self
+      self.body ||= default_body_obj
       @body.capture(bstr)
     end
 
+    # This method parses only HTTP response headers. Expects headers to be 
+    # split from the body before-hand.
+    def capture_headers(hstr)
+      self.headers ||= default_headers_obj
+
+      if @body and not @body.capture_complete?
+        return 
+      elsif @headers.capture_complete?
+        @status, @headers = default_headers_obj.capture_full_headers(hstr)
+      else 
+        @headers.capture(hstr)
+      end
+    end
+
+    # This method returns the content length from Headers. This is
+    # mostly useful if you are using a BoundBody object for the body.
+    # 
+    # Returns nil if no "Content-Length" is not found.
+    #
+    # The opts parameter :ignore_content_length affects this method and 
+    # will cause it always to return nil.
+    #
     def content_length(hdrs=@headers)
-      if hdrs and hdrs["Content-Length"] =~ /^(\d+)$/
+      if( (not @opts[:ignore_content_length]) and 
+          hdrs and 
+          hdrs["Content-Length"] =~ /^(\d+)$/ )
+
         $1.to_i
       end
     end
 
-    def reset_capture()
-      # nop
+    def attach_new_header(hdr_obj=nil)
+      self.headers = hdr_obj
+      return hdr_obj
     end
 
-    def reset_capture!()
-      # nop
+    def attach_new_body(body_obj=nil)
+      self.body = body_obj
+      return body_obj
     end
 
-    def ready_to_capture?
-      if @body and not @body.ready_to_capture?
-        false
+    # XXX doc override!
+    def default_headers_obj(*args)
+      Header.new(*args)
+    end
+
+    # XXX doc override!
+    def default_body_obj(*args)
+      Body.new(*args)
+    end
+
+    # This method will non-destructively reset the capture state on this 
+    # object and all child entities. Note, however, If child entities are not 
+    # defined, it may instantiate new ones. 
+    # See also: capture_complete?, reset_capture!
+    def reset_capture
+      if @headers
+        @headers.reset_capture if not @headers.capture_complete?
+      else
+        attach_new_header()
+      end
+
+      if @body
+        @body.reset_capture if not @body.capture_complete? 
+      else
+        attach_new_body()
+      end
+      @capture_state = nil
+      self
+    end
+
+    # This method will destructively reset the capture state on this object.
+    # It does so by initializing fresh child entities and discarding the old
+    # ones. See also: capture_complete?, reset_capture
+    def reset_capture!
+      attach_new_header()
+      attach_new_body()
+      @capture_state = nil
+      self
+    end
+
+    # Indicates whether this object is ready to capture fresh data, or is
+    # waiting for additional data or a reset from a previous incomplete or 
+    # otherwise broken capture. See also: reset_capture, reset_capture!
+    def capture_complete?
+      if( (@headers and not @headers.capture_complete?) or
+          (@body and not @body.capture_complete?) )
+        return false
       else
         true
       end
@@ -73,12 +153,34 @@ module Rbkb::Http
 
     attr_reader :body, :headers
 
+    # This accessor will attempt to always do the "right thing" while
+    # setting this object's body entity. See: default_body_obj
     def body=(b)
-      @body.data = b
+      if @body
+        @body.data = b
+      elsif b.kind_of? Body
+        @body = b.dup
+        @body.opts = b.opts
+      else
+        @body = default_body_obj(b)
+      end
+      @body.base = self
+      return @body
     end
 
+    # This accessor will attempt to always do the "right thing" while
+    # setting this object's headers entity. See: default_headers_obj
     def headers=(h)
-      @headers.data = h
+      if @headers
+        @headers.data = h
+      elsif h.kind_of? Headers
+        @headers = h.dup
+        @headers.opts = h.opts
+      else
+        @headers = default_headers_obj(h)
+      end
+      @headers.base = self
+      return @body
     end
 
   end
@@ -95,24 +197,39 @@ module Rbkb::Http
       @action.parameters
     end
 
+    # Returns a new Headers object extended as RequestHeaders. This is the 
+    # default object which will be used when composing fresh Request header
+    # entities.
+    def default_headers_obj(*args)
+      Headers.new(*args).extend(RequestHeaders)
+    end
+
+    # Returns a new BoundBody object. This is the default object which will 
+    # be used when composing fresh Request body entities.
+    def default_body_obj(*args)
+      BoundBody.new(*args)
+    end
 
     # Returns a raw HTTP request for this instance. The instance must have 
     # an action element defined at the bare minimum.
-    def to_raw(body=@body)
+    #
+    # FIXME: follow same conventions as Response.to_raw
+    def to_raw(tmp_body=@body)
       raise "this request has no action element" unless @action
       @headers ||= Headers.request_hdr
-      @headers.base = self
-      if( (not @opts[:never_content_length]) and 
-          ( len=@opts[:static_length] or 
-            @opts[:do_content_length] ) )
-        
-        @headers["Content-Length"] = len.to_i || body.to_s.size.to_s 
-      else
-        @headers.delete_key("Content-Length")
+      tmp_body ||= Body.new
+
+      if( (not @opts[:ignore_content_length]))
+        if ( len=@opts[:static_length] )
+          tmp_body = BoundBody.new(tmp_body, tmp_body.opts)
+          @headers["Content-Length"] = len.to_i || tmp_body.to_s.size.to_s 
+        else
+          @headers.delete_key("Content-Length")
+        end
       end
 
       hdrs = (@headers).to_raw_array.unshift(@action.to_raw)
-      return "#{hdrs.join("\r\n")}\r\n\r\n#{@body}"
+      return "#{hdrs.join("\r\n")}\r\n\r\n#{tmp_body.to_raw}"
     end
 
 
@@ -178,16 +295,24 @@ module Rbkb::Http
       tmp_body ||= @body
 
       if do_chunked_encoding?(tmp_hdrs)
+        unless tmp_body.is_a? ChunkedBody
+          tmp_body = ChunkedBody.new(tmp_body.to_s, tmp_body.opts)
+          tmp_body.base = self 
+        end
         tmp_hdrs.delete_key("Content-Length")
-        tmp_body = ChunkedBody.new(tmp_body.to_s) {|x| x.base = self }
-      else
+      elsif not opts[:ignore_content_length]
+        unless tmp_body.is_a? BoundBody
+          tmp_body = BoundBody.new(tmp_body.to_s, tmp_body.opts)
+          tmp_body.base = self 
+        end
         tmp_hdrs["Content-Length"] = tmp_body.to_s.size.to_s
         tmp_hdrs.delete_key("Transfer-Encoding")
-        tmp_body = BoundBody.new(tmp_body.to_s) {|x| x.base = self }
+      else
+        tmp_body = Body.new(tmp_body.to_s) {|x| x.base = self}
       end
 
       hdrs = tmp_hdrs.to_raw_array.unshift(@status.to_raw)
-      return "#{hdrs.join("\r\n")}\r\n\r\n#{tmp_body}"
+      return "#{hdrs.join("\r\n")}\r\n\r\n#{tmp_body.to_raw}"
     end
 
 
@@ -199,11 +324,17 @@ module Rbkb::Http
         (hdrs["Transfer-Encoding"] =~ /(?:^|\W)chunked(?:\W|$)/) )
     end
 
+    # Returns a new Headers object extended as ResponseHeaders. This is the 
+    # default object which will be used when composing fresh Response header
+    # entities.
+    def default_headers_obj(*args)
+      Headers.new(*args).extend(ResponseHeaders)
+    end
 
-    # This method parses only HTTP response headers. Expects headers to be 
-    # split from the body before-hand.
-    def capture_headers(hstr)
-      @status, @headers = Headers.response_hdr.capture_full_headers(hstr)
+    # Returns a new BoundBody object. This is the default object which will 
+    # be used when composing fresh Response body entities.
+    def default_body_obj(*args)
+      BoundBody.new(*args)
     end
 
     # Parses a raw HTTP response and captures data into the current instance.
@@ -213,17 +344,18 @@ module Rbkb::Http
 
       capture_headers(hstr)
 
-      # Yield self along with the 
       yield(self, bstr) if block_given?
 
-      @body =
-        if do_chunked_encoding?
-          ChunkedBody.new {|b| b.base = self }
-        elsif content_length()
-          BoundBody.new {|b| b.base = self }
-        else
-          Body.new {|b| b.base = self }
-        end
+      unless @body and @body.capture_complete?
+        @body =
+          if do_chunked_encoding?
+            ChunkedBody.new {|b| b.base = self }
+          elsif content_length()
+            BoundBody.new {|b| b.base = self }
+          else
+            Body.new {|b| b.base = self }
+          end
+      end
 
       capture_body(bstr)
 
