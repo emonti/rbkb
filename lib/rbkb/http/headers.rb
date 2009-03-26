@@ -30,7 +30,7 @@ module Rbkb::Http
     #   opts: Options which affect the behavior of the Headers object.
     #         (none currently defined)
     #
-    def initialize(raw=nil, opts=nil)
+    def initialize(*args)
       super()
       if args.first.is_a? Enumerable
         raw=args.first
@@ -107,18 +107,18 @@ module Rbkb::Http
 
       first = nil
       capture(str) do |heads|
-        first = first_klass.parse(heads.shift).extend
+        first = first_klass.parse(heads.shift)
         yield(heads) if block_given?
       end
       return [first, self]
     end
 
-    def self.request_hdr()
-      new().extend(RequestHeaders)
+    def self.request_hdr(*args)
+      new(*args).extend(RequestHeaders)
     end
 
     def self.response_hdr(*args)
-      new().extend(ResponseHeaders)
+      new(*args).extend(ResponseHeaders)
     end
   end
 

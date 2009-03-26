@@ -40,7 +40,7 @@ module Rbkb::Http
     attr_reader :base, :data
 
     def base=(b)
-      if b.nil? or b.is_a? Request or b.is_a? Request # XXX
+      if b.nil? or b.is_a? Base
         @base = b
       else
         raise "base must be a Response or Request object or nil" 

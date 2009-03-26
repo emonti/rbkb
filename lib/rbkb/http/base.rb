@@ -91,25 +91,30 @@ module Rbkb::Http
   class Request < Base
     attr_accessor :action, :proxy_request
 
-    def request_path
-      @action.path
-    end
-
     def request_parameters
       @action.parameters
     end
+
 
     # Returns a raw HTTP request for this instance. The instance must have 
     # an action element defined at the bare minimum.
     def to_raw(body=@body)
       raise "this request has no action element" unless @action
-      @headers ||= Headers.new {|x| x.base = self }
-      if len=@opts[:static_length] or body
+      @headers ||= Headers.request_hdr
+      @headers.base = self
+      if( (not @opts[:never_content_length]) and 
+          ( len=@opts[:static_length] or 
+            @opts[:do_content_length] ) )
+        
         @headers["Content-Length"] = len.to_i || body.to_s.size.to_s 
+      else
+        @headers.delete_key("Content-Length")
       end
+
       hdrs = (@headers).to_raw_array.unshift(@action.to_raw)
       return "#{hdrs.join("\r\n")}\r\n\r\n#{@body}"
     end
+
 
     # If a proxy_request member exists, this method will encapsulate
     # a raw HTTP request using the information in the proxy_request
@@ -132,18 +137,25 @@ module Rbkb::Http
       hstr, bstr = str.split(/\s*\r?\n\r?\n/, 2)
       act, hdr = Headers.request_hdr.capture_full_headers(hstr)
 
-      bstr = nil if bstr and bstr.empty? and hdr["Content-Length"].nil?
+      tmp_body = 
+        if content_length()
+          BoundBody.new() {|b| b.base = self}
+        else
+          Body.new() {|b| b.base = self }
+        end
+
+      tmp_body.capture(bstr)
 
       if act.verb.to_s.upcase == "CONNECT"
         @proxy_request = nil
         preq = self.class.new(act, hdr)
-        capture(bstr)
+        self.capture(tmp_body)
         raise "multiple proxy CONNECT headers!" if @proxy_request
         @proxy_request = preq
       else
         @action = act
         @headers = hdr
-        @body = bstr
+        @body = tmp_body
       end
       return self
     end
