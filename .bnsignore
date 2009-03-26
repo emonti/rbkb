@@ -14,7 +14,7 @@
 *~
 *.swp
 announcement.txt
-coverage
+coverage*/
 doc
 pkg
 bin/experimental
