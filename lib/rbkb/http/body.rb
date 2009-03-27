@@ -128,14 +128,10 @@ module Rbkb::Http
     end
 
     def to_raw(*args)
-      body = super(*args)
-      if not clen=get_content_length()
-        raise "content-length is unknown. aborting capture"
-      elsif body.size < clen
-        return body.ljust((clen - body.size), (opts[:pad] || "\x00"))
-      else
-        return body[0,clen]
+      if @base
+        @base.headers["Content-Length"] = self.size
       end
+      super(*args)
     end
   end
 

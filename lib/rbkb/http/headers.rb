@@ -1,5 +1,4 @@
 require 'uri'
-require 'rbkb/helpers/named_value_array'
 
 module Rbkb::Http
 
@@ -24,7 +23,7 @@ module Rbkb::Http
   # Hash or any other Enumerable to a Headers object through the use of to_a.
   # However it has the caveat that named pairs are expected on various 
   # operations.
-  class Headers < Rbkb::NamedValueArray
+  class Headers < NamedValueArray
     include CommonInterface
 
     # Class method to instantiate a new RequestHeaders object
