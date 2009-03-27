@@ -1,6 +1,8 @@
 require File.dirname(__FILE__) + '/test_http_helper.rb'
 
 class TestHttpResponse < Test::Unit::TestCase
+  include HttpTestHelper::CommonInterfaceTests
+
   include Rbkb::Http
 
   def setup
@@ -56,36 +58,6 @@ _EOF_
     assert_equal @content_length, rsp.content_length
   end
 
-  def test_init_parse
-    rsp = @obj_klass.new(@rawdat)
-    do_capture_value_tests(rsp)
-    do_type_tests(rsp)
-  end
-
-  def test_parse
-    rsp = @obj_klass.parse(@rawdat)
-    do_capture_value_tests(rsp)
-    do_type_tests(rsp)
-  end
-
-  def test_capture
-    @obj.capture(@rawdat)
-    do_capture_value_tests(@obj)
-    do_type_tests(@obj)
-  end
-
-  def test_captured_body_type
-    @obj.capture(@rawdat)
-    assert_kind_of BoundBody, @obj.body
-  end
-
-  def test_back_to_raw
-    @obj.capture(@rawdat)
-    do_capture_value_tests(@obj)
-    do_type_tests(@obj)
-    assert_equal @rawdat_crlf, @obj.to_raw
-  end
-
   def test_capture_crlf_headers
     @obj.capture(@rawdat_crlf)
     do_capture_value_tests(@obj)
@@ -93,20 +65,9 @@ _EOF_
     assert_equal @rawdat_crlf, @obj.to_raw
   end
 
-  def test_capture_and_reuse_nondestructive
-    @obj.capture(@rawdat_crlf)
-    @obj.reset_capture
-    @obj.capture(@rawdat_crlf)
-    do_capture_value_tests(@obj)
-    do_type_tests(@obj)
-  end
-
-  def test_capture_and_reuse_destructive
-    @obj.capture(@rawdat_crlf)
-    @obj.reset_capture!
-    @obj.capture(@rawdat_crlf)
-    do_capture_value_tests(@obj)
-    do_type_tests(@obj)
+  def test_captured_body_type
+    @obj.capture(@rawdat)
+    assert_kind_of BoundBody, @obj.body
   end
 end
 

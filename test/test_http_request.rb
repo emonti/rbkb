@@ -1,6 +1,8 @@
 require File.dirname(__FILE__) + '/test_http_helper.rb'
 
 class TestHttpRequest < Test::Unit::TestCase
+  include HttpTestHelper::CommonInterfaceTests
+
   include Rbkb::Http
 
   def setup
@@ -56,7 +58,6 @@ _EOF_
     assert_kind_of Body, req.body
     assert_kind_of RequestAction, req.action
     assert_kind_of RequestHeaders, req.headers
-    assert_kind_of(@body_klass, req.body) if @body_klass
   end
 
   def do_capture_value_tests(req)
@@ -70,29 +71,6 @@ _EOF_
     assert_equal @req_parameters, req.request_parameters
   end
 
-  def test_init_parse
-    req = @obj_klass.new(@rawdat)
-    do_capture_value_tests(req)
-    do_type_tests(req)
-  end
-
-  def test_parse
-    req = @obj_klass.parse(@rawdat)
-    do_capture_value_tests(req)
-    do_type_tests(req)
-  end
-
-  def test_capture
-    req = @obj.capture(@rawdat)
-    do_capture_value_tests(req)
-    do_type_tests(req)
-  end
-
-  def test_back_to_raw
-    req = @obj.capture(@rawdat)
-    assert_equal @rawdat_crlf, req.to_raw
-  end
-
   def test_capture_crlf_headers
     req = @obj.capture(@rawdat_crlf)
     do_capture_value_tests(req)
@@ -100,21 +78,59 @@ _EOF_
     assert_equal @rawdat_crlf, req.to_raw
   end
 
-  def test_capture_and_reuse_nondestructive
-    @obj.capture(@rawdat_crlf)
-    @obj.reset_capture
-    @obj.capture(@rawdat_crlf)
-    do_capture_value_tests(@obj)
-    do_type_tests(@obj)
+  def test_captured_body_type
+    @obj.capture(@rawdat)
+    assert_kind_of Body, @obj.body
   end
 
-  def test_capture_and_reuse_destructive
-    @obj.capture(@rawdat_crlf)
-    @obj.reset_capture!
-    @obj.capture(@rawdat_crlf)
-    do_capture_value_tests(@obj)
-    do_type_tests(@obj)
-  end
 end
 
+
+class TestHttpPostRequest < TestHttpRequest
+
+  def setup
+    @obj_klass = Request
+    @obj = @obj_klass.new
+
+    @rawdat =<<_EOF_
+POST /path/script.cgi?qtype=foo HTTP/1.0
+From: frog@jmarshall.com
+HasColon: this_has_a_colon:yikes
+User-Agent: HTTPTool/1.0
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 32
+
+home=Cosby&favorite+flavor=flies
+_EOF_
+    @rawdat.chomp!
+
+    @hstr, @body = @rawdat.split(/^\n/, 2)
+    @rawdat_crlf = @hstr.gsub("\n", "\r\n") + "\r\n" + @body
+
+    @verb = "POST"
+    @uri = "/path/script.cgi?qtype=foo"
+    @path, @query = @uri.split('?',2)
+    @req_parameters = [
+      ["qtype", "foo"], 
+    ]
+    @version = "HTTP/1.0"
+
+    @headers = [
+      ["From", "frog@jmarshall.com"],
+      ["HasColon", "this_has_a_colon:yikes"],
+      ["User-Agent", "HTTPTool/1.0"],
+      ["Content-Type", "application/x-www-form-urlencoded"],
+      ["Content-Length", "32"],
+    ]
+
+     @post_parameters = [["home", "Cosby"], ["favorite+flavor", "flies"]]
+  end
+
+  def test_captured_body_type
+    @obj.capture(@rawdat)
+    assert_kind_of BoundBody, @obj.body
+  end
+
+
+end
 
