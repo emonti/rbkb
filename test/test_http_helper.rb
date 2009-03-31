@@ -18,13 +18,13 @@ module HttpTestHelper
     end
 
     def test_init_parse
-      req = @obj_klass.new(@rawdat)
+      req = @obj_klass.new(@rawdat, @obj_opts)
       do_capture_value_tests(req)
       do_type_tests(req)
     end
 
     def test_parse
-      req = @obj_klass.parse(@rawdat)
+      req = @obj_klass.parse(@rawdat, @obj_opts)
       do_capture_value_tests(req)
       do_type_tests(req)
     end
