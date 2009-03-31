@@ -7,7 +7,8 @@ class TestHttpResponse < Test::Unit::TestCase
 
   def setup
     @obj_klass = Response
-    @obj = @obj_klass.new
+    @obj_opts = nil
+    @obj = @obj_klass.new(nil, @obj_opts)
 
     @rawdat =<<_EOF_
 HTTP/1.0 404 Not Found
@@ -77,6 +78,7 @@ class TestHttpResponseChunked < TestHttpResponse
 
   def setup
     @obj_klass = Response
+    @obj_opts = {}
     @obj = @obj_klass.new
 
     @rawdat =<<_EOF_
@@ -149,5 +151,72 @@ _EOF_
     do_type_tests(@obj)
     assert_equal raw_tc, @obj.to_raw
   end
+end
+
+# This test-case simulates a HTTP response to a HEAD request. This type of
+# response is special since it returns Content-Length: NNN or 
+# Transfer-Encoding: chunked headers without any actual body data. 
+# To handle this special situation, we use the 'ignore_content_length' and 
+# 'ignore_chunked_encoding' options.
+class TestHttpResponseToHead < TestHttpResponse
+  def setup
+    @obj_klass = Response
+
+    # Technically, a server should only respond to HEAD with one of 
+    # content length *or* chunked encoding. However, we ignore them both.
+    @obj_opts = {
+      :ignore_content_length => true, 
+      :ignore_chunked_encoding => true
+    }
+    @obj = @obj_klass.new(nil, @obj_opts)
+
+    # Note, our test-case includes both content length and chunked encoding.
+    # A real server probably wouldn't do this, but we want to make sure
+    # we handle both.
+    @rawdat =<<_EOF_
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Date: Fri, 27 Mar 2009 04:27:27 GMT
+Expires: -1
+Content-Length: 9140
+Content-Type: text/html; charset=ISO-8859-1
+Server: Booble
+Transfer-Encoding: chunked
+
+_EOF_
+
+    @hstr, @body = @rawdat.split(/^\n/, 2)
+    @rawdat_crlf = @hstr.gsub("\n", "\r\n") + "\r\n" + @body
+
+    @code = 200
+    @text = "OK"
+    @version = "HTTP/1.1"
+
+    @headers = [
+      ["Cache-Control", "private, max-age=0"], 
+      ["Date", "Fri, 27 Mar 2009 04:27:27 GMT"], 
+      ["Expires", "-1"], 
+      ["Content-Length", "9140"], 
+      ["Content-Type", "text/html; charset=ISO-8859-1"], 
+      ["Server", "Booble"], 
+      ["Transfer-Encoding", "chunked"]
+    ]
+
+    # Content length should get ignored
+    @content_length = nil
+  end
+
+  def test_capture_crlf_headers
+    @obj.capture(@rawdat_crlf)
+    do_capture_value_tests(@obj)
+    do_type_tests(@obj)
+    assert_equal @rawdat_crlf, @obj.to_raw
+  end
+
+  def test_captured_body_type
+    @obj.capture(@rawdat)
+    assert_kind_of Body, @obj.body
+  end
+
 end
 
