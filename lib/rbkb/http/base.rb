@@ -8,8 +8,8 @@ module Rbkb::Http
   class Base
     include CommonInterface
 
-    def self.parse(str)
-      new().capture(str)
+    def self.parse(*args)
+      new(*args)
     end
 
     # Initializes a new Base object

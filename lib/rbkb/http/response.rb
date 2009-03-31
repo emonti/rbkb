@@ -63,10 +63,10 @@ module Rbkb::Http
     end
 
     # Indicates whether to use chunked encoding based on presence of 
-    # the "Transfer-Encoding: chunked" header and/or :ignore_chunked opts
-    # parameter.
+    # the "Transfer-Encoding: chunked" header or the :ignore_chunked_encoding
+    # opts parameter.
     def do_chunked_encoding?(hdrs=@headers)
-      ( (not @opts[:ignore_chunked]) and 
+      ( (not @opts[:ignore_chunked_encoding]) and 
         (hdrs["Transfer-Encoding"] =~ /(?:^|\W)chunked(?:\W|$)/) )
     end
 
@@ -82,6 +82,5 @@ module Rbkb::Http
     def default_body_obj(*args)
       BoundBody.new(*args)
     end
-
   end
 end

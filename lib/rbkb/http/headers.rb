@@ -52,7 +52,7 @@ module Rbkb::Http
 
     # Instantiates a new Headers object. 
     #
-    # Parameters:
+    # Arguments:
     #   raw:  String or Enumerable. Strings are parsed with capture. 
     #         Enumerables are converted with 'to_a' and stored directly.
     #
@@ -274,10 +274,11 @@ module Rbkb::Http
       @uri.query if @uri
     end
 
-    # Returns the URI query parameters as a Parameters object if defined.
+    # Returns the URI query parameters as a FormUrlencodedParams object if 
+    # the query string is defined.
     # XXX note parameters cannot currently be modified in this form.
     def parameters
-      Parameters.parse(query) if query
+      FormUrlencodedParams.parse(query) if query
     end
 
     attr_reader :base
