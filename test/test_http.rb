@@ -10,6 +10,7 @@ class TestHttp < Test::Unit::TestCase
     assert_equal Response, Rbkb::Http::Response
     assert_equal Request, Rbkb::Http::Request
     assert_equal Parameters, Rbkb::Http::Parameters
+    assert_equal FormUrlencodedParams, Rbkb::Http::FormUrlencodedParams
 
     assert_equal Headers, Rbkb::Http::Headers
     assert_equal RequestHeaders, Rbkb::Http::RequestHeaders
