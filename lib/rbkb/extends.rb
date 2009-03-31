@@ -491,6 +491,34 @@ class String
     ret
   end
 
+  # Converts a '_' delimited string to CamelCase like 'foo_class' into 
+  # 'FooClass'.
+  # See also: camelize_meth, decamelize
+  def camelize
+    self.gsub(/(^|_)([a-z])/) { $2.upcase }
+  end
+
+  # Converts a '_' delimited string to method style camelCase like 'foo_method'
+  # into 'fooMethod'.
+  # See also: camelize, decamelize
+  def camelize_meth
+    self.gsub(/_([a-z])/) { $1.upcase }
+  end
+  
+
+  # Converts a CamelCase or camelCase string into '_' delimited form like
+  # 'FooBar' or 'fooBar' into 'foo_bar'. 
+  #
+  # Note: This method only handles camel humps. Strings with consecutive 
+  # uppercase chars like 'FooBAR' will be converted to 'foo_bar'
+  #
+  # See also: camelize, camelize_meth
+  def decamelize
+    self.gsub(/(^|[a-z])([A-Z])/) do 
+      ($1.empty?)? $2 : "#{$1}_#{$2}"
+    end.downcase
+  end
+
   # convert a string to its idiomatic ruby class name
   def class_name
     r = ""
@@ -521,7 +549,13 @@ class String
     end
   end
 
+  # Return a self encapsulated in a StringIO object. This is handy.
+  def to_stringio
+    StringIO.new(self)
+  end
+
 end # class String
+
 
 class Symbol
   # looks up this symbol as a constant defined in 'ns' (Object by default)
