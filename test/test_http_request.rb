@@ -20,7 +20,7 @@ Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
 Keep-Alive: 300
 Proxy-Connection: keep-alive
 Referer: http://www.google.com/
-Cookie: PREFID=XXXX:LM=1237996892:S=YYYYY; NID=111
+Cookie: PREFID=NNNN:LM=1237996892:S=YYYYY; NID=111
 
 _EOF_
 
@@ -48,7 +48,7 @@ _EOF_
       ["Keep-Alive", "300"], 
       ["Proxy-Connection", "keep-alive"], 
       ["Referer", "http://www.google.com/"], 
-      ["Cookie", "PREFID=XXXX:LM=1237996892:S=YYYYY; NID=111"],
+      ["Cookie", "PREFID=NNNN:LM=1237996892:S=YYYYY; NID=111"],
     ]
   end
 
