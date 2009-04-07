@@ -155,6 +155,7 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
       @evma_port = @local_port
       @meth = @svr_method
       @feed_opts[:kind] = :server
+      @feed_opts[:no_stop_on_unbind] = true
     else
 
       ## Get target/listen argument for client mode

@@ -37,7 +37,7 @@ module Plug
 
 
   module Base
-    attr_accessor :peers, :transport, :kind, :tls, :tls_opts
+    attr_accessor :peers, :transport, :kind, :tls, :tls_opts, :no_stop_on_unbind
 
     def initialize(transport, opts={})
 #      raise "Invalid transport #{transport.inspect}" unless (:UDP, :TCP).include?(transport)
@@ -121,7 +121,10 @@ module Plug
 
     def unbind
       UI.log "** Connection " + ((@peers.empty?)? "refused." : "closed.")
-      EM.stop
+      unless @no_stop_on_unbind
+        UI.log "STOPPING!!"
+        EM.stop  
+      end
     end
   end
 
