@@ -36,7 +36,7 @@ module Rbkb::Cli
 
     def make_parser()
       arg = super()
-      arg.banner += " host:port"
+      arg.banner << " host:port"
 
       arg.on("-o", "--output=FILE", "Output to file") do |o|
         Plug::UI::LOGCFG[:out] = File.open(o, "w") # XXX
