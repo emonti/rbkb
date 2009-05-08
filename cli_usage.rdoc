@@ -7,13 +7,11 @@ usage information. Examples to come.
 
 Base64 encode data supplied via an argument, file, or standard input.
 
-  Usage: b64 [options] <data | blank for stdin>
+Usage: b64 [options] <data | blank for stdin>
     -h, --help                       Show this message
     -v, --version                    Show version and exit
     -f, --file FILENAME              Input from FILENAME
-
-  Output options:
-    -l, --length LEN                 Encode in lines of LEN characters
+    -l, --length LEN                 Output LEN chars per line
 
 
 === bgrep
@@ -70,7 +68,7 @@ Generates a crc32 checksum for data provided via stdin or file
 
 Base64 decode an encoded chunk supplied via argument, file, or standard input.
 
-  Usage: d64 [options] <data | blank for stdin>
+Usage: d64 [options] <data | blank for stdin>
     -h, --help                       Show this message
     -v, --version                    Show version and exit
     -f, --file FILENAME              Input from FILENAME

@@ -8,11 +8,13 @@ class Rbkb::Cli::D64 < Rbkb::Cli::Executable
   def make_parser
     super()
     @oparse.banner += " <data | blank for stdin>"
+    add_std_file_opt(:indat)
   end
 
   def parse(*args)
     super(*args)
     parse_string_argument(:indat)
+    parse_file_argument(:indat)
     parse_catchall()
     @opts[:indat] ||= @stdin.read
   end

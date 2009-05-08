@@ -10,6 +10,8 @@ class Rbkb::Cli::B64 < Rbkb::Cli::Executable
     arg = @oparse
     arg.banner += " <data | blank for stdin>"
 
+    add_std_file_opt(:indat)
+
     arg.on("-l", "--length LEN", Numeric, "Output LEN chars per line") do |l|
         bail("length must be > 0") unless l > 0
         @opts[:len] = l
@@ -19,6 +21,7 @@ class Rbkb::Cli::B64 < Rbkb::Cli::Executable
   def parse(*args)
     super(*args)
     parse_string_argument(:indat)
+    parse_file_argument(:indat)
     parse_catchall()
     @opts[:indat] ||= @stdin.read
   end
