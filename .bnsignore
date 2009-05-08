@@ -13,6 +13,7 @@
 .*
 *~
 *.swp
+**/*.swp
 announcement.txt
 coverage*/
 doc
