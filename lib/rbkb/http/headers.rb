@@ -137,15 +137,10 @@ module Rbkb::Http
 
       if sel.empty?
         self << [k,v]
+        return [[k,v]]
       else
         sel.each {|h| h[1] = v }
-      end
-      return [k,v]
-    end
-
-    def set_value_at(idx,v)
-      if h = self[idx]
-        h[1] = v
+        return sel
       end
     end
 
