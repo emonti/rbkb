@@ -1,3 +1,7 @@
+== 0.6.6
+* Bug-fix:
+  * Http library improperly made headers unique by name. The library has
+    been changed so that headers no longer tries to pretend to be a hash.
 
 == 0.6.5.2 
 * Enhancements

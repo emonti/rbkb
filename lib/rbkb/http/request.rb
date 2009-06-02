@@ -34,9 +34,9 @@ module Rbkb::Http
 
       if len=@opts[:static_length]
         @body = Body.new(@body, @body.opts) {|x| x.base = self}
-        @headers["Content-Length"] = len.to_i
+        @headers.set_header("Content-Length", len.to_i)
       elsif @opts[:ignore_content_length]
-        @headers.delete_key("Content-Length")
+        @headers.delete_header("Content-Length")
       end
 
       bstr = tmp_body.to_raw

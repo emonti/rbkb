@@ -19,12 +19,12 @@ module Rbkb::Http
         unless @body.is_a? ChunkedBody
           @body = ChunkedBody.new(@body, @body.opts)
         end
-        @headers.delete_key("Content-Length")
+        @headers.delete_header("Content-Length")
       elsif not opts[:ignore_content_length]
         unless @body.is_a? BoundBody
           @body = BoundBody.new(@body, @body.opts)
         end
-        @headers.delete_key("Transfer-Encoding")
+        @headers.delete_header("Transfer-Encoding")
       else
         @body = Body.new(@body, @body.opts)
       end
@@ -67,7 +67,7 @@ module Rbkb::Http
     # opts parameter.
     def do_chunked_encoding?(hdrs=@headers)
       ( (not @opts[:ignore_chunked_encoding]) and 
-        (hdrs["Transfer-Encoding"] =~ /(?:^|\W)chunked(?:\W|$)/) )
+        (hdrs.get_header_value("Transfer-Encoding").first =~ /(?:^|\W)chunked(?:\W|$)/) )
     end
 
     # Returns a new Headers object extended as ResponseHeaders. This is the 

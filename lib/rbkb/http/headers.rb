@@ -23,7 +23,7 @@ module Rbkb::Http
   # Hash or any other Enumerable to a Headers object through the use of to_a.
   # However it has the caveat that named pairs are expected on various 
   # operations.
-  class Headers < NamedValueArray
+  class Headers < Array
     include CommonInterface
 
     # Class method to instantiate a new RequestHeaders object
@@ -108,7 +108,7 @@ module Rbkb::Http
         self.replace []
         d.to_a.each do |k, v| 
           k = k.to_s if k.is_a? Numeric
-          self[k] = v
+          self << [k,v]
         end
       end
       return self
@@ -118,6 +118,35 @@ module Rbkb::Http
     # "Cookie: Value" strings.
     def to_raw_array
       self.map {|h,v| "#{h}: #{v}" }
+    end
+
+    def get_header(k)
+      self.select {|h| h[0].downcase == k.downcase }
+    end
+
+    def get_header_value(k)
+      get_header(k).map {|h| h[1]}
+    end
+    
+    def delete_header(k)
+      self.delete_if {|h| h[0].downcase == k.downcase }
+    end
+    
+    def set_header(k,v)
+      sel = get_header(k)
+
+      if sel.empty?
+        self << [k,v]
+      else
+        sel.each {|h| h[1] = v }
+      end
+      return [k,v]
+    end
+
+    def set_value_at(idx,v)
+      if h = self[idx]
+        h[1] = v
+      end
     end
 
     # The to_raw method returns a raw string of headers as they appear
@@ -141,7 +170,7 @@ module Rbkb::Http
       self.replace [] if capture_complete? 
       heads.each do |s| 
         k,v = s.split(/\s*:\s*/, 2) 
-        self[k] = v
+        self << [k,v]
       end
       return self
     end

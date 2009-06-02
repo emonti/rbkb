@@ -61,7 +61,7 @@ module Rbkb::Http
     def content_length(hdrs=@headers)
       raise "headers is nil?" if not hdrs
       if( (not @opts[:ignore_content_length]) and 
-          hdrs["Content-Length"] =~ /^(\d+)$/ )
+          hdrs.get_header_value("Content-Length").first =~ /^(\d+)$/ )
 
         $1.to_i
       end

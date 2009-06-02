@@ -129,7 +129,7 @@ module Rbkb::Http
 
     def to_raw(*args)
       if @base
-        @base.headers["Content-Length"] = self.size
+        @base.headers.set_header("Content-Length", self.size)
       end
       super(*args)
     end
