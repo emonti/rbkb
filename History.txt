@@ -1,3 +1,8 @@
+== 0.6.7
+* Bug-fix:
+  * Fixed a silly typing bug in Http::Parameters.set_param introduced
+    with 0.6.6
+
 == 0.6.6
 * Bug-fix:
   * Http library improperly made headers unique by name. The library has
