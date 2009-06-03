@@ -1,7 +1,11 @@
 == 0.6.7
+* Enhancements
+  * Http::Parameters was given the same treatement as headers got in 0.6.6. 
+    Technically params are supposed to be unique, but we try to stay flexible 
+    in Rbkb. 
 * Bug-fix:
   * Fixed a silly typing bug in Http::Parameters.set_param introduced
-    with 0.6.6
+    around 0.6.6
 
 == 0.6.6
 * Bug-fix:
@@ -11,7 +15,7 @@
 == 0.6.5.2 
 * Enhancements
   * d64 and b64 now support the -f option for input files as rdoc indicates
-    Thanks to Cory Scott for catching this doc error his patch.
+    Thanks to Cory Scott for catching this doc error and for his patch.
 
 == 0.6.5.1 
 * Minor bug-fix
