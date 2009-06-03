@@ -40,7 +40,7 @@ module Rbkb::Http
       if p=self.get_param(k)
         p[1]=v
       else
-        p << 
+        p << [k,v]
       end
       return v
     end
