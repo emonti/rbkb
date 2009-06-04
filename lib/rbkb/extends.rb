@@ -4,16 +4,10 @@
 require "stringio"
 require 'zlib'
 require 'open3'
-require 'sha1'
 
 module Rbkb
   DEFAULT_BYTE_ORDER=:big
   HEXCHARS = [("0".."9").to_a, ("a".."f").to_a].flatten
-end
-
-# Generates a "universally unique identifier"
-def uuid
-  (SHA1::sha1(rand.to_s)).to_s
 end
 
 # Generates a random alphanumeric string of 'size' bytes (8 by default)
@@ -322,17 +316,17 @@ class String
 
     dat=self
     if find.kind_of? Regexp
-      search = lambda do |find, buf| 
-        if m = find.match(buf)
+      search = lambda do |m, buf| 
+        if m = m.match(buf)
           mtch = m[0]
           off,endoff = m.offset(0)
           return off, endoff, mtch
         end
       end
     else
-      search = lambda do |find, buf|
-        if off = buf.index(find)
-          return off, off+find.size, find
+      search = lambda do |s, buf|
+        if off = buf.index(s)
+          return off, off+s.size, s
         end
       end
     end
@@ -405,9 +399,12 @@ class String
     urx = /((?:#{prx}\x00){#{min}}(?:#{prx}\x00)*(?:\x00\x00)?)/
 
     rx = case (opts[:encoding] || :both).to_sym
-         when :ascii   : arx
-         when :unicode : urx
-         when :both    : Regexp.union( arx, urx )
+         when :ascii   
+           arx
+         when :unicode 
+           urx
+         when :both    
+           Regexp.union( arx, urx )
          else 
            raise "Encoding must be :unicode, :ascii, or :both"
          end

@@ -1,3 +1,15 @@
+== 0.6.8 / 2009-06-04
+* Enhancements
+  * 0.6.8 is geared towards making rbkb compatible with ruby 1.9.x 
+    (tested on 1.9.1). Had to sacrifice the 'uuid' helper method 
+    since something happened to SHA1 in ruby 1.9. It may make a comeback if 
+    anybody yells about this.
+* Known Issues:
+  * There are problems with binary releases of eventmachine with 1.9.1 on win32
+    this does not appear to be caused by rbkb, however we're keeping an eye on 
+    it. For now, this is causing the plug tools to crash and test cases to 
+    fail on 1.9.1 win32.
+
 == 0.6.7
 * Enhancements
   * Http::Parameters was given the same treatement as headers got in 0.6.6. 

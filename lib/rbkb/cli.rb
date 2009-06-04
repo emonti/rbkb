@@ -180,9 +180,9 @@ module Rbkb::Cli
           @opts[lkey] = 
             if($2[0,1] == '-')
               $2[1..-1].hex_to_num * -1
-             else
+            else
               $2.hex_to_num
-             end
+            end
         end
       end
     end
