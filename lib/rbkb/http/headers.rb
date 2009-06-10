@@ -120,13 +120,26 @@ module Rbkb::Http
       self.map {|h,v| "#{h}: #{v}" }
     end
 
-    def get_header(k)
+    def get_all(k)
       self.select {|h| h[0].downcase == k.downcase }
     end
 
-    def get_header_value(k)
-      get_header(k).map {|h| h[1]}
+    def get_all_values_for(k)
+      self.get_all(k).collect {|h,v| v }
     end
+    alias all_values_for get_all_values_for
+
+    def get_header(k)
+      self.find {|h| h[0].downcase == k.downcase }
+    end
+
+    def get_value_for(k)
+      if v= self.get_header(k)
+        return h[1]
+      end
+    end
+    alias get_header_value get_value_for
+    alias value_for get_value_for
     
     def delete_header(k)
       self.delete_if {|h| h[0].downcase == k.downcase }
@@ -143,6 +156,7 @@ module Rbkb::Http
         return sel
       end
     end
+    alias set_all_for set_header
 
     # The to_raw method returns a raw string of headers as they appear
     # on the wire.

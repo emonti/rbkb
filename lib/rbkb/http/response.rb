@@ -67,7 +67,7 @@ module Rbkb::Http
     # opts parameter.
     def do_chunked_encoding?(hdrs=@headers)
       ( (not @opts[:ignore_chunked_encoding]) and 
-        (hdrs.get_header_value("Transfer-Encoding").first =~ /(?:^|\W)chunked(?:\W|$)/) )
+        (hdrs.get_header_value("Transfer-Encoding").to_s =~ /(?:^|\W)chunked(?:\W|$)/) )
     end
 
     # Returns a new Headers object extended as ResponseHeaders. This is the 

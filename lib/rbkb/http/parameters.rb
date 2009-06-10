@@ -22,19 +22,22 @@ module Rbkb::Http
       self.select {|p| p[0] == k}
     end
 
+    def get_all_values_for(k)
+      self.get_all(k).collect {|p,v| v }
+    end
+    alias all_values_for get_all_values_for
+
     def get_param(k)
       self.find {|p| p[0] == k}
     end
 
     def get_value_for(k)
-      if v=self.get(k)
-        return v[1]
+      if p=self.get_param(k)
+        return p[1]
       end
     end
-
-    def get_all_values_for(k)
-      self.get_all(k).map {|p,v| v }
-    end
+    alias get_param_value get_value_for
+    alias value_for get_value_for
 
     def set_param(k, v)
       if p=self.get_param(k)
@@ -42,7 +45,7 @@ module Rbkb::Http
       else
         p << [k,v]
       end
-      return v
+      return [[k,v]]
     end
 
     def set_all_for(k, v)
