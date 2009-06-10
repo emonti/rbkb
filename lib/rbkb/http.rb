@@ -5,9 +5,11 @@
 
 module Rbkb
   module Http
-    VERSION = "0.0.2"
+    VERSION = "0.0.3"
   end
 end
+
+require 'time' # gives us Time.httpdate parser and output methods
 
 require "rbkb/http/common.rb"
 require "rbkb/http/base.rb"
@@ -16,5 +18,4 @@ require "rbkb/http/response.rb"
 require "rbkb/http/headers.rb"
 require "rbkb/http/body.rb"
 require "rbkb/http/parameters.rb"
-
 

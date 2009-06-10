@@ -1,6 +1,6 @@
 == 0.6.8 / 2009-06-04
 * Enhancements
-  * 0.6.8 is geared towards making rbkb compatible with ruby 1.9.x 
+  * 0.6.8 is geared towards beginning to make rbkb compatible with ruby 1.9.x 
     (tested on 1.9.1). Had to sacrifice the 'uuid' helper method 
     since something happened to SHA1 in ruby 1.9. It may make a comeback if 
     anybody yells about this.
