@@ -20,3 +20,4 @@ doc
 pkg
 bin/experimental
 reference
+*.gem
