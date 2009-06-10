@@ -134,7 +134,7 @@ module Rbkb::Http
     end
 
     def get_value_for(k)
-      if v= self.get_header(k)
+      if h=self.get_header(k)
         return h[1]
       end
     end
@@ -146,7 +146,7 @@ module Rbkb::Http
     end
     
     def set_header(k,v)
-      sel = get_header(k)
+      sel = get_all(k)
 
       if sel.empty?
         self << [k,v]
