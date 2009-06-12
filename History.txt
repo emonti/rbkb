@@ -1,3 +1,8 @@
+== 0.6.8.1 / 2009-06-12
+* Enhancements
+  * Added String.rotate_bytes per request for a rotation cypher by 
+    wardwouts@github. I pilfered this implementation mostly from Timur Duehr.
+
 == 0.6.8 / 2009-06-04
 * Enhancements
   * 0.6.8 is geared towards beginning to make rbkb compatible with ruby 1.9.x 

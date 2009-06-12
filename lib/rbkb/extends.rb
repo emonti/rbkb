@@ -206,6 +206,18 @@ class String
     (self.dat_to_num ^ x)#.to_bytes
   end
 
+  # Byte rotation cypher.
+  # This was pilfered from Timur Duehr with only a minor change.
+  def rotate_bytes(k=0)
+    r = Array.new(self.size)
+    i=0
+    self.each_byte do |b| 
+      r[i] = ((b + k) % 256).chr
+      i+=1
+    end
+    return r.join
+  end
+
   # String randomizer
   def randomize ; self.split('').randomize.to_s ; end
 
