@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>new (Rbkb::Http::RequestAction)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 280</span>
+280:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+281:       <span class="ruby-identifier">_common_init</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+282:       <span class="ruby-ivar">@verb</span> <span class="ruby-operator">||=</span> <span class="ruby-value str">&quot;GET&quot;</span>
+283:       <span class="ruby-ivar">@uri</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-value str">&quot;/&quot;</span>)
+284:       <span class="ruby-ivar">@version</span> <span class="ruby-operator">||=</span> <span class="ruby-value str">&quot;HTTP/1.1&quot;</span>
+285:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

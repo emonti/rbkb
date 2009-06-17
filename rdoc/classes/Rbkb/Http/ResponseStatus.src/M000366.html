@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>capture (Rbkb::Http::ResponseStatus)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/http/tmp/headers.rb, line 351</span>
+351:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">str</span>)
+352:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;arg 0 must be a string&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+353:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">m</span>=<span class="ruby-regexp re">/^([^\s]+)\s+(\d+)(?:\s+(.*))?$/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">str</span>)
+354:         <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;invalid status #{str.inspect}&quot;</span>
+355:       <span class="ruby-keyword kw">end</span>
+356:       <span class="ruby-ivar">@version</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>]
+357:       <span class="ruby-ivar">@code</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">2</span>] <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^\d+$/</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">2</span>].<span class="ruby-identifier">to_i</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">2</span>]
+358:       <span class="ruby-ivar">@text</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">3</span>]
+359:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>
+360:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>go (Rbkb::Cli::Bgrep)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>    <span class="ruby-comment cmt"># File lib/rbkb/cli/bgrep.rb, line 53</span>
+53:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">go</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+54:     <span class="ruby-keyword kw">super</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+55: 
+56:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:hex</span>]
+57:       <span class="ruby-identifier">bail</span> <span class="ruby-value str">&quot;you specified -x for hex and the subject isn't&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@find</span>.<span class="ruby-identifier">ishex?</span>
+58:       <span class="ruby-ivar">@find</span> = <span class="ruby-ivar">@find</span>.<span class="ruby-identifier">unhexify</span>
+59:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:rx</span>]
+60:       <span class="ruby-ivar">@find</span> = <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@find</span>, <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">MULTILINE</span>)
+61:     <span class="ruby-keyword kw">end</span>
+62: 
+63:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">fname</span> = <span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">shift</span>
+64:       <span class="ruby-identifier">dat</span> = <span class="ruby-identifier">do_file_read</span>(<span class="ruby-identifier">fname</span>)
+65:       <span class="ruby-identifier">fname</span> = <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@argv</span>[<span class="ruby-value">0</span>] <span class="ruby-comment cmt"># only print filenames for multiple files</span>
+66:     <span class="ruby-keyword kw">else</span>
+67:       <span class="ruby-identifier">dat</span> = <span class="ruby-ivar">@stdin</span>.<span class="ruby-identifier">read</span>
+68:     <span class="ruby-keyword kw">end</span>
+69: 
+70:     <span class="ruby-identifier">loop</span> <span class="ruby-keyword kw">do</span> 
+71:       <span class="ruby-identifier">dat</span>.<span class="ruby-identifier">bgrep</span>(<span class="ruby-ivar">@find</span>, <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:align</span>]) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">hit_start</span>, <span class="ruby-identifier">hit_end</span>, <span class="ruby-identifier">match</span><span class="ruby-operator">|</span>
+72:         <span class="ruby-ivar">@stdout</span>.<span class="ruby-identifier">write</span> <span class="ruby-node">&quot;#{fname}:&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">fname</span> <span class="ruby-keyword kw">and</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:include_fname</span>]
+73: 
+74:         <span class="ruby-ivar">@stdout</span>.<span class="ruby-identifier">write</span>(
+75:           <span class="ruby-node">&quot;#{(hit_start).to_hex.rjust(8,&quot;0&quot;)}:&quot;</span><span class="ruby-operator">+</span>
+76:           <span class="ruby-node">&quot;#{(hit_end).to_hex.rjust(8,&quot;0&quot;)}:b:&quot;</span><span class="ruby-operator">+</span>
+77:           <span class="ruby-node">&quot;#{match.inspect}\n&quot;</span>)
+78:       <span class="ruby-keyword kw">end</span>
+79: 
+80:       <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">fname</span>=<span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">shift</span>
+81:       <span class="ruby-identifier">dat</span> = <span class="ruby-identifier">do_file_read</span>(<span class="ruby-identifier">fname</span>)
+82:     <span class="ruby-keyword kw">end</span>
+83:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">exit</span>(<span class="ruby-value">0</span>)
+84:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

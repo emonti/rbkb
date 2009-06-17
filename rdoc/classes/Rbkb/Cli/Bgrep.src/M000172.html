@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>make_parser (Rbkb::Cli::Bgrep)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>    <span class="ruby-comment cmt"># File lib/rbkb/cli/bgrep.rb, line 16</span>
+16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">make_parser</span>
+17:     <span class="ruby-identifier">arg</span> = <span class="ruby-keyword kw">super</span>()
+18:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">banner</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot; &lt;search&gt; &lt;file | blank for stdin&gt;&quot;</span>
+19: 
+20:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-x&quot;</span>, <span class="ruby-value str">&quot;--[no-]hex&quot;</span>, <span class="ruby-value str">&quot;Search for hex (default: false)&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+21:       <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:hex</span>] = <span class="ruby-identifier">x</span>
+22:     <span class="ruby-keyword kw">end</span>
+23: 
+24:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-r&quot;</span>, <span class="ruby-value str">&quot;--[no-]regex&quot;</span>, <span class="ruby-value str">&quot;Search for regex (default: false)&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+25:       <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:rx</span>] = <span class="ruby-identifier">r</span>
+26:     <span class="ruby-keyword kw">end</span>
+27: 
+28:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-a&quot;</span>, <span class="ruby-value str">&quot;--align=BYTES&quot;</span>, <span class="ruby-constant">Numeric</span>, 
+29:            <span class="ruby-value str">&quot;Only match on alignment boundary&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span>
+30:       <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:align</span>] = <span class="ruby-identifier">a</span>
+31:     <span class="ruby-keyword kw">end</span>
+32: 
+33:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-n&quot;</span>, <span class="ruby-value str">&quot;--[no-]filename&quot;</span>, 
+34:            <span class="ruby-node">&quot;Toggle filenames. (Default: #{@opts[:include_fname]})&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">n</span><span class="ruby-operator">|</span>
+35:       <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:include_fname</span>] = <span class="ruby-identifier">n</span>
+36:     <span class="ruby-keyword kw">end</span>
+37:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">arg</span>
+38:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>capture (Rbkb::Http::RequestAction)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 294</span>
+294:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">str</span>)
+295:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;arg 0 must be a string&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+296:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">m</span>=<span class="ruby-regexp re">/^([^\s]+)\s+([^\s]+)(?:\s+([^\s]+))?\s*$/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">str</span>)
+297:         <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;invalid action #{str.inspect}&quot;</span>
+298:       <span class="ruby-keyword kw">end</span>
+299:       <span class="ruby-ivar">@verb</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>]
+300:       <span class="ruby-ivar">@uri</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">2</span>]
+301:       <span class="ruby-ivar">@version</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">3</span>]
+302:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>
+303:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>to_chars (Numeric)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 617</span>
+617:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_chars</span>(<span class="ruby-identifier">order</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">siz</span>=<span class="ruby-keyword kw">nil</span>)
+618:     <span class="ruby-identifier">order</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Rbkb</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_BYTE_ORDER</span>
+619:     <span class="ruby-identifier">n</span>=<span class="ruby-keyword kw">self</span>
+620:     <span class="ruby-identifier">siz</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">size</span>
+621:     <span class="ruby-identifier">ret</span>=[]
+622:     <span class="ruby-identifier">siz</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword kw">do</span> 
+623:       <span class="ruby-identifier">c</span> = (<span class="ruby-identifier">n</span> <span class="ruby-operator">%</span> <span class="ruby-value">256</span>)
+624:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span> <span class="ruby-keyword kw">then</span> (<span class="ruby-identifier">c</span> = <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">c</span>)) <span class="ruby-keyword kw">end</span>
+625:       <span class="ruby-identifier">ret</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">c</span>
+626:       <span class="ruby-identifier">n</span>=(<span class="ruby-identifier">n</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-value">8</span>)
+627:     <span class="ruby-keyword kw">end</span>
+628:     <span class="ruby-keyword kw">return</span> ((<span class="ruby-identifier">order</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:big</span>)<span class="ruby-operator">?</span> <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">reverse</span>  <span class="ruby-operator">:</span> <span class="ruby-identifier">ret</span>)
+629:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

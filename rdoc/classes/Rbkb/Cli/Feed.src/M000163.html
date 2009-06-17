@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>go (Rbkb::Cli::Feed)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/cli/feed.rb, line 196</span>
+196:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">go</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+197:     <span class="ruby-keyword kw">super</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+198: 
+199:     <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">UI</span>.<span class="ruby-identifier">verbose</span> <span class="ruby-node">&quot;** FEED CONTAINS #{@feed_opts[:feed].size} MESSAGES&quot;</span>
+200: 
+201:     <span class="ruby-comment cmt">## Start the eventmachine</span>
+202:     <span class="ruby-identifier">loop</span> <span class="ruby-keyword kw">do</span>
+203:       <span class="ruby-constant">EventMachine</span><span class="ruby-operator">::</span><span class="ruby-identifier">run</span> <span class="ruby-keyword kw">do</span>
+204:         <span class="ruby-constant">EventMachine</span>.<span class="ruby-identifier">send</span>(<span class="ruby-operator">*</span><span class="ruby-ivar">@em_args</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+205:           <span class="ruby-constant">EventMachine</span>.<span class="ruby-identifier">start_server</span>(<span class="ruby-ivar">@blit_addr</span>, <span class="ruby-ivar">@blit_port</span>, <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">Blit</span>, <span class="ruby-identifier">:TCP</span>, <span class="ruby-identifier">c</span>)
+206:           <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">UI</span><span class="ruby-operator">::</span><span class="ruby-identifier">verbose</span>(<span class="ruby-node">&quot;** BLITSRV-#{@blit_addr}:#{@blit_port}(TCP) Started&quot;</span>)
+207: 
+208:           <span class="ruby-comment cmt"># if this is a UDP client, we will always send the first message</span>
+209:           <span class="ruby-keyword kw">if</span> [<span class="ruby-identifier">:UDP</span>, <span class="ruby-identifier">:client</span>] <span class="ruby-operator">==</span> [<span class="ruby-ivar">@transport</span>, <span class="ruby-identifier">c</span>.<span class="ruby-identifier">kind</span>]
+210:             <span class="ruby-identifier">peer</span> = <span class="ruby-identifier">c</span>.<span class="ruby-identifier">peers</span>.<span class="ruby-identifier">add_peer_manually</span>(<span class="ruby-ivar">@target_addr</span>, <span class="ruby-ivar">@target_port</span>)
+211:             <span class="ruby-identifier">c</span>.<span class="ruby-identifier">feed_data</span>(<span class="ruby-identifier">peer</span>)
+212:             <span class="ruby-identifier">c</span>.<span class="ruby-identifier">go_first</span> = <span class="ruby-keyword kw">false</span>
+213:           <span class="ruby-keyword kw">end</span>
+214:         <span class="ruby-keyword kw">end</span>
+215:       <span class="ruby-keyword kw">end</span>
+216: 
+217:       <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@persist</span>
+218:       <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">UI</span><span class="ruby-operator">::</span><span class="ruby-identifier">verbose</span>(<span class="ruby-value str">&quot;** RECONNECTING&quot;</span>)
+219:     <span class="ruby-keyword kw">end</span>
+220: 
+221:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

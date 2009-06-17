@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>go (Rbkb::Cli::Hexify)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>    <span class="ruby-comment cmt"># File lib/rbkb/cli/hexify.rb, line 47</span>
+47:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">go</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+48:     <span class="ruby-keyword kw">super</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+49: 
+50:     <span class="ruby-comment cmt"># Default to standard input</span>
+51:     <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:indat</span>] <span class="ruby-operator">||=</span> <span class="ruby-ivar">@stdin</span>.<span class="ruby-identifier">read</span>() 
+52: 
+53:     <span class="ruby-identifier">indat</span> = <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:indat</span>)
+54:     <span class="ruby-identifier">len</span> = (<span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:len</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">indat</span>.<span class="ruby-identifier">length</span>)
+55: 
+56:     <span class="ruby-identifier">bail</span>(<span class="ruby-value str">&quot;Length must be greater than zero&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">len</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
+57: 
+58:     <span class="ruby-keyword kw">until</span> (<span class="ruby-identifier">m</span> = <span class="ruby-identifier">indat</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">len</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>)).<span class="ruby-identifier">empty?</span>
+59:       <span class="ruby-ivar">@stdout</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">hexify</span>(<span class="ruby-ivar">@opts</span>)
+60:       <span class="ruby-ivar">@stdout</span>.<span class="ruby-identifier">puts</span>((<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:delim</span>] <span class="ruby-keyword kw">and</span> <span class="ruby-operator">!</span> <span class="ruby-identifier">indat</span>.<span class="ruby-identifier">empty?</span>)<span class="ruby-operator">?</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:delim</span>] <span class="ruby-operator">:</span> <span class="ruby-value str">&quot;\n&quot;</span>)
+61:     <span class="ruby-keyword kw">end</span>
+62:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">exit</span>(<span class="ruby-value">0</span>)
+63:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

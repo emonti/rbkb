@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>parse (Rbkb::Cli::Feed)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/cli/feed.rb, line 145</span>
+145:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+146:     <span class="ruby-keyword kw">super</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+147: 
+148:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@transport</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:UDP</span>
+149:       <span class="ruby-ivar">@svr_method</span> = <span class="ruby-ivar">@cli_method</span> = <span class="ruby-identifier">:open_datagram_socket</span>
+150:     <span class="ruby-keyword kw">end</span>
+151: 
+152:     <span class="ruby-comment cmt"># Prepare EventMachine arguments based on whether we are a client or server</span>
+153:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@listen</span>
+154:       <span class="ruby-ivar">@evma_addr</span> = <span class="ruby-ivar">@local_addr</span>
+155:       <span class="ruby-ivar">@evma_port</span> = <span class="ruby-ivar">@local_port</span>
+156:       <span class="ruby-ivar">@meth</span> = <span class="ruby-ivar">@svr_method</span>
+157:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:kind</span>] = <span class="ruby-identifier">:server</span>
+158:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:no_stop_on_unbind</span>] = <span class="ruby-keyword kw">true</span>
+159:     <span class="ruby-keyword kw">else</span>
+160: 
+161:       <span class="ruby-comment cmt">## Get target/listen argument for client mode</span>
+162:       <span class="ruby-keyword kw">unless</span> (<span class="ruby-identifier">m</span> = <span class="ruby-regexp re">/^([\w\.]+):(\d+)$/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">tgt</span>=<span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">shift</span>))
+163:         <span class="ruby-identifier">bail_args</span> <span class="ruby-identifier">tgt</span>
+164:       <span class="ruby-keyword kw">end</span>
+165: 
+166:       <span class="ruby-ivar">@target_addr</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>]
+167:       <span class="ruby-ivar">@target_port</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">2</span>].<span class="ruby-identifier">to_i</span>
+168: 
+169:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@transport</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:UDP</span>
+170:         <span class="ruby-ivar">@evma_addr</span> = <span class="ruby-ivar">@local_addr</span>
+171:         <span class="ruby-ivar">@evma_port</span> = <span class="ruby-ivar">@local_port</span> <span class="ruby-operator">||</span> <span class="ruby-value">0</span>
+172:       <span class="ruby-keyword kw">else</span>
+173:         <span class="ruby-ivar">@evma_addr</span> = <span class="ruby-ivar">@target_addr</span>
+174:         <span class="ruby-ivar">@evma_port</span> = <span class="ruby-ivar">@target_port</span>
+175:       <span class="ruby-keyword kw">end</span>
+176: 
+177:       <span class="ruby-ivar">@meth</span> = <span class="ruby-ivar">@cli_method</span>
+178:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:kind</span>] = <span class="ruby-identifier">:client</span>
+179:     <span class="ruby-keyword kw">end</span>
+180: 
+181:     <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:feed</span>] <span class="ruby-operator">||=</span> []
+182: 
+183:     <span class="ruby-ivar">@em_args</span>=[ 
+184:       <span class="ruby-ivar">@meth</span>, 
+185:       <span class="ruby-ivar">@evma_addr</span>, 
+186:       <span class="ruby-ivar">@evma_port</span>, 
+187:       <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">ArrayFeeder</span>, 
+188:       <span class="ruby-ivar">@transport</span>, 
+189:       <span class="ruby-ivar">@feed_opts</span>
+190:     ].<span class="ruby-identifier">flatten</span>
+191: 
+192:     <span class="ruby-identifier">parse_catchall</span>()
+193:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

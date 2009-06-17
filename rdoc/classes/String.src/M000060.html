@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>crc32 (String)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 475</span>
+475:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">crc32</span>
+476:     <span class="ruby-comment cmt">## pure ruby version. slower, but here for reference (found on some forum)</span>
+477:     <span class="ruby-comment cmt">#  r = 0xFFFFFFFF</span>
+478:     <span class="ruby-comment cmt">#  self.each_byte do |b|</span>
+479:     <span class="ruby-comment cmt">#    r ^= b</span>
+480:     <span class="ruby-comment cmt">#    8.times do</span>
+481:     <span class="ruby-comment cmt">#      r = (r&gt;&gt;1) ^ (0xEDB88320 * (r &amp; 1))</span>
+482:     <span class="ruby-comment cmt">#    end</span>
+483:     <span class="ruby-comment cmt">#  end</span>
+484:     <span class="ruby-comment cmt">#  r ^ 0xFFFFFFFF</span>
+485:     <span class="ruby-comment cmt">## or... we can just use:</span>
+486:     <span class="ruby-constant">Zlib</span>.<span class="ruby-identifier">crc32</span> <span class="ruby-keyword kw">self</span>
+487:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

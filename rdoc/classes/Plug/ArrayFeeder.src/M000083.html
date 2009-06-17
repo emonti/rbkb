@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>say (Plug::ArrayFeeder)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/plug/plug.rb, line 188</span>
+188:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">say</span>(<span class="ruby-identifier">dat</span>, <span class="ruby-identifier">sender</span>)
+189:       <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">dat</span>, <span class="ruby-identifier">sender</span>)
+190:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@step</span>
+191:         <span class="ruby-constant">EventMachine</span>.<span class="ruby-identifier">defer</span>(
+192:           <span class="ruby-identifier">proc</span> { <span class="ruby-constant">UI</span>.<span class="ruby-identifier">prompt</span> <span class="ruby-node">&quot;&gt;&gt; Hit [enter] to continue at #{@pos}:&quot;</span> },
+193:           <span class="ruby-identifier">proc</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">feed_data</span> }
+194:         )
+195:       <span class="ruby-keyword kw">else</span>
+196:         <span class="ruby-identifier">feed_data</span>
+197:       <span class="ruby-keyword kw">end</span>
+198:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

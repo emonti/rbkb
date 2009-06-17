@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>capture_incomplete (Rbkb::Http::Base)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/http/tmp/base.rb, line 146</span>
+146:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">capture_incomplete</span>(<span class="ruby-identifier">str</span>)
+147:       <span class="ruby-keyword kw">if</span> (<span class="ruby-ivar">@headers</span>)
+148:         <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@headers</span>.<span class="ruby-identifier">capture_complete?</span>
+149:           <span class="ruby-identifier">capture_headers</span>(<span class="ruby-identifier">str</span>)
+150:           <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>
+151:         <span class="ruby-keyword kw">end</span>
+152:         <span class="ruby-keyword kw">if</span> (<span class="ruby-ivar">@body</span> <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">not</span> <span class="ruby-ivar">@body</span>.<span class="ruby-identifier">capture_complete?</span>)
+153:           <span class="ruby-ivar">@body</span>.<span class="ruby-identifier">capture</span>(<span class="ruby-identifier">str</span>)
+154:           <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>
+155:         <span class="ruby-keyword kw">end</span>
+156:       <span class="ruby-keyword kw">end</span>
+157:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span>
+158:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

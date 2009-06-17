@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>parse (Rbkb::Cli::Hexify)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>    <span class="ruby-comment cmt"># File lib/rbkb/cli/hexify.rb, line 34</span>
+34:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+35:     <span class="ruby-keyword kw">super</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+36: 
+37:     <span class="ruby-comment cmt"># blackbag-style space delimiter compatability</span>
+38:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@argv</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;+&quot;</span> <span class="ruby-keyword kw">and</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:delim</span>].<span class="ruby-identifier">nil?</span>
+39:       <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:delim</span>]=<span class="ruby-value str">&quot; &quot;</span>
+40:       <span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">shift</span>
+41:     <span class="ruby-keyword kw">end</span>
+42: 
+43:     <span class="ruby-identifier">parse_string_argument</span>(<span class="ruby-identifier">:indat</span>)
+44:     <span class="ruby-identifier">parse_catchall</span>()
+45:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

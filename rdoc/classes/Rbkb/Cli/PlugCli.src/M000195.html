@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>make_parser (Rbkb::Cli::PlugCli)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>    <span class="ruby-comment cmt"># File lib/rbkb/plug/cli.rb, line 37</span>
+37:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">make_parser</span>()
+38:       <span class="ruby-identifier">arg</span> = <span class="ruby-keyword kw">super</span>()
+39:       <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">banner</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot; host:port&quot;</span>
+40: 
+41:       <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-o&quot;</span>, <span class="ruby-value str">&quot;--output=FILE&quot;</span>, <span class="ruby-value str">&quot;Output to file&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>
+42:         <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">UI</span><span class="ruby-operator">::</span><span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>] = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">o</span>, <span class="ruby-value str">&quot;w&quot;</span>) <span class="ruby-comment cmt"># XXX</span>
+43:       <span class="ruby-keyword kw">end</span>
+44: 
+45:       <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-q&quot;</span>, <span class="ruby-value str">&quot;--quiet&quot;</span>, <span class="ruby-value str">&quot;Turn off verbose logging&quot;</span>) <span class="ruby-keyword kw">do</span>
+46:         <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">UI</span><span class="ruby-operator">::</span><span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:verbose</span>] = <span class="ruby-keyword kw">false</span> <span class="ruby-comment cmt"># XXX</span>
+47:       <span class="ruby-keyword kw">end</span>
+48: 
+49:       <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-d&quot;</span>, <span class="ruby-value str">&quot;--dump-format=hex/raw&quot;</span>, 
+50:              <span class="ruby-value str">&quot;Output conversations in hexdump or raw&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">d</span><span class="ruby-operator">|</span>
+51:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">m</span>=<span class="ruby-regexp re">/^(hex|raw)$/i</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">d</span>)
+52:           <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">UI</span><span class="ruby-operator">::</span><span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:dump</span>] = <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_sym</span> <span class="ruby-comment cmt"># XXX</span>
+53:         <span class="ruby-keyword kw">else</span>
+54:           <span class="ruby-identifier">bail</span> <span class="ruby-node">&quot;Invalid dump format: #{d.inspect}&quot;</span>
+55:         <span class="ruby-keyword kw">end</span>
+56:       <span class="ruby-keyword kw">end</span>
+57: 
+58:       <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-b&quot;</span>, <span class="ruby-value str">&quot;--blit=ADDR:PORT&quot;</span>, <span class="ruby-value str">&quot;Where to listen for blit&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">b</span><span class="ruby-operator">|</span>
+59:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">m</span>=<span class="ruby-constant">RX_PORT_OPT_ADDR</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">b</span>)
+60:           <span class="ruby-identifier">bail</span>(<span class="ruby-value str">&quot;Invalid blit address/port&quot;</span>)
+61:         <span class="ruby-keyword kw">end</span>
+62:         <span class="ruby-ivar">@blit_port</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">2</span>].<span class="ruby-identifier">to_i</span>
+63:         <span class="ruby-ivar">@blit_addr</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>]
+64:       <span class="ruby-keyword kw">end</span>
+65: 
+66:       <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-u&quot;</span>, <span class="ruby-value str">&quot;--udp&quot;</span>, <span class="ruby-value str">&quot;UDP mode&quot;</span>) { <span class="ruby-ivar">@transport</span>=<span class="ruby-identifier">:UDP</span> }
+67: 
+68:       <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-S&quot;</span>, <span class="ruby-value str">&quot;--start-tls&quot;</span>, <span class="ruby-value str">&quot;Initiate TLS&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@plug_opts</span>[<span class="ruby-identifier">:tls</span>]=<span class="ruby-keyword kw">true</span> }
+69: 
+70:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">arg</span>
+71:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>dump (Plug::UI)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>    <span class="ruby-comment cmt"># File lib/rbkb/plug/plug.rb, line 22</span>
+22:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dump</span>(<span class="ruby-identifier">from</span>, <span class="ruby-identifier">to</span>, <span class="ruby-identifier">dat</span>)
+23:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dump</span>=<span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:dump</span>]
+24:         <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>].<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;%% #{from} SAYS TO #{to} LEN=#{dat.size}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:verbose</span>]
+25:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">dump</span>
+26:         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hex</span>
+27:           <span class="ruby-identifier">dat</span>.<span class="ruby-identifier">hexdump</span>(<span class="ruby-identifier">:out</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>])
+28:         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:raw</span>
+29:           <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>].<span class="ruby-identifier">puts</span> <span class="ruby-identifier">dat</span>
+30:         <span class="ruby-keyword kw">else</span>
+31:           <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>].<span class="ruby-identifier">puts</span> <span class="ruby-identifier">dat</span>
+32:         <span class="ruby-keyword kw">end</span>
+33:         <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>].<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%%&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:verbose</span>]
+34:       <span class="ruby-keyword kw">end</span>
+35:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

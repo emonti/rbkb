@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>connection_completed (Plug::Base)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/plug/plug.rb, line 113</span>
+113:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">connection_completed</span>
+114:       <span class="ruby-identifier">peer</span> = <span class="ruby-identifier">plug_peer</span>
+115:       <span class="ruby-constant">UI</span>.<span class="ruby-identifier">log</span> <span class="ruby-node">&quot;** #{name} CONNECTED TO #{peer.name}&quot;</span>
+116:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">tls</span>
+117:         <span class="ruby-identifier">start_tls</span>(<span class="ruby-identifier">tls_opts</span> <span class="ruby-operator">||</span> {})
+118:       <span class="ruby-keyword kw">end</span>
+119:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">peer</span>
+120:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

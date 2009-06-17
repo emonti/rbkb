@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>to_hex (Numeric)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 653</span>
+653:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_hex</span>(<span class="ruby-identifier">o</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">s</span>=<span class="ruby-keyword kw">nil</span>)
+654:     <span class="ruby-identifier">to_chars</span>(<span class="ruby-identifier">o</span>,<span class="ruby-identifier">s</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> 
+655:       <span class="ruby-constant">Rbkb</span><span class="ruby-operator">::</span><span class="ruby-constant">HEXCHARS</span>[<span class="ruby-identifier">c</span>.<span class="ruby-identifier">clear_bits</span>(<span class="ruby-value">0xf</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-value">4</span>]<span class="ruby-operator">+</span><span class="ruby-constant">Rbkb</span><span class="ruby-operator">::</span><span class="ruby-constant">HEXCHARS</span>[<span class="ruby-identifier">c</span>.<span class="ruby-identifier">clear_bits</span>(<span class="ruby-value">0xf0</span>)]
+656:     }.<span class="ruby-identifier">join</span>
+657:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

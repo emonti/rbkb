@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>capture (Rbkb::Http::Base)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>    <span class="ruby-comment cmt"># File lib/rbkb/http/tmp/base.rb, line 21</span>
+21:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">str</span>)
+22:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;arg 0 must be a string&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">str</span>
+23: <span class="ruby-comment cmt">#      if ret = self.capture_incomplete(str)</span>
+24: <span class="ruby-comment cmt">#        return ret</span>
+25: <span class="ruby-comment cmt">#      end</span>
+26:       <span class="ruby-identifier">hstr</span>, <span class="ruby-identifier">bstr</span> = <span class="ruby-identifier">str</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\s*\r?\n\r?\n/</span>, <span class="ruby-value">2</span>)
+27:       <span class="ruby-identifier">capture_headers</span>(<span class="ruby-identifier">hstr</span>)
+28:       <span class="ruby-ivar">@body</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">derive_body_object</span>()
+29:       <span class="ruby-identifier">capture_body</span>(<span class="ruby-identifier">bstr</span>)
+30:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>
+31:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

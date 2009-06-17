@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>receive_data (Plug::Blit)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>    <span class="ruby-comment cmt"># File lib/rbkb/plug/blit.rb, line 51</span>
+51:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">receive_data</span> <span class="ruby-identifier">dat</span>
+52:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> (<span class="ruby-ivar">@buf</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">dat</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-constant">SIG</span>.<span class="ruby-identifier">size</span>) <span class="ruby-keyword kw">or</span> (<span class="ruby-ivar">@buf</span>.<span class="ruby-identifier">pos</span> <span class="ruby-operator">&gt;</span> (<span class="ruby-constant">SIG</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>))
+53: 
+54:       <span class="ruby-ivar">@buf</span>.<span class="ruby-identifier">rewind</span>
+55: 
+56:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@buf</span>.<span class="ruby-identifier">read</span>(<span class="ruby-constant">SIG</span>.<span class="ruby-identifier">size</span>) <span class="ruby-operator">==</span> <span class="ruby-constant">SIG</span> <span class="ruby-keyword kw">and</span>
+57:                     <span class="ruby-identifier">op</span> = <span class="ruby-constant">OPCODES</span>[ <span class="ruby-ivar">@buf</span>.<span class="ruby-identifier">read</span>(<span class="ruby-value">1</span>)[<span class="ruby-value">0</span>] ]
+58: 
+59:       <span class="ruby-identifier">initbuf</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">op</span>)
+60:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

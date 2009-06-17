@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>to_raw (Rbkb::Http::Response)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>    <span class="ruby-comment cmt"># File lib/rbkb/http/tmp/response.rb, line 13</span>
+13:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_raw</span>(<span class="ruby-identifier">raw_body</span>=<span class="ruby-keyword kw">nil</span>)
+14:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;this response has no status&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">first_entity</span>()
+15:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">headers</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">default_headers_obj</span>()
+16:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">body</span> = <span class="ruby-identifier">raw_body</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">raw_body</span>
+17: 
+18:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">do_chunked_encoding?</span>(<span class="ruby-ivar">@headers</span>)
+19:         <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@body</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">ChunkedBody</span>
+20:           <span class="ruby-ivar">@body</span> = <span class="ruby-constant">ChunkedBody</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@body</span>, <span class="ruby-ivar">@body</span>.<span class="ruby-identifier">opts</span>)
+21:         <span class="ruby-keyword kw">end</span>
+22:         <span class="ruby-ivar">@headers</span>.<span class="ruby-identifier">delete_header</span>(<span class="ruby-value str">&quot;Content-Length&quot;</span>)
+23:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:ignore_content_length</span>]
+24:         <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@body</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">BoundBody</span>
+25:           <span class="ruby-ivar">@body</span> = <span class="ruby-constant">BoundBody</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@body</span>, <span class="ruby-ivar">@body</span>.<span class="ruby-identifier">opts</span>)
+26:         <span class="ruby-keyword kw">end</span>
+27:         <span class="ruby-ivar">@headers</span>.<span class="ruby-identifier">delete_header</span>(<span class="ruby-value str">&quot;Transfer-Encoding&quot;</span>)
+28:       <span class="ruby-keyword kw">else</span>
+29:         <span class="ruby-ivar">@body</span> = <span class="ruby-constant">Body</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@body</span>, <span class="ruby-ivar">@body</span>.<span class="ruby-identifier">opts</span>)
+30:       <span class="ruby-keyword kw">end</span>
+31:       <span class="ruby-ivar">@body</span>.<span class="ruby-identifier">base</span> = <span class="ruby-keyword kw">self</span>
+32: 
+33:       <span class="ruby-keyword kw">yield</span>(<span class="ruby-keyword kw">self</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+34: 
+35:       <span class="ruby-identifier">bstr</span> = <span class="ruby-ivar">@body</span>.<span class="ruby-identifier">to_raw</span>
+36:       <span class="ruby-identifier">hdrs</span> = <span class="ruby-ivar">@headers</span>.<span class="ruby-identifier">to_raw_array</span>.<span class="ruby-identifier">unshift</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first_entity</span>.<span class="ruby-identifier">to_raw</span>)
+37:       <span class="ruby-keyword kw">return</span> <span class="ruby-node">&quot;#{hdrs.join(&quot;\r\n&quot;)}\r\n\r\n#{bstr}&quot;</span>
+38:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

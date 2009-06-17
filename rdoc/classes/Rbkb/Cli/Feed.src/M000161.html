@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>make_parser (Rbkb::Cli::Feed)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/cli/feed.rb, line 59</span>
+ 59:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">make_parser</span>()
+ 60:     <span class="ruby-identifier">arg</span> = <span class="ruby-keyword kw">super</span>()
+ 61:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">banner</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot; host:port&quot;</span>
+ 62: 
+ 63:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-o&quot;</span>, <span class="ruby-value str">&quot;--output=FILE&quot;</span>, <span class="ruby-value str">&quot;Output to file&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>
+ 64:       <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">UI</span><span class="ruby-operator">::</span><span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>] = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">o</span>, <span class="ruby-value str">&quot;w&quot;</span>)
+ 65:     <span class="ruby-keyword kw">end</span>
+ 66: 
+ 67:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-l&quot;</span>, <span class="ruby-value str">&quot;--listen=(ADDR:?)PORT&quot;</span>, <span class="ruby-value str">&quot;Server - on port (and addr?)&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
+ 68:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">m</span>=<span class="ruby-regexp re">/^(?:([\w\._-]+):)?(\d+)$/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">p</span>)
+ 69:         <span class="ruby-ivar">@local_addr</span> = <span class="ruby-identifier">$1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$1</span>
+ 70:         <span class="ruby-ivar">@local_port</span> = <span class="ruby-identifier">$2</span>.<span class="ruby-identifier">to_i</span>
+ 71:         <span class="ruby-ivar">@listen</span> = <span class="ruby-keyword kw">true</span>
+ 72:       <span class="ruby-keyword kw">else</span>
+ 73:         <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid listen argument: #{p.inspect}&quot;</span>
+ 74:       <span class="ruby-keyword kw">end</span>
+ 75:     <span class="ruby-keyword kw">end</span>
+ 76: 
+ 77:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-b&quot;</span>, <span class="ruby-value str">&quot;--blit=(ADDR:)?PORT&quot;</span>, <span class="ruby-value str">&quot;Where to listen for blit&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">b</span><span class="ruby-operator">|</span>
+ 78:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">b</span>
+ 79:       <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">m</span>=<span class="ruby-regexp re">/^(?:([\w\._-]+):)?(\d+)$/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">b</span>))
+ 80:         <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid blit argument: #{b.inspect}&quot;</span>
+ 81:       <span class="ruby-keyword kw">end</span>
+ 82:       <span class="ruby-ivar">@blit_port</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">2</span>].<span class="ruby-identifier">to_i</span>
+ 83:       <span class="ruby-ivar">@blit_addr</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>]
+ 84:     <span class="ruby-keyword kw">end</span>
+ 85: 
+ 86:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-i&quot;</span>, <span class="ruby-value str">&quot;--[no-]initiate&quot;</span>, <span class="ruby-value str">&quot;Send the first message on connect&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+ 87:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:go_first</span>] = <span class="ruby-identifier">i</span>
+ 88:     <span class="ruby-keyword kw">end</span>
+ 89: 
+ 90:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-e&quot;</span>, <span class="ruby-value str">&quot;--[no-]end&quot;</span>, <span class="ruby-value str">&quot;End connection when feed is exhausted&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+ 91:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:close_at_end</span>] = <span class="ruby-identifier">c</span>
+ 92:     <span class="ruby-keyword kw">end</span>
+ 93:      
+ 94:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-s&quot;</span>, <span class="ruby-value str">&quot;--[no-]step&quot;</span>, <span class="ruby-value str">&quot;'Continue' prompt between messages&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+ 95:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:step</span>] = <span class="ruby-identifier">s</span>
+ 96:     <span class="ruby-keyword kw">end</span>
+ 97: 
+ 98:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-u&quot;</span>, <span class="ruby-value str">&quot;--udp&quot;</span>, <span class="ruby-value str">&quot;Use UDP instead of TCP&quot;</span> ) <span class="ruby-keyword kw">do</span>
+ 99:       <span class="ruby-ivar">@transport</span> = <span class="ruby-identifier">:UDP</span>
+100:     <span class="ruby-keyword kw">end</span>
+101: 
+102:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-r&quot;</span>, <span class="ruby-value str">&quot;--reconnect&quot;</span>, <span class="ruby-value str">&quot;Attempt to reconnect endlessly.&quot;</span>) <span class="ruby-keyword kw">do</span>
+103:       <span class="ruby-ivar">@persist</span>=<span class="ruby-keyword kw">true</span>
+104:     <span class="ruby-keyword kw">end</span>
+105: 
+106:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-q&quot;</span>, <span class="ruby-value str">&quot;--quiet&quot;</span>, <span class="ruby-value str">&quot;Suppress verbose messages/dumps&quot;</span>) <span class="ruby-keyword kw">do</span>
+107:       <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">UI</span><span class="ruby-operator">::</span><span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:verbose</span>] = <span class="ruby-keyword kw">false</span>
+108:     <span class="ruby-keyword kw">end</span>
+109: 
+110:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-Q&quot;</span>, <span class="ruby-value str">&quot;--squelch-exhausted&quot;</span>, <span class="ruby-value str">&quot;Squelch 'FEED EXHAUSTED' messages&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+111:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:squelch_exhausted</span>] = <span class="ruby-keyword kw">true</span>
+112:     <span class="ruby-keyword kw">end</span>
+113: 
+114:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">separator</span>  <span class="ruby-value str">&quot;  Sources: (can be combined)&quot;</span>
+115: 
+116:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-f&quot;</span>, <span class="ruby-value str">&quot;--from-files=GLOB&quot;</span>, <span class="ruby-value str">&quot;Import messages from raw files&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+117:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:feed</span>] <span class="ruby-operator">||=</span> []
+118:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:feed</span>] <span class="ruby-operator">+=</span> <span class="ruby-constant">FeedImport</span>.<span class="ruby-identifier">import_rawfiles</span>(<span class="ruby-identifier">f</span>)
+119:     <span class="ruby-keyword kw">end</span>
+120: 
+121:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-x&quot;</span>, <span class="ruby-value str">&quot;--from-hex=FILE&quot;</span>, <span class="ruby-value str">&quot;Import messages from hexdumps&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+122:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:feed</span>] <span class="ruby-operator">||=</span> []
+123:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:feed</span>] <span class="ruby-operator">+=</span> <span class="ruby-constant">FeedImport</span>.<span class="ruby-identifier">import_dump</span>(<span class="ruby-identifier">x</span>)
+124:     <span class="ruby-keyword kw">end</span>
+125: 
+126:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-y&quot;</span>, <span class="ruby-value str">&quot;--from-yaml=FILE&quot;</span>, <span class="ruby-value str">&quot;Import messages from yaml&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">y</span><span class="ruby-operator">|</span>
+127:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:feed</span>] <span class="ruby-operator">||=</span> []
+128:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:feed</span>] <span class="ruby-operator">+=</span> <span class="ruby-constant">FeedImport</span>.<span class="ruby-identifier">import_yaml</span>(<span class="ruby-identifier">y</span>)
+129:     <span class="ruby-keyword kw">end</span>
+130: 
+131:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-p&quot;</span>, <span class="ruby-value str">&quot;--from-pcap=FILE[:FILTER]&quot;</span>, <span class="ruby-value str">&quot;Import messages from pcap&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
+132:       <span class="ruby-keyword kw">if</span> <span class="ruby-regexp re">/^([^:]+):(.+)$/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">p</span>)
+133:         <span class="ruby-identifier">file</span> = <span class="ruby-identifier">$1</span>
+134:         <span class="ruby-identifier">filter</span> = <span class="ruby-identifier">$2</span>
+135:       <span class="ruby-keyword kw">else</span>
+136:         <span class="ruby-identifier">file</span> = <span class="ruby-identifier">p</span>
+137:         <span class="ruby-identifier">filter</span> = <span class="ruby-keyword kw">nil</span>
+138:       <span class="ruby-keyword kw">end</span>
+139: 
+140:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:feed</span>] <span class="ruby-operator">||=</span> []
+141:       <span class="ruby-ivar">@feed_opts</span>[<span class="ruby-identifier">:feed</span>] <span class="ruby-operator">+=</span> <span class="ruby-constant">FeedImport</span>.<span class="ruby-identifier">import_pcap</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">filter</span>)
+142:     <span class="ruby-keyword kw">end</span>
+143:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

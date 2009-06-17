@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>go (Rbkb::Cli::Telson)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>    <span class="ruby-comment cmt"># File lib/rbkb/cli/telson.rb, line 55</span>
+55:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">go</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+56:     <span class="ruby-keyword kw">super</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+57: 
+58:     <span class="ruby-identifier">loop</span> <span class="ruby-keyword kw">do</span>
+59:       <span class="ruby-constant">EventMachine</span>.<span class="ruby-identifier">run</span> {
+60:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@transport</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:TCP</span>
+61:           <span class="ruby-identifier">bail</span>(<span class="ruby-value str">&quot;Sorry: --source only works with UDP.&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@srced</span>
+62: 
+63:           <span class="ruby-identifier">c</span>=<span class="ruby-constant">EventMachine</span>.<span class="ruby-identifier">connect</span>(<span class="ruby-ivar">@target_addr</span>, <span class="ruby-ivar">@target_port</span>, <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">Telson</span>, <span class="ruby-ivar">@transport</span>, <span class="ruby-ivar">@plug_opts</span>)
+64: 
+65:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@transport</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:UDP</span>
+66:           <span class="ruby-identifier">c</span>=<span class="ruby-constant">EventMachine</span>.<span class="ruby-identifier">open_datagram_socket</span>( <span class="ruby-ivar">@local_addr</span>, <span class="ruby-ivar">@local_port</span>, <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">Telson</span>, <span class="ruby-ivar">@transport</span>, <span class="ruby-ivar">@plug_opts</span>)
+67:           <span class="ruby-identifier">c</span>.<span class="ruby-identifier">peers</span>.<span class="ruby-identifier">add_peer_manually</span>(<span class="ruby-ivar">@target_addr</span>, <span class="ruby-ivar">@target_port</span>)
+68: 
+69:         <span class="ruby-comment cmt">### someday maybe raw or others?</span>
+70:         <span class="ruby-keyword kw">else</span>
+71:           <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;bad transport protocol&quot;</span>
+72:         <span class="ruby-keyword kw">end</span>
+73: 
+74:         <span class="ruby-constant">EventMachine</span>.<span class="ruby-identifier">start_server</span>(<span class="ruby-ivar">@blit_addr</span>, <span class="ruby-ivar">@blit_port</span>, <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">Blit</span>, <span class="ruby-ivar">@blit_proto</span>, <span class="ruby-identifier">c</span>)
+75:         <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">UI</span><span class="ruby-operator">::</span><span class="ruby-identifier">verbose</span>(<span class="ruby-node">&quot;** BLITSRV-#{@blit_addr}:#{@blit_port}(TCP) Started&quot;</span>) <span class="ruby-comment cmt"># XXX</span>
+76:       }
+77:       <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@persist</span>
+78:       <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">UI</span><span class="ruby-operator">::</span><span class="ruby-identifier">verbose</span>(<span class="ruby-value str">&quot;** RECONNECTING&quot;</span>) <span class="ruby-comment cmt"># XXX</span>
+79:     <span class="ruby-keyword kw">end</span>
+80:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>cstring (String)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 470</span>
+470:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cstring</span>(<span class="ruby-identifier">off</span>=<span class="ruby-value">0</span>)
+471:     <span class="ruby-keyword kw">self</span>[ <span class="ruby-identifier">off</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">index</span>(<span class="ruby-value str">&quot;\x00&quot;</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">size</span> ]
+472:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

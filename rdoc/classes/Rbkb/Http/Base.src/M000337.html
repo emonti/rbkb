@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>content_length (Rbkb::Http::Base)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>    <span class="ruby-comment cmt"># File lib/rbkb/http/tmp/base.rb, line 72</span>
+72:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">content_length</span>(<span class="ruby-identifier">hdrs</span>=<span class="ruby-ivar">@headers</span>)
+73:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;headers is nil?&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">hdrs</span>
+74:       <span class="ruby-keyword kw">if</span>( (<span class="ruby-keyword kw">not</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:ignore_content_length</span>]) <span class="ruby-keyword kw">and</span> 
+75:           <span class="ruby-identifier">hdrs</span>.<span class="ruby-identifier">get_header_value</span>(<span class="ruby-value str">&quot;Content-Length&quot;</span>).<span class="ruby-identifier">to_s</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^(\d+)$/</span> )
+76: 
+77:         <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_i</span>
+78:       <span class="ruby-keyword kw">end</span>
+79:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

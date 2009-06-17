@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: Rbkb::Http::CommonInterface</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">Rbkb::Http::CommonInterface</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../files/lib/rbkb/http/common_rb.html">
+                lib/rbkb/http/common.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000215">_common_init</a>&nbsp;&nbsp;
+      <a href="#M000216">opts</a>&nbsp;&nbsp;
+      <a href="#M000217">opts=</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000215" class="method-detail">
+        <a name="M000215"></a>
+
+        <div class="method-heading">
+          <a href="CommonInterface.src/M000215.html" target="Code" class="method-signature"
+            onclick="popupCode('CommonInterface.src/M000215.html');return false;">
+          <span class="method-name">_common_init</span><span class="method-args">(raw=nil, opts=nil) {|self if block_given?| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This provides a common method for use in &#8216;initialize&#8217; to slurp
+in <a href="CommonInterface.html#M000216">opts</a> parameters and
+optionally capture a raw blob. This method also accepts a block to which it
+yields &#8216;self&#8216;
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000216" class="method-detail">
+        <a name="M000216"></a>
+
+        <div class="method-heading">
+          <a href="CommonInterface.src/M000216.html" target="Code" class="method-signature"
+            onclick="popupCode('CommonInterface.src/M000216.html');return false;">
+          <span class="method-name">opts</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Implements a common interface for an <a
+href="CommonInterface.html#M000216">opts</a> hash which is stored
+internally as the class variable @<a
+href="CommonInterface.html#M000216">opts</a>.
+</p>
+<p>
+The <a href="CommonInterface.html#M000216">opts</a> hash is designed to
+contain various named values for configuration, etc. The values and names
+are determined entirely by the class that uses it.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000217" class="method-detail">
+        <a name="M000217"></a>
+
+        <div class="method-heading">
+          <a href="CommonInterface.src/M000217.html" target="Code" class="method-signature"
+            onclick="popupCode('CommonInterface.src/M000217.html');return false;">
+          <span class="method-name">opts=</span><span class="method-args">(o=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Implements a common interface for setting a new <a
+href="CommonInterface.html#M000216">opts</a> hash containing various named
+values for configuration, etc. This also performs a minimal sanity check to
+ensure the object is a Hash.
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

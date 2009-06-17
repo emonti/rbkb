@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>new (Plug::Proxy)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>    <span class="ruby-comment cmt"># File lib/rbkb/plug/proxy.rb, line 10</span>
+10:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">transport</span>, <span class="ruby-identifier">target</span>)
+11:       <span class="ruby-ivar">@transport</span> = <span class="ruby-identifier">transport</span>
+12:       <span class="ruby-ivar">@peers</span> = <span class="ruby-constant">ProxyPeerList</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>)
+13:       <span class="ruby-ivar">@kind</span> = <span class="ruby-identifier">:proxy</span>
+14:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

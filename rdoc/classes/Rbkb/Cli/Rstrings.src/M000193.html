@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>go (Rbkb::Cli::Rstrings)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/cli/rstrings.rb, line 77</span>
+ 77:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">go</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+ 78:     <span class="ruby-keyword kw">super</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+ 79: 
+ 80:     <span class="ruby-identifier">start_off</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:start_off</span>]
+ 81:     <span class="ruby-identifier">end_off</span>   = <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:end_off</span>]
+ 82:     <span class="ruby-identifier">enc</span>  = <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:encoding</span>]
+ 83:     <span class="ruby-identifier">min</span>  = <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:minimum</span>]
+ 84:     <span class="ruby-identifier">align</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:align</span>]
+ 85: 
+ 86:     <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:pr_fnames</span>]=<span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:fnames</span>].<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>
+ 87: 
+ 88:     <span class="ruby-identifier">i</span>=<span class="ruby-value">0</span>
+ 89:     <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">buf</span>=<span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:indat</span>].<span class="ruby-identifier">shift</span>
+ 90:       <span class="ruby-identifier">buf</span>[<span class="ruby-identifier">start_off</span><span class="ruby-operator">..</span><span class="ruby-identifier">end_off</span>].<span class="ruby-identifier">strings</span>(
+ 91:         <span class="ruby-identifier">:encoding</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">enc</span>,
+ 92:         <span class="ruby-identifier">:minimum</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">min</span>,
+ 93:         <span class="ruby-identifier">:align</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">align</span>
+ 94:       ) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">off</span>, <span class="ruby-identifier">len</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">str</span><span class="ruby-operator">|</span>
+ 95:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:pr_fnames</span>]
+ 96:           <span class="ruby-ivar">@stdout</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{@opts[:fnames][i]}:&quot;</span>
+ 97:         <span class="ruby-keyword kw">end</span>
+ 98:         <span class="ruby-ivar">@stdout</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{(off+start_off).to_hex.rjust(8,&quot;0&quot;)}:&quot;</span><span class="ruby-operator">+</span>
+ 99:                    <span class="ruby-node">&quot;#{(len+start_off).to_hex.rjust(8,&quot;0&quot;)}:&quot;</span><span class="ruby-operator">+</span>
+100:                    <span class="ruby-node">&quot;#{type.to_s[0,1]}:#{str.delete(&quot;\000&quot;).inspect}\n&quot;</span>
+101:       <span class="ruby-keyword kw">end</span>
+102:       <span class="ruby-identifier">i</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span>
+103:     <span class="ruby-keyword kw">end</span>
+104: 
+105:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">exit</span>(<span class="ruby-value">0</span>)
+106:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

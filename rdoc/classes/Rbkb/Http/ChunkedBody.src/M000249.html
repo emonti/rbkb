@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>capture (Rbkb::Http::ChunkedBody)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/http/body.rb, line 151</span>
+151:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">str</span>)
+152:       <span class="ruby-comment cmt"># chunked encoding is gross...</span>
+153:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@expect_length</span>
+154:         <span class="ruby-identifier">sio</span> = <span class="ruby-constant">StringIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@last_chunk</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">str</span>)
+155:       <span class="ruby-keyword kw">else</span>
+156:         <span class="ruby-identifier">sio</span> = <span class="ruby-constant">StringIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">str</span>)
+157:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">data</span>=<span class="ruby-value str">&quot;&quot;</span>
+158:       <span class="ruby-keyword kw">end</span>
+159:       <span class="ruby-ivar">@last_chunk</span> = <span class="ruby-keyword kw">nil</span>
+160: 
+161:       <span class="ruby-ivar">@expect_length</span> = <span class="ruby-keyword kw">true</span>
+162:       <span class="ruby-keyword kw">while</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">sio</span>.<span class="ruby-identifier">eof?</span>
+163:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">m</span>=<span class="ruby-regexp re">/^([a-fA-F0-9]+)\s*(;[[:print:]\s]*)?\r?\n$/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">line</span>=<span class="ruby-identifier">sio</span>.<span class="ruby-identifier">readline</span>)
+164:           <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;invalid chunk at #{line.chomp.inspect}&quot;</span>
+165:         <span class="ruby-keyword kw">end</span>
+166:         <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">chunksz</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">hex</span>) <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+167:           <span class="ruby-ivar">@expect_length</span> = <span class="ruby-keyword kw">false</span>
+168:           <span class="ruby-comment cmt"># XXX ignore Trailer headers</span>
+169:           <span class="ruby-keyword kw">break</span>
+170:         <span class="ruby-keyword kw">end</span>
+171: 
+172:         <span class="ruby-keyword kw">if</span> ( (<span class="ruby-keyword kw">not</span> <span class="ruby-identifier">sio</span>.<span class="ruby-identifier">eof?</span>) <span class="ruby-keyword kw">and</span> 
+173:              (<span class="ruby-identifier">chunk</span>=<span class="ruby-identifier">sio</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">chunksz</span>)) <span class="ruby-keyword kw">and</span> 
+174:              <span class="ruby-identifier">chunk</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">chunksz</span> <span class="ruby-keyword kw">and</span> 
+175:              (<span class="ruby-keyword kw">not</span> <span class="ruby-identifier">sio</span>.<span class="ruby-identifier">eof?</span>) <span class="ruby-keyword kw">and</span> (<span class="ruby-identifier">extra</span> = <span class="ruby-identifier">sio</span>.<span class="ruby-identifier">readline</span>) <span class="ruby-keyword kw">and</span>
+176:              (<span class="ruby-keyword kw">not</span> <span class="ruby-identifier">sio</span>.<span class="ruby-identifier">eof?</span>) <span class="ruby-keyword kw">and</span> (<span class="ruby-identifier">extra</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">sio</span>.<span class="ruby-identifier">readline</span>)
+177:            )
+178:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">extra</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^\r?\n\r?\n$/</span>
+179:             <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">chunk</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+180:             <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">chunk</span>
+181:           <span class="ruby-keyword kw">else</span>
+182:             <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;expected CRLF&quot;</span>
+183:           <span class="ruby-keyword kw">end</span>
+184:         <span class="ruby-keyword kw">else</span>
+185:           <span class="ruby-ivar">@last_chunk</span> = <span class="ruby-identifier">line</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">chunk</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">extra</span>.<span class="ruby-identifier">to_s</span>
+186:           <span class="ruby-keyword kw">break</span>
+187:         <span class="ruby-keyword kw">end</span>
+188:       <span class="ruby-keyword kw">end</span>
+189:       <span class="ruby-identifier">throw</span>(<span class="ruby-identifier">:expect_length</span>, <span class="ruby-ivar">@expect_length</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@expect_length</span>
+190:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>
+191:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,1179 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: Rbkb::Http::Headers</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">Rbkb::Http::Headers</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../files/lib/rbkb/http/headers_rb.html">
+                lib/rbkb/http/headers.rb
+                </a>
+        <br />
+                <a href="../../../files/lib/rbkb/http/tmp/headers_rb.html">
+                lib/rbkb/http/tmp/headers.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="../../Array.html">
+                Array
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+A base class for <a href="RequestHeaders.html">RequestHeaders</a> and <a
+href="ResponseHeaders.html">ResponseHeaders</a>
+</p>
+<p>
+Includes common implementations of <a
+href="Headers.html#M000284">to_raw</a>, <a
+href="Headers.html#M000273">to_raw_array</a>, <a
+href="Headers.html#M000285">capture</a>, and the class method <a
+href="Headers.html#M000267">parse</a>
+</p>
+<p>
+The <a href="Headers.html">Headers</a> array are stored internally as an
+named value pairs array.
+</p>
+<p>
+The headers are generally name/value pairs in the form of:
+</p>
+<pre>
+  [  [&quot;Name1&quot;, &quot;value1&quot;], [&quot;Name2&quot;, &quot;value2&quot;], ...  ]
+</pre>
+<p>
+Which will be rendered with <a href="Headers.html#M000284">to_raw</a>() to
+(or captured with <a href="Headers.html#M000285">capture</a>() from):
+</p>
+<pre>
+  Name1: value1
+  Name2: value2
+  ...
+</pre>
+<p>
+This has the benefit of letting the <a
+href="Headers.html#M000272">data=</a> accessor automatically render a Hash
+or any other <a href="../../Enumerable.html">Enumerable</a> to a <a
+href="Headers.html">Headers</a> object through the use of to_a. However it
+has the caveat that named pairs are expected on various operations.
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000276">all_values_for</a>&nbsp;&nbsp;
+      <a href="#M000270">base=</a>&nbsp;&nbsp;
+      <a href="#M000296">base=</a>&nbsp;&nbsp;
+      <a href="#M000285">capture</a>&nbsp;&nbsp;
+      <a href="#M000308">capture</a>&nbsp;&nbsp;
+      <a href="#M000313">capture_complete?</a>&nbsp;&nbsp;
+      <a href="#M000290">capture_complete?</a>&nbsp;&nbsp;
+      <a href="#M000287">capture_full_headers</a>&nbsp;&nbsp;
+      <a href="#M000310">capture_full_headers</a>&nbsp;&nbsp;
+      <a href="#M000271">data</a>&nbsp;&nbsp;
+      <a href="#M000297">data</a>&nbsp;&nbsp;
+      <a href="#M000298">data=</a>&nbsp;&nbsp;
+      <a href="#M000272">data=</a>&nbsp;&nbsp;
+      <a href="#M000281">delete_header</a>&nbsp;&nbsp;
+      <a href="#M000304">delete_header</a>&nbsp;&nbsp;
+      <a href="#M000274">get_all</a>&nbsp;&nbsp;
+      <a href="#M000300">get_all</a>&nbsp;&nbsp;
+      <a href="#M000303">get_all_values_for</a>&nbsp;&nbsp;
+      <a href="#M000275">get_all_values_for</a>&nbsp;&nbsp;
+      <a href="#M000286">get_first_obj</a>&nbsp;&nbsp;
+      <a href="#M000309">get_first_obj</a>&nbsp;&nbsp;
+      <a href="#M000277">get_header</a>&nbsp;&nbsp;
+      <a href="#M000301">get_header</a>&nbsp;&nbsp;
+      <a href="#M000279">get_header_value</a>&nbsp;&nbsp;
+      <a href="#M000302">get_header_value</a>&nbsp;&nbsp;
+      <a href="#M000278">get_value_for</a>&nbsp;&nbsp;
+      <a href="#M000295">new</a>&nbsp;&nbsp;
+      <a href="#M000269">new</a>&nbsp;&nbsp;
+      <a href="#M000293">parse</a>&nbsp;&nbsp;
+      <a href="#M000267">parse</a>&nbsp;&nbsp;
+      <a href="#M000294">parse_full_headers</a>&nbsp;&nbsp;
+      <a href="#M000268">parse_full_headers</a>&nbsp;&nbsp;
+      <a href="#M000291">request_hdr</a>&nbsp;&nbsp;
+      <a href="#M000265">request_hdr</a>&nbsp;&nbsp;
+      <a href="#M000288">reset_capture</a>&nbsp;&nbsp;
+      <a href="#M000311">reset_capture</a>&nbsp;&nbsp;
+      <a href="#M000289">reset_capture!</a>&nbsp;&nbsp;
+      <a href="#M000312">reset_capture!</a>&nbsp;&nbsp;
+      <a href="#M000266">response_hdr</a>&nbsp;&nbsp;
+      <a href="#M000292">response_hdr</a>&nbsp;&nbsp;
+      <a href="#M000283">set_all_for</a>&nbsp;&nbsp;
+      <a href="#M000306">set_all_for</a>&nbsp;&nbsp;
+      <a href="#M000305">set_header</a>&nbsp;&nbsp;
+      <a href="#M000282">set_header</a>&nbsp;&nbsp;
+      <a href="#M000307">to_raw</a>&nbsp;&nbsp;
+      <a href="#M000284">to_raw</a>&nbsp;&nbsp;
+      <a href="#M000273">to_raw_array</a>&nbsp;&nbsp;
+      <a href="#M000299">to_raw_array</a>&nbsp;&nbsp;
+      <a href="#M000280">value_for</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+    <div id="includes">
+      <h3 class="section-bar">Included Modules</h3>
+
+      <div id="includes-list">
+        <span class="include-name"><a href="CommonInterface.html">CommonInterface</a></span>
+        <span class="include-name"><a href="CommonInterface.html">CommonInterface</a></span>
+      </div>
+    </div>
+
+    <div id="section">
+
+
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">base</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">base</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000295" class="method-detail">
+        <a name="M000295"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000295.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000295.html');return false;">
+          <span class="method-name">new</span><span class="method-args">(*args) {|self if block_given?| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Instantiates a <a href="Headers.html#M000269">new</a> <a
+href="Headers.html">Headers</a> object.
+</p>
+<p>
+Arguments:
+</p>
+<pre>
+  raw:  String or Enumerable. Strings are parsed with capture.
+        Enumerables are converted with 'to_a' and stored directly.
+
+  opts: Options which affect the behavior of the Headers object.
+        (none currently defined)
+</pre>
+        </div>
+      </div>
+
+      <div id="method-M000269" class="method-detail">
+        <a name="M000269"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000269.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000269.html');return false;">
+          <span class="method-name">new</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Instantiates a <a href="Headers.html#M000269">new</a> <a
+href="Headers.html">Headers</a> object.
+</p>
+<p>
+Arguments:
+</p>
+<pre>
+  raw:  String or Enumerable. Strings are parsed with capture.
+        Enumerables are converted with 'to_a' and stored directly.
+
+  opts: Options which affect the behavior of the Headers object.
+        (none currently defined)
+</pre>
+        </div>
+      </div>
+
+      <div id="method-M000293" class="method-detail">
+        <a name="M000293"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000293.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000293.html');return false;">
+          <span class="method-name">parse</span><span class="method-args">(str)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Instantiates a <a href="Headers.html#M000269">new</a> <a
+href="Headers.html">Headers</a> object and returns the result of <a
+href="Headers.html#M000285">capture</a>(str) Note, this method does not
+distinguish between <a href="ResponseHeaders.html">ResponseHeaders</a> or
+<a href="RequestHeaders.html">RequestHeaders</a>, and so the object may
+need to be extended with one or the other, if you need access to specific
+behviors from either.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000267" class="method-detail">
+        <a name="M000267"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000267.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000267.html');return false;">
+          <span class="method-name">parse</span><span class="method-args">(str)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Instantiates a <a href="Headers.html#M000269">new</a> <a
+href="Headers.html">Headers</a> object and returns the result of <a
+href="Headers.html#M000285">capture</a>(str) Note, this method does not
+distinguish between <a href="ResponseHeaders.html">ResponseHeaders</a> or
+<a href="RequestHeaders.html">RequestHeaders</a>, and so the object may
+need to be extended with one or the other, if you need access to specific
+behviors from either.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000294" class="method-detail">
+        <a name="M000294"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000294.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000294.html');return false;">
+          <span class="method-name">parse_full_headers</span><span class="method-args">(str, first_obj)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Instantiates a <a href="Headers.html#M000269">new</a> <a
+href="Headers.html">Headers</a> object and returns the result of <a
+href="Headers.html#M000287">capture_full_headers</a>(str, first_obj)
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000268" class="method-detail">
+        <a name="M000268"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000268.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000268.html');return false;">
+          <span class="method-name">parse_full_headers</span><span class="method-args">(str, first_obj)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Instantiates a <a href="Headers.html#M000269">new</a> <a
+href="Headers.html">Headers</a> object and returns the result of <a
+href="Headers.html#M000287">capture_full_headers</a>(str, first_obj)
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000291" class="method-detail">
+        <a name="M000291"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000291.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000291.html');return false;">
+          <span class="method-name">request_hdr</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Class method to instantiate a <a href="Headers.html#M000269">new</a> <a
+href="RequestHeaders.html">RequestHeaders</a> object
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000265" class="method-detail">
+        <a name="M000265"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000265.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000265.html');return false;">
+          <span class="method-name">request_hdr</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Class method to instantiate a <a href="Headers.html#M000269">new</a> <a
+href="RequestHeaders.html">RequestHeaders</a> object
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000266" class="method-detail">
+        <a name="M000266"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000266.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000266.html');return false;">
+          <span class="method-name">response_hdr</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Class method to instantiate a <a href="Headers.html#M000269">new</a> <a
+href="ResponseHeaders.html">ResponseHeaders</a> object
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000292" class="method-detail">
+        <a name="M000292"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000292.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000292.html');return false;">
+          <span class="method-name">response_hdr</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Class method to instantiate a <a href="Headers.html#M000269">new</a> <a
+href="ResponseHeaders.html">ResponseHeaders</a> object
+</p>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000276" class="method-detail">
+        <a name="M000276"></a>
+
+        <div class="method-heading">
+          <span class="method-name">all_values_for</span><span class="method-args">(k)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Headers.html#M000275">get_all_values_for</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000270" class="method-detail">
+        <a name="M000270"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000270.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000270.html');return false;">
+          <span class="method-name">base=</span><span class="method-args">(b)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Conditionally sets the @base class variable if it is a kind of <a
+href="Base.html">Base</a> object.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000296" class="method-detail">
+        <a name="M000296"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000296.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000296.html');return false;">
+          <span class="method-name">base=</span><span class="method-args">(b)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Conditionally sets the @base class variable if it is a kind of <a
+href="Base.html">Base</a> object.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000285" class="method-detail">
+        <a name="M000285"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000285.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000285.html');return false;">
+          <span class="method-name">capture</span><span class="method-args">(str) {|self, heads| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Captures a raw string of headers into this instance&#8216;s internal array.
+Note: This method expects not to include the first element such as a <a
+href="RequestAction.html">RequestAction</a> or <a
+href="ResponseStatus.html">ResponseStatus</a>. See <a
+href="Headers.html#M000287">capture_full_headers</a> for a version that can
+handle this.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000308" class="method-detail">
+        <a name="M000308"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000308.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000308.html');return false;">
+          <span class="method-name">capture</span><span class="method-args">(str) {|self, heads| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Captures a raw string of headers into this instance&#8216;s internal array.
+Note: This method expects not to include the first element such as a <a
+href="RequestAction.html">RequestAction</a> or <a
+href="ResponseStatus.html">ResponseStatus</a>. See <a
+href="Headers.html#M000287">capture_full_headers</a> for a version that can
+handle this.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000313" class="method-detail">
+        <a name="M000313"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000313.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000313.html');return false;">
+          <span class="method-name">capture_complete?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Indicates whether this object is ready to <a
+href="Headers.html#M000285">capture</a> fresh <a
+href="Headers.html#M000271">data</a>, or is waiting for additional <a
+href="Headers.html#M000271">data</a> or a reset from a previous incomplete
+or otherwise broken <a href="Headers.html#M000285">capture</a>. See also:
+<a href="Headers.html#M000288">reset_capture</a>, <a
+href="Headers.html#M000289">reset_capture!</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000290" class="method-detail">
+        <a name="M000290"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000290.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000290.html');return false;">
+          <span class="method-name">capture_complete?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Indicates whether this object is ready to <a
+href="Headers.html#M000285">capture</a> fresh <a
+href="Headers.html#M000271">data</a>, or is waiting for additional <a
+href="Headers.html#M000271">data</a> or a reset from a previous incomplete
+or otherwise broken <a href="Headers.html#M000285">capture</a>. See also:
+<a href="Headers.html#M000288">reset_capture</a>, <a
+href="Headers.html#M000289">reset_capture!</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000287" class="method-detail">
+        <a name="M000287"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000287.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000287.html');return false;">
+          <span class="method-name">capture_full_headers</span><span class="method-args">(str, first_obj=nil) {|heads| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method parses a full set of raw headers from the &#8216;str&#8217;
+argument. Unlike the regular <a href="Headers.html#M000285">capture</a>
+method, the string is expected to start with a line which will be parsed by
+first_obj using its own <a href="Headers.html#M000285">capture</a> method.
+For example, first_obj would <a href="Headers.html#M000267">parse</a>
+something like &quot;GET / HTTP/1.1&quot; for <a
+href="RequestAction.html">RequestAction</a> or &quot;HTTP/1.1 200 OK&quot;
+for <a href="ResponseStatus.html">ResponseStatus</a>. If first_obj is not
+defined, there will be an attempt to resolve it by calling <a
+href="Headers.html#M000286">get_first_obj</a> which should return the
+appropriate type of object or raise an exception.
+</p>
+<p>
+Returns a 2 element array containing [first_entity, headers] where first
+entity is the instantiated first_obj object and headers is self.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000310" class="method-detail">
+        <a name="M000310"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000310.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000310.html');return false;">
+          <span class="method-name">capture_full_headers</span><span class="method-args">(str, first_obj=nil) {|heads| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method parses a full set of raw headers from the &#8216;str&#8217;
+argument. Unlike the regular <a href="Headers.html#M000285">capture</a>
+method, the string is expected to start with a line which will be parsed by
+first_obj using its own <a href="Headers.html#M000285">capture</a> method.
+For example, first_obj would <a href="Headers.html#M000267">parse</a>
+something like &quot;GET / HTTP/1.1&quot; for <a
+href="RequestAction.html">RequestAction</a> or &quot;HTTP/1.1 200 OK&quot;
+for <a href="ResponseStatus.html">ResponseStatus</a>. If first_obj is not
+defined, there will be an attempt to resolve it by calling <a
+href="Headers.html#M000286">get_first_obj</a> which should return the
+appropriate type of object or raise an exception.
+</p>
+<p>
+Returns a 2 element array containing [first_entity, headers] where first
+entity is the instantiated first_obj object and headers is self.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000271" class="method-detail">
+        <a name="M000271"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000271.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000271.html');return false;">
+          <span class="method-name">data</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Headers.html#M000271">data</a> method provides a common
+interface to access internal non-raw information stored in the object.
+</p>
+<p>
+The <a href="Headers.html">Headers</a> incarnation returns the internal
+headers array (actually self).
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000297" class="method-detail">
+        <a name="M000297"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000297.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000297.html');return false;">
+          <span class="method-name">data</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Headers.html#M000271">data</a> method provides a common
+interface to access internal non-raw information stored in the object.
+</p>
+<p>
+The <a href="Headers.html">Headers</a> incarnation returns the internal
+headers array (actually self).
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000298" class="method-detail">
+        <a name="M000298"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000298.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000298.html');return false;">
+          <span class="method-name">data=</span><span class="method-args">(d)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Headers.html#M000272">data=</a> method provides a common
+interface to access internal non-raw information stored in the object.
+</p>
+<p>
+This method stores creates a shallow copy for anything but another <a
+href="Headers.html">Headers</a> object which it references directly. A few
+rules are enforced:
+</p>
+<pre>
+  * 1-dimensional elements will be expanded to tuples with 'nil' as the
+    second value.
+
+  * Names which are enumerables will be 'join()'ed, but not values.
+</pre>
+        </div>
+      </div>
+
+      <div id="method-M000272" class="method-detail">
+        <a name="M000272"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000272.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000272.html');return false;">
+          <span class="method-name">data=</span><span class="method-args">(d)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Headers.html#M000272">data=</a> method provides a common
+interface to access internal non-raw information stored in the object.
+</p>
+<p>
+This method stores creates a shallow copy for anything but another <a
+href="Headers.html">Headers</a> object which it references directly. A few
+rules are enforced:
+</p>
+<pre>
+  * 1-dimensional elements will be expanded to tuples with 'nil' as the
+    second value.
+
+  * Names which are enumerables will be 'join()'ed, but not values.
+</pre>
+        </div>
+      </div>
+
+      <div id="method-M000281" class="method-detail">
+        <a name="M000281"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000281.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000281.html');return false;">
+          <span class="method-name">delete_header</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000304" class="method-detail">
+        <a name="M000304"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000304.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000304.html');return false;">
+          <span class="method-name">delete_header</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000274" class="method-detail">
+        <a name="M000274"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000274.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000274.html');return false;">
+          <span class="method-name">get_all</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000300" class="method-detail">
+        <a name="M000300"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000300.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000300.html');return false;">
+          <span class="method-name">get_all</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000303" class="method-detail">
+        <a name="M000303"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000303.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000303.html');return false;">
+          <span class="method-name">get_all_values_for</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000275" class="method-detail">
+        <a name="M000275"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000275.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000275.html');return false;">
+          <span class="method-name">get_all_values_for</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000286" class="method-detail">
+        <a name="M000286"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000286.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000286.html');return false;">
+          <span class="method-name">get_first_obj</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+See <a href="Headers.html#M000287">capture_full_headers</a>. This method is
+used to resolve the parser for the first entity above the HTTP headers.
+This instance is designed to raise an exception when capturing.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000309" class="method-detail">
+        <a name="M000309"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000309.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000309.html');return false;">
+          <span class="method-name">get_first_obj</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+See <a href="Headers.html#M000287">capture_full_headers</a>. This method is
+used to resolve the parser for the first entity above the HTTP headers.
+This instance is designed to raise an exception when capturing.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000277" class="method-detail">
+        <a name="M000277"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000277.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000277.html');return false;">
+          <span class="method-name">get_header</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000301" class="method-detail">
+        <a name="M000301"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000301.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000301.html');return false;">
+          <span class="method-name">get_header</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000279" class="method-detail">
+        <a name="M000279"></a>
+
+        <div class="method-heading">
+          <span class="method-name">get_header_value</span><span class="method-args">(k)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Headers.html#M000278">get_value_for</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000302" class="method-detail">
+        <a name="M000302"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000302.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000302.html');return false;">
+          <span class="method-name">get_header_value</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000278" class="method-detail">
+        <a name="M000278"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000278.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000278.html');return false;">
+          <span class="method-name">get_value_for</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000288" class="method-detail">
+        <a name="M000288"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000288.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000288.html');return false;">
+          <span class="method-name">reset_capture</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method will non-destructively reset the <a
+href="Headers.html#M000285">capture</a> state on this object. The existing
+headers are maintained when this is called. See also: <a
+href="Headers.html#M000290">capture_complete?</a> <a
+href="Headers.html#M000289">reset_capture!</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000311" class="method-detail">
+        <a name="M000311"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000311.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000311.html');return false;">
+          <span class="method-name">reset_capture</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method will non-destructively reset the <a
+href="Headers.html#M000285">capture</a> state on this object. The existing
+headers are maintained when this is called. See also: <a
+href="Headers.html#M000290">capture_complete?</a> <a
+href="Headers.html#M000289">reset_capture!</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000289" class="method-detail">
+        <a name="M000289"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000289.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000289.html');return false;">
+          <span class="method-name">reset_capture!</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method will destructively reset the <a
+href="Headers.html#M000285">capture</a> state on this object. The existing
+headers array is emptied when this is called. See also: <a
+href="Headers.html#M000290">capture_complete?</a>, <a
+href="Headers.html#M000288">reset_capture</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000312" class="method-detail">
+        <a name="M000312"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000312.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000312.html');return false;">
+          <span class="method-name">reset_capture!</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method will destructively reset the <a
+href="Headers.html#M000285">capture</a> state on this object. The existing
+headers array is emptied when this is called. See also: <a
+href="Headers.html#M000290">capture_complete?</a>, <a
+href="Headers.html#M000288">reset_capture</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000283" class="method-detail">
+        <a name="M000283"></a>
+
+        <div class="method-heading">
+          <span class="method-name">set_all_for</span><span class="method-args">(k,v)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Headers.html#M000282">set_header</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000306" class="method-detail">
+        <a name="M000306"></a>
+
+        <div class="method-heading">
+          <span class="method-name">set_all_for</span><span class="method-args">(k,v)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Headers.html#M000282">set_header</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000305" class="method-detail">
+        <a name="M000305"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000305.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000305.html');return false;">
+          <span class="method-name">set_header</span><span class="method-args">(k,v)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000282" class="method-detail">
+        <a name="M000282"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000282.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000282.html');return false;">
+          <span class="method-name">set_header</span><span class="method-args">(k,v)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000307" class="method-detail">
+        <a name="M000307"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000307.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000307.html');return false;">
+          <span class="method-name">to_raw</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Headers.html#M000284">to_raw</a> method returns a raw string
+of headers as they appear on the wire.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000284" class="method-detail">
+        <a name="M000284"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000284.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000284.html');return false;">
+          <span class="method-name">to_raw</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Headers.html#M000284">to_raw</a> method returns a raw string
+of headers as they appear on the wire.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000273" class="method-detail">
+        <a name="M000273"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000273.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000273.html');return false;">
+          <span class="method-name">to_raw_array</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Headers.html#M000273">to_raw_array</a> method returns an
+interim formatted array of raw &quot;Cookie: Value&quot; strings.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000299" class="method-detail">
+        <a name="M000299"></a>
+
+        <div class="method-heading">
+          <a href="Headers.src/M000299.html" target="Code" class="method-signature"
+            onclick="popupCode('Headers.src/M000299.html');return false;">
+          <span class="method-name">to_raw_array</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Headers.html#M000273">to_raw_array</a> method returns an
+interim formatted array of raw &quot;Cookie: Value&quot; strings.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000280" class="method-detail">
+        <a name="M000280"></a>
+
+        <div class="method-heading">
+          <span class="method-name">value_for</span><span class="method-args">(k)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Headers.html#M000278">get_value_for</a>
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

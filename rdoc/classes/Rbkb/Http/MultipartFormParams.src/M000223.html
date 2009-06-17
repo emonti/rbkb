@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>capture (Rbkb::Http::MultipartFormParams)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/http/parameters.rb, line 94</span>
+ 94:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">str</span>)
+ 95:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;arg 0 must be a string&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">str</span>
+ 96:       <span class="ruby-identifier">str</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'&amp;'</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> 
+ 97:         <span class="ruby-identifier">var</span>,<span class="ruby-identifier">val</span> = <span class="ruby-identifier">p</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'='</span>,<span class="ruby-value">2</span>)
+ 98:         <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">var</span>,<span class="ruby-identifier">val</span>]
+ 99:       <span class="ruby-keyword kw">end</span>
+100:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>
+101:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

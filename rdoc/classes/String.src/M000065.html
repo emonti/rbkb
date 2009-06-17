@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>class_name (String)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 532</span>
+532:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">class_name</span>
+533:     <span class="ruby-identifier">r</span> = <span class="ruby-value str">&quot;&quot;</span>
+534:     <span class="ruby-identifier">up</span> = <span class="ruby-keyword kw">true</span>
+535:     <span class="ruby-identifier">each_byte</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+536:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span> <span class="ruby-operator">==</span> <span class="ruby-value">95</span>
+537:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">up</span>
+538:           <span class="ruby-identifier">r</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;::&quot;</span>
+539:         <span class="ruby-keyword kw">else</span>
+540:           <span class="ruby-identifier">up</span> = <span class="ruby-keyword kw">true</span>
+541:         <span class="ruby-keyword kw">end</span>
+542:       <span class="ruby-keyword kw">else</span>
+543:         <span class="ruby-identifier">m</span> = <span class="ruby-identifier">up</span> <span class="ruby-value">? </span><span class="ruby-operator">:</span><span class="ruby-identifier">upcase</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">:to_s</span>
+544:         <span class="ruby-identifier">r</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">c</span>.<span class="ruby-identifier">chr</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">m</span>))
+545:         <span class="ruby-identifier">up</span> = <span class="ruby-keyword kw">false</span>
+546:       <span class="ruby-keyword kw">end</span>
+547:     <span class="ruby-keyword kw">end</span>
+548:     <span class="ruby-identifier">r</span>
+549:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>go (Rbkb::Cli::Dedump)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>    <span class="ruby-comment cmt"># File lib/rbkb/cli/dedump.rb, line 33</span>
+33:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">go</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+34:     <span class="ruby-keyword kw">super</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+35: 
+36:     <span class="ruby-comment cmt"># Default to standard input</span>
+37:     <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:indat</span>] <span class="ruby-operator">||=</span> <span class="ruby-ivar">@stdin</span>.<span class="ruby-identifier">read</span>() 
+38: 
+39:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">exit</span>(<span class="ruby-value">1</span>) <span class="ruby-keyword kw">unless</span>((<span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:len</span>] <span class="ruby-operator">||=</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:indat</span>].<span class="ruby-identifier">length</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
+40: 
+41:     <span class="ruby-keyword kw">begin</span>
+42:       <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:indat</span>].<span class="ruby-identifier">dehexdump</span>( <span class="ruby-identifier">:len</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:len</span>], <span class="ruby-identifier">:out</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@stdout</span>)
+43:     <span class="ruby-keyword kw">rescue</span>
+44:       <span class="ruby-identifier">bail</span> <span class="ruby-node">&quot;Error: #{$!}&quot;</span>
+45:     <span class="ruby-keyword kw">end</span>
+46: 
+47:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">exit</span>(<span class="ruby-value">0</span>)
+48:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

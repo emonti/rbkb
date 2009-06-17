@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>feed_data (Plug::ArrayFeeder)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/plug/plug.rb, line 200</span>
+200:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">feed_data</span>(<span class="ruby-identifier">dst</span>=<span class="ruby-identifier">plug_peer</span>)
+201:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">dat</span>=<span class="ruby-ivar">@feed</span>[<span class="ruby-ivar">@pos</span>]
+202:         <span class="ruby-constant">UI</span>.<span class="ruby-identifier">log</span> <span class="ruby-value str">&quot;** FEED EXHAUSTED&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@squelch_exhausted</span>
+203:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span>
+204:       <span class="ruby-keyword kw">end</span>
+205: 
+206:       <span class="ruby-identifier">dst</span>.<span class="ruby-identifier">say</span> <span class="ruby-identifier">dat</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-keyword kw">self</span>
+207: 
+208:       <span class="ruby-keyword kw">if</span> (<span class="ruby-ivar">@pos</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>) <span class="ruby-operator">&gt;=</span> <span class="ruby-ivar">@feed</span>.<span class="ruby-identifier">size</span> <span class="ruby-keyword kw">and</span> <span class="ruby-ivar">@close_at_end</span>
+209:         <span class="ruby-identifier">close_connection_after_writing</span>
+210:       <span class="ruby-keyword kw">end</span>
+211:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

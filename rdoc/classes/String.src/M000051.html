@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>hexdump (String)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 250</span>
+250:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hexdump</span>(<span class="ruby-identifier">opt</span>={})
+251:     <span class="ruby-identifier">s</span>=<span class="ruby-keyword kw">self</span>
+252:     <span class="ruby-identifier">out</span> = <span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:out</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">StringIO</span>.<span class="ruby-identifier">new</span>
+253:     <span class="ruby-identifier">len</span> = (<span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:len</span>] <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:len</span>] <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)<span class="ruby-operator">?</span> <span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:len</span>] <span class="ruby-operator">+</span> (<span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:len</span>] <span class="ruby-operator">%</span> <span class="ruby-value">2</span>) <span class="ruby-operator">:</span> <span class="ruby-value">16</span>
+254: 
+255:     <span class="ruby-identifier">off</span> = <span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:start_addr</span>] <span class="ruby-operator">||</span> <span class="ruby-value">0</span>
+256:     <span class="ruby-identifier">offlen</span> = <span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:start_len</span>] <span class="ruby-operator">||</span> <span class="ruby-value">8</span>
+257: 
+258:     <span class="ruby-identifier">hlen</span>=<span class="ruby-identifier">len</span><span class="ruby-operator">/</span><span class="ruby-value">2</span>
+259: 
+260:     <span class="ruby-identifier">s</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-node">/(?:.|\n){1,#{len}}/</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span>
+261:       <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">off</span>.<span class="ruby-identifier">to_s</span>(<span class="ruby-value">16</span>).<span class="ruby-identifier">rjust</span>(<span class="ruby-identifier">offlen</span>, <span class="ruby-value str">&quot;0&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">'  '</span>)
+262: 
+263:       <span class="ruby-identifier">i</span>=<span class="ruby-value">0</span>
+264:       <span class="ruby-identifier">m</span>.<span class="ruby-identifier">each_byte</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+265:         <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">to_s</span>(<span class="ruby-value">16</span>).<span class="ruby-identifier">rjust</span>(<span class="ruby-value">2</span>,<span class="ruby-value str">&quot;0&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; &quot;</span>
+266:         <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span>(<span class="ruby-value str">' '</span>) <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">i</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span>) <span class="ruby-operator">==</span> <span class="ruby-identifier">hlen</span>
+267:       <span class="ruby-keyword kw">end</span>
+268: 
+269:       <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span>(<span class="ruby-value str">&quot;   &quot;</span> <span class="ruby-operator">*</span> (<span class="ruby-identifier">len</span><span class="ruby-operator">-</span><span class="ruby-identifier">i</span>) ) <span class="ruby-comment cmt"># pad</span>
+270:       <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span>(<span class="ruby-value str">&quot; &quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">hlen</span>
+271: 
+272:       <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span>(<span class="ruby-value str">&quot; |&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">tr</span>(<span class="ruby-value str">&quot;\0-\37\177-\377&quot;</span>, <span class="ruby-value str">'.'</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;|\n&quot;</span>)
+273:       <span class="ruby-identifier">off</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">length</span>
+274:     <span class="ruby-keyword kw">end</span>
+275: 
+276:     <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">off</span>.<span class="ruby-identifier">to_s</span>(<span class="ruby-value">16</span>).<span class="ruby-identifier">rjust</span>(<span class="ruby-identifier">offlen</span>,<span class="ruby-value str">'0'</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\n&quot;</span>)
+277: 
+278:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">out</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">StringIO</span>
+279:       <span class="ruby-identifier">out</span>.<span class="ruby-identifier">string</span>
+280:     <span class="ruby-keyword kw">end</span>
+281:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

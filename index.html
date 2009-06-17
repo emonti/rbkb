@@ -1,1 +1,224 @@
-helu pages
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>Ruby BlackBag (rbkb)</title>
+	
+	<style type="text/css">
+		body {
+  		margin-top: 1.0em;
+  		background-color: #202020;
+		  font-family: "helvetica"; 
+  		color: #ffffff;
+    }
+    #container {
+      margin: 0 auto;
+      width: 700px;
+    }
+		h1 { font-size: 3.8em; color: #36b0c8; margin-bottom: 3px; }
+		h1 .small { font-size: 0.4em; }
+		h1 a { text-decoration: none }
+		h2 { font-size: 1.5em; color: #36b0c8; }
+    h3 { color: #36b0c8; }
+    a { color: #36b0c8; }
+    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+    .download { float: right; }
+		pre { background: #000; color: #fff; padding: 15px;}
+    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+    .footer { text-align:center; padding-top:30px; font-style: italic; }
+	</style>
+	
+</head>
+
+<body>
+  <a href="http://github.com/emonti/rbkb"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+  
+  <div id="container">
+
+    <div class="download">
+      <a href="http://github.com/emonti/rbkb/zipball/master">
+        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
+      <a href="http://github.com/emonti/rbkb/tarball/master">
+        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+    </div>
+      
+    <h1><a href="http://github.com/emonti/rbkb">Ruby BlackBag (rbkb)</a> 
+      <span class="small">by <a href="http://github.com/emonti">emonti</a></span></h1>
+
+    <div class="description">A miscellaneous collection of command-line tools and ruby library helpers related to pen-testing and reversing. </div>
+
+    <div align="center"><img src="img/doctor-bag.jpg" alt="Black Bag"/></div>
+
+    <h4>Rationale</h4>
+    <pre>
+      Disclaimer:
+      Most of what's in the black bag was born of a desire to do less typing.
+      But there might be a few clever things that were added by accident.
+    </pre>
+    <p>
+    rbkb is inspired by Matasano BlackBag (a set of similar tools written in
+    C).
+    </p>
+    <p>
+    See:
+    </p>
+    <ul>
+    <li><a href="http://www.matasano.com/log/1048/blackbag-091-new-link-and-minor-fixes">www.matasano.com/log/1048/blackbag-091-new-link-and-minor-fixes</a>/
+
+    </li>
+
+    <li><a href="http://www.matasano.com/log/552/code-release-blackbag-09-binary-protocol-reversing-unix-thingies">www.matasano.com/log/552/code-release-blackbag-09-binary-protocol-reversing-unix-thingies</a>/
+
+    </li>
+    </ul>
+    <p>
+    Things go into the black bag as they are stolen (as a compliment!) or
+    dreamed up, usually for simplifying some repetetive task or a desire for a
+    new tool.
+    </p>
+    <p>
+    Along the way, some of tools in the blackbag spirit make their way into
+    &#8216;rbkb&#8217; that may or may not make it to &#8216;bkb&#8217; right
+    away (if ever). Similarly some of the things in &#8216;bkb&#8217; have not
+    yet made it to &#8216;rbkb&#8217; (and may not).
+    </p>
+        
+    <h2>Synopsis</h2>
+    <h3>Command Line Tools</h3>
+    <p>
+    The tools almost all support &#8217;-h&#8217;, but I&#8217;ll admit this only goes so far. See <a href="rdoc/files/cli_usage_rdoc.html">cli_usage.rdoc</a> for usage and a bit of extra info on the various tools. </p>
+    <p>
+    When I get some spare time, I&#8217;ll try and do up some examples of using all the tools.  </p>
+
+    <h3>Plug</h3>
+
+    <p>
+    Black Bag includes several tools for testing network protocols using
+    plugboard proxies. Users of the original Matasano BlackBag may be familiar
+    with the commands &#8216;bkb replug&#8217;, &#8216;bkb telson&#8217;, and
+    &#8216;bkb blit&#8217;.
+    </p>
+    <p>
+    Ruby BlackBag has a similar set of network tools:
+    </p>
+    <ul>
+    <li>&#8216;blit&#8217; : Uses a simple homegrown OOB IPC mechanism (local
+    socket) to communicate with &#8216;blit-capable&#8217; tools like telson
+    and plugsrv and send data to network endpoints through them. Use
+
+    &#8216;blit&#8217; to send raw messages to servers or clients then watch
+    how they respond (see below).
+
+    </li>
+    <li>&#8216;telson&#8217; : Similar to &#8216;bkb telson&#8217;. Opens a TCP or
+    UDP client connection which is little more than a receiver for
+    &#8216;blit&#8217; messages. Use this to pretend to be a client and send
+    raw messages to some service while observing raw replies.
+
+    </li>
+    <li>&#8216;plugsrv&#8217; : Similar to &#8216;bkb replug&#8217;. Sits as a
+    reverse TCP proxy between one or more clients and a server. Accepts
+
+    &#8216;blit&#8217; messages which can be directed at client or server ends
+    of a conversation. The original &#8216;replug&#8217; didn&#8217;t do this,
+    which makes plugsrv kindof neat.
+
+    </li>
+    </ul>
+    <h3>Monkey Patches</h3>
+
+    <p> Much of rbkb is implemented as a bunch of monkeypatches to Array, String, Numeric and other base classes. If this suits your fancy (some people despise monkeypatches, this is not their fancy) then you can &#8216;require &quot;rbkb&quot;&#8217; from your irb sessions and own scripts. See <a href="rdoc/files/lib_usage_rdoc.html">lib_usage.rdoc</a> for more info.  </p>
+        
+  <h2>Documentation</h2>
+  <p>See the <a href="rdoc/index.html">rdoc API documentation</a></p>
+
+
+  <h2>Dependencies</h2>
+  <ul>
+    <li><a href="http://rubyeventmachine.com">eventmachine</a> &gt;= 0.12.0</li>
+  </ul>
+    
+
+  <h2>Install</h2>
+
+  <h4>Gem Installation</h4>
+  <pre>
+      gem sources -a http://gems.github.com #(you only have to do this once)
+      gem install emonti-rbkb
+  </pre>
+
+  <p>See below for download and manual build info.</p>
+
+  <h2>Download</h2>
+  <p>
+    You can download this project in either
+    <a href="http://github.com/emonti/rbkb/zipball/master">zip</a> or
+    <a href="http://github.com/emonti/rbkb/tarball/master">tar</a> formats.
+  </p>
+  <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
+    by running:
+    <pre>$ git clone git://github.com/emonti/rbkb</pre>
+  </p>
+    
+  <div>
+    get the source code on GitHub : <a href="http://github.com/emonti/rbkb">emonti/rbkb</a>
+  </div>
+  
+
+
+  <h4>Manual Installation</h4>
+
+  <p>To generate the gem locally do:</p>
+  <pre>
+    cd rbkb
+    rake gem:install
+  </pre>
+
+  <p>or ... you can install manually without rubygems:</p>
+
+  <pre>
+    cd rbkb
+    cp -r rbkb/lib/* /usr/lib/ruby/1.8/site_ruby/1.8 # or another ruby libdir
+    cp bin/* ~/bin      # or wherever else in your PATH
+  </pre>
+
+  <p>Run this to generate docs with rdoc the same way the gem would have:</p>
+  <pre>
+    rdoc --main README.rdoc README.rdoc lib
+  </pre>
+
+  <h2>License</h2>
+  <p>(The MIT License)</p>
+  <pre>
+  Copyright (c) 2009 Eric Monti, Matasano Security
+
+  Permission is hereby granted, free of charge, to any person obtaining
+  a copy of this software and associated documentation files (the
+  'Software'), to deal in the Software without restriction, including
+  without limitation the rights to use, copy, modify, merge, publish,
+  distribute, sublicense, and/or sell copies of the Software, and to
+  permit persons to whom the Software is furnished to do so, subject to
+  the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  </pre>
+
+  <h2>Author</h2>
+  <p>Eric Monti (emonti@matasano.com)<br/><br/>      </p>
+
+  </div>
+  
+</body>
+</html>

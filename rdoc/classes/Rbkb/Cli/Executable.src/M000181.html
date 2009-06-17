@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>parse (Rbkb::Cli::Executable)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>     <span class="ruby-comment cmt"># File lib/rbkb/cli.rb, line 97</span>
+ 97:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>
+ 98:       <span class="ruby-comment cmt"># parse flag arguments</span>
+ 99:       <span class="ruby-ivar">@oparse</span>.<span class="ruby-identifier">parse!</span>(<span class="ruby-ivar">@argv</span>) <span class="ruby-keyword kw">rescue</span>(<span class="ruby-identifier">bail_args</span>(<span class="ruby-identifier">$!</span>))
+100:       <span class="ruby-ivar">@parsed</span>=<span class="ruby-keyword kw">true</span>
+101: 
+102:       <span class="ruby-comment cmt"># the overriding class may implement additional arguments from here</span>
+103:     <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

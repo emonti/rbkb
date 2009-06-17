@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>parse (Rbkb::Cli::Slice)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre>    <span class="ruby-comment cmt"># File lib/rbkb/cli/slice.rb, line 25</span>
+25:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+26:     <span class="ruby-keyword kw">super</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+27:     <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:first</span>] <span class="ruby-operator">||=</span> <span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">shift</span>
+28: 
+29:     <span class="ruby-keyword kw">unless</span>(<span class="ruby-constant">Numeric</span> <span class="ruby-operator">===</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:first</span>] <span class="ruby-keyword kw">or</span> <span class="ruby-regexp re">/^-?\d+$/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:first</span>]) )
+30:       <span class="ruby-identifier">bail_args</span> <span class="ruby-value str">&quot;invalid start length&quot;</span>
+31:     <span class="ruby-keyword kw">end</span>
+32: 
+33:     <span class="ruby-identifier">parse_catchall</span>()
+34: 
+35:     <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:first</span>] = <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:first</span>].<span class="ruby-identifier">to_i</span>
+36:     <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:indat</span>] <span class="ruby-operator">||=</span> <span class="ruby-ivar">@stdin</span>.<span class="ruby-identifier">read</span>()
+37:   <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>
