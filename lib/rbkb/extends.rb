@@ -206,16 +206,16 @@ class String
     (self.dat_to_num ^ x)#.to_bytes
   end
 
-  # Byte rotation cypher.
-  # This was pilfered from Timur Duehr with only a minor change.
+  # Byte rotation as found in lame ciphers.
+  # This was cribbed from Timur Duehr with only a minor change.
   def rotate_bytes(k=0)
-    r = Array.new(self.size)
+    r = self.dup
     i=0
     self.each_byte do |b| 
-      r[i] = ((b + k) % 256).chr
+      r[i] = ((b + k) % 384).chr
       i+=1
     end
-    return r.join
+    return r
   end
 
   # String randomizer
