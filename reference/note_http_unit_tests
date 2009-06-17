@@ -1,3 +1,0 @@
-ruby -S rcov \
-test/test_http*.rb \
---sort coverage -T --exclude rcov.rb --exclude eventmachine --exclude pcap_misc.rb --exclude pcaplet.rb -o coverage_http

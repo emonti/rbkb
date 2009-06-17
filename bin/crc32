@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-require "rbkb/cli/crc32"
-
-Rbkb::Cli::Crc32.run()

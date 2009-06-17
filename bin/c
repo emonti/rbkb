@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-require "rbkb/cli/chars"
-
-Rbkb::Cli::Chars.run()

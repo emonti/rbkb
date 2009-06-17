@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-require "rbkb/cli/bgrep"
-
-Rbkb::Cli::Bgrep.run()

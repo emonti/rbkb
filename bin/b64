@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-require "rbkb/cli/b64"
-
-Rbkb::Cli::B64.run()
