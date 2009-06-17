@@ -1,6 +1,6 @@
 = rbkb
 
-* http://www.github.com/emonti/rbkb
+* http://emonti.github.com/rbkb
 
 == DESCRIPTION:
 
