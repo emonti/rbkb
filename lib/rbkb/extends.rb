@@ -11,11 +11,16 @@ module Rbkb
 end
 
 # Generates a random alphanumeric string of 'size' bytes (8 by default)
-def random_string(size = 8)
+def random_alphanum(size = 8)
   chars = ('A'..'Z').to_a + ('a'..'z').to_a + ('0'..'9').to_a
   (1..size).collect{|a| chars[rand(chars.size)]}.join
 end
 
+# Generates a random string of 'size' bytes (8 by default)
+def random_string(size = 8)
+  chars = (0..255).map {|c| c.chr }
+  (1..size).collect {|a| char[rand(chars.size)]}
+end
 
 # Simple syntactic sugar to pass any object to a block
 def with(x)
