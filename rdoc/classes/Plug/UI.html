@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: Plug::UI</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">Plug::UI</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/rbkb/plug/plug_rb.html">
+                lib/rbkb/plug/plug.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000101">debug</a>&nbsp;&nbsp;
+      <a href="#M000102">dump</a>&nbsp;&nbsp;
+      <a href="#M000099">log</a>&nbsp;&nbsp;
+      <a href="#M000098">prompt</a>&nbsp;&nbsp;
+      <a href="#M000100">verbose</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+    <div id="constants-list">
+      <h3 class="section-bar">Constants</h3>
+
+      <div class="name-list">
+        <table summary="Constants">
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">LOGCFG</td>
+          <td>=</td>
+          <td class="context-item-value">{:out =&gt; STDERR, :dump =&gt; :hex}</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000101" class="method-detail">
+        <a name="M000101"></a>
+
+        <div class="method-heading">
+          <a href="#M000101" class="method-signature">
+          <span class="method-name">debug</span><span class="method-args">(*msg)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000101-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000101-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/plug/plug.rb, line 20</span>
+20:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>].<span class="ruby-identifier">puts</span> <span class="ruby-identifier">msg</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:debug</span>] ; <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000102" class="method-detail">
+        <a name="M000102"></a>
+
+        <div class="method-heading">
+          <a href="#M000102" class="method-signature">
+          <span class="method-name">dump</span><span class="method-args">(from, to, dat)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000102-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000102-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/plug/plug.rb, line 22</span>
+22:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dump</span>(<span class="ruby-identifier">from</span>, <span class="ruby-identifier">to</span>, <span class="ruby-identifier">dat</span>)
+23:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dump</span>=<span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:dump</span>]
+24:         <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>].<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;%% #{from} SAYS TO #{to} LEN=#{dat.size}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:verbose</span>]
+25:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">dump</span>
+26:         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hex</span>
+27:           <span class="ruby-identifier">dat</span>.<span class="ruby-identifier">hexdump</span>(<span class="ruby-identifier">:out</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>])
+28:         <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:raw</span>
+29:           <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>].<span class="ruby-identifier">puts</span> <span class="ruby-identifier">dat</span>
+30:         <span class="ruby-keyword kw">else</span>
+31:           <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>].<span class="ruby-identifier">puts</span> <span class="ruby-identifier">dat</span>
+32:         <span class="ruby-keyword kw">end</span>
+33:         <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>].<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%%&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:verbose</span>]
+34:       <span class="ruby-keyword kw">end</span>
+35:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000099" class="method-detail">
+        <a name="M000099"></a>
+
+        <div class="method-heading">
+          <a href="#M000099" class="method-signature">
+          <span class="method-name">log</span><span class="method-args">(*msg)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000099-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000099-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/plug/plug.rb, line 16</span>
+16:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">log</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>].<span class="ruby-identifier">puts</span> <span class="ruby-identifier">msg</span> ; <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000098" class="method-detail">
+        <a name="M000098"></a>
+
+        <div class="method-heading">
+          <a href="#M000098" class="method-signature">
+          <span class="method-name">prompt</span><span class="method-args">(*msg)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000098-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000098-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/plug/plug.rb, line 14</span>
+14:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">prompt</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">msg</span> ; <span class="ruby-constant">STDIN</span>.<span class="ruby-identifier">gets</span> ; <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000100" class="method-detail">
+        <a name="M000100"></a>
+
+        <div class="method-heading">
+          <a href="#M000100" class="method-signature">
+          <span class="method-name">verbose</span><span class="method-args">(*msg)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000100-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000100-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/plug/plug.rb, line 18</span>
+18:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">verbose</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:out</span>].<span class="ruby-identifier">puts</span> <span class="ruby-identifier">msg</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">LOGCFG</span>[<span class="ruby-identifier">:verbose</span>] ; <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

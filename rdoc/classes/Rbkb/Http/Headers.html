@@ -1,0 +1,948 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: Rbkb::Http::Headers</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">Rbkb::Http::Headers</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../files/lib/rbkb/http/headers_rb.html">
+                lib/rbkb/http/headers.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="../../Array.html">
+                Array
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+A base class for <a href="RequestHeaders.html">RequestHeaders</a> and <a
+href="ResponseHeaders.html">ResponseHeaders</a>
+</p>
+<p>
+Includes common implementations of <a
+href="Headers.html#M000277">to_raw</a>, <a
+href="Headers.html#M000266">to_raw_array</a>, <a
+href="Headers.html#M000278">capture</a>, and the class method <a
+href="Headers.html#M000260">parse</a>
+</p>
+<p>
+The <a href="Headers.html">Headers</a> array are stored internally as an
+named value pairs array.
+</p>
+<p>
+The headers are generally name/value pairs in the form of:
+</p>
+<pre>
+  [  [&quot;Name1&quot;, &quot;value1&quot;], [&quot;Name2&quot;, &quot;value2&quot;], ...  ]
+</pre>
+<p>
+Which will be rendered with <a href="Headers.html#M000277">to_raw</a>() to
+(or captured with <a href="Headers.html#M000278">capture</a>() from):
+</p>
+<pre>
+  Name1: value1
+  Name2: value2
+  ...
+</pre>
+<p>
+This has the benefit of letting the <a
+href="Headers.html#M000265">data=</a> accessor automatically render a Hash
+or any other <a href="../../Enumerable.html">Enumerable</a> to a <a
+href="Headers.html">Headers</a> object through the use of to_a. However it
+has the caveat that named pairs are expected on various operations.
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000269">all_values_for</a>&nbsp;&nbsp;
+      <a href="#M000263">base=</a>&nbsp;&nbsp;
+      <a href="#M000278">capture</a>&nbsp;&nbsp;
+      <a href="#M000283">capture_complete?</a>&nbsp;&nbsp;
+      <a href="#M000280">capture_full_headers</a>&nbsp;&nbsp;
+      <a href="#M000264">data</a>&nbsp;&nbsp;
+      <a href="#M000265">data=</a>&nbsp;&nbsp;
+      <a href="#M000274">delete_header</a>&nbsp;&nbsp;
+      <a href="#M000267">get_all</a>&nbsp;&nbsp;
+      <a href="#M000268">get_all_values_for</a>&nbsp;&nbsp;
+      <a href="#M000279">get_first_obj</a>&nbsp;&nbsp;
+      <a href="#M000270">get_header</a>&nbsp;&nbsp;
+      <a href="#M000272">get_header_value</a>&nbsp;&nbsp;
+      <a href="#M000271">get_value_for</a>&nbsp;&nbsp;
+      <a href="#M000262">new</a>&nbsp;&nbsp;
+      <a href="#M000260">parse</a>&nbsp;&nbsp;
+      <a href="#M000261">parse_full_headers</a>&nbsp;&nbsp;
+      <a href="#M000258">request_hdr</a>&nbsp;&nbsp;
+      <a href="#M000281">reset_capture</a>&nbsp;&nbsp;
+      <a href="#M000282">reset_capture!</a>&nbsp;&nbsp;
+      <a href="#M000259">response_hdr</a>&nbsp;&nbsp;
+      <a href="#M000276">set_all_for</a>&nbsp;&nbsp;
+      <a href="#M000275">set_header</a>&nbsp;&nbsp;
+      <a href="#M000277">to_raw</a>&nbsp;&nbsp;
+      <a href="#M000266">to_raw_array</a>&nbsp;&nbsp;
+      <a href="#M000273">value_for</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+    <div id="includes">
+      <h3 class="section-bar">Included Modules</h3>
+
+      <div id="includes-list">
+        <span class="include-name"><a href="CommonInterface.html">CommonInterface</a></span>
+      </div>
+    </div>
+
+    <div id="section">
+
+
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">base</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000262" class="method-detail">
+        <a name="M000262"></a>
+
+        <div class="method-heading">
+          <a href="#M000262" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Instantiates a <a href="Headers.html#M000262">new</a> <a
+href="Headers.html">Headers</a> object.
+</p>
+<p>
+Arguments:
+</p>
+<pre>
+  raw:  String or Enumerable. Strings are parsed with capture.
+        Enumerables are converted with 'to_a' and stored directly.
+
+  opts: Options which affect the behavior of the Headers object.
+        (none currently defined)
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000262-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000262-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 62</span>
+62:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+63:       <span class="ruby-keyword kw">super</span>()
+64:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Enumerable</span>
+65:         <span class="ruby-identifier">raw</span>=<span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>
+66:         <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>]=<span class="ruby-keyword kw">nil</span>
+67:         <span class="ruby-identifier">_common_init</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+68:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">data</span> = <span class="ruby-identifier">raw</span>.<span class="ruby-identifier">to_a</span>
+69:       <span class="ruby-keyword kw">else</span>
+70:         <span class="ruby-identifier">_common_init</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+71:       <span class="ruby-keyword kw">end</span>
+72:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000260" class="method-detail">
+        <a name="M000260"></a>
+
+        <div class="method-heading">
+          <a href="#M000260" class="method-signature">
+          <span class="method-name">parse</span><span class="method-args">(str)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Instantiates a <a href="Headers.html#M000262">new</a> <a
+href="Headers.html">Headers</a> object and returns the result of <a
+href="Headers.html#M000278">capture</a>(str) Note, this method does not
+distinguish between <a href="ResponseHeaders.html">ResponseHeaders</a> or
+<a href="RequestHeaders.html">RequestHeaders</a>, and so the object may
+need to be extended with one or the other, if you need access to specific
+behviors from either.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000260-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000260-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 43</span>
+43:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">str</span>)
+44:       <span class="ruby-identifier">new</span>().<span class="ruby-identifier">capture</span>(<span class="ruby-identifier">str</span>)
+45:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000261" class="method-detail">
+        <a name="M000261"></a>
+
+        <div class="method-heading">
+          <a href="#M000261" class="method-signature">
+          <span class="method-name">parse_full_headers</span><span class="method-args">(str, first_obj)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Instantiates a <a href="Headers.html#M000262">new</a> <a
+href="Headers.html">Headers</a> object and returns the result of <a
+href="Headers.html#M000280">capture_full_headers</a>(str, first_obj)
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000261-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000261-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 49</span>
+49:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parse_full_headers</span>(<span class="ruby-identifier">str</span>, <span class="ruby-identifier">first_obj</span>)
+50:       <span class="ruby-identifier">new</span>().<span class="ruby-identifier">capture_full_headers</span>(<span class="ruby-identifier">str</span>, <span class="ruby-identifier">first_obj</span>)
+51:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000258" class="method-detail">
+        <a name="M000258"></a>
+
+        <div class="method-heading">
+          <a href="#M000258" class="method-signature">
+          <span class="method-name">request_hdr</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Class method to instantiate a <a href="Headers.html#M000262">new</a> <a
+href="RequestHeaders.html">RequestHeaders</a> object
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000258-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000258-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 30</span>
+30:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">request_hdr</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+31:       <span class="ruby-constant">Headers</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>).<span class="ruby-identifier">extend</span>(<span class="ruby-constant">RequestHeaders</span>)
+32:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000259" class="method-detail">
+        <a name="M000259"></a>
+
+        <div class="method-heading">
+          <a href="#M000259" class="method-signature">
+          <span class="method-name">response_hdr</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Class method to instantiate a <a href="Headers.html#M000262">new</a> <a
+href="ResponseHeaders.html">ResponseHeaders</a> object
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000259-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000259-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 35</span>
+35:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">response_hdr</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+36:       <span class="ruby-constant">Headers</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>).<span class="ruby-identifier">extend</span>(<span class="ruby-constant">ResponseHeaders</span>)
+37:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000269" class="method-detail">
+        <a name="M000269"></a>
+
+        <div class="method-heading">
+          <span class="method-name">all_values_for</span><span class="method-args">(k)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Headers.html#M000268">get_all_values_for</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000263" class="method-detail">
+        <a name="M000263"></a>
+
+        <div class="method-heading">
+          <a href="#M000263" class="method-signature">
+          <span class="method-name">base=</span><span class="method-args">(b)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Conditionally sets the @base class variable if it is a kind of <a
+href="Base.html">Base</a> object.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000263-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000263-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 78</span>
+78:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">base=</span>(<span class="ruby-identifier">b</span>)
+79:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Base</span>
+80:         <span class="ruby-ivar">@base</span> = <span class="ruby-identifier">b</span>
+81:       <span class="ruby-keyword kw">else</span>
+82:         <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;base must be a kind of Base object or nil&quot;</span> 
+83:       <span class="ruby-keyword kw">end</span>
+84:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000278" class="method-detail">
+        <a name="M000278"></a>
+
+        <div class="method-heading">
+          <a href="#M000278" class="method-signature">
+          <span class="method-name">capture</span><span class="method-args">(str) {|self, heads| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Captures a raw string of headers into this instance&#8216;s internal array.
+Note: This method expects not to include the first element such as a <a
+href="RequestAction.html">RequestAction</a> or <a
+href="ResponseStatus.html">ResponseStatus</a>. See <a
+href="Headers.html#M000280">capture_full_headers</a> for a version that can
+handle this.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000278-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000278-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 171</span>
+171:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">str</span>)
+172: 
+173:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;arg 0 must be a string&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+174:       <span class="ruby-identifier">heads</span> = <span class="ruby-identifier">str</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\s*\r?\n/</span>)
+175: 
+176:       <span class="ruby-comment cmt"># pass interim parsed headers to a block if given</span>
+177:       <span class="ruby-keyword kw">yield</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">heads</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+178: 
+179:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">replace</span> [] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">capture_complete?</span> 
+180:       <span class="ruby-identifier">heads</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> 
+181:         <span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span> = <span class="ruby-identifier">s</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\s*:\s*/</span>, <span class="ruby-value">2</span>) 
+182:         <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>]
+183:       <span class="ruby-keyword kw">end</span>
+184:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>
+185:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000283" class="method-detail">
+        <a name="M000283"></a>
+
+        <div class="method-heading">
+          <a href="#M000283" class="method-signature">
+          <span class="method-name">capture_complete?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Indicates whether this object is ready to <a
+href="Headers.html#M000278">capture</a> fresh <a
+href="Headers.html#M000264">data</a>, or is waiting for additional <a
+href="Headers.html#M000264">data</a> or a reset from a previous incomplete
+or otherwise broken <a href="Headers.html#M000278">capture</a>. See also:
+<a href="Headers.html#M000281">reset_capture</a>, <a
+href="Headers.html#M000282">reset_capture!</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000283-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000283-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 234</span>
+234:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">capture_complete?</span>
+235:       <span class="ruby-keyword kw">not</span> <span class="ruby-ivar">@capture_state</span>
+236:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000280" class="method-detail">
+        <a name="M000280"></a>
+
+        <div class="method-heading">
+          <a href="#M000280" class="method-signature">
+          <span class="method-name">capture_full_headers</span><span class="method-args">(str, first_obj=nil) {|heads| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method parses a full set of raw headers from the &#8216;str&#8217;
+argument. Unlike the regular <a href="Headers.html#M000278">capture</a>
+method, the string is expected to start with a line which will be parsed by
+first_obj using its own <a href="Headers.html#M000278">capture</a> method.
+For example, first_obj would <a href="Headers.html#M000260">parse</a>
+something like &quot;GET / HTTP/1.1&quot; for <a
+href="RequestAction.html">RequestAction</a> or &quot;HTTP/1.1 200 OK&quot;
+for <a href="ResponseStatus.html">ResponseStatus</a>. If first_obj is not
+defined, there will be an attempt to resolve it by calling <a
+href="Headers.html#M000279">get_first_obj</a> which should return the
+appropriate type of object or raise an exception.
+</p>
+<p>
+Returns a 2 element array containing [first_entity, headers] where first
+entity is the instantiated first_obj object and headers is self.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000280-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000280-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 204</span>
+204:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">capture_full_headers</span>(<span class="ruby-identifier">str</span>, <span class="ruby-identifier">first_obj</span>=<span class="ruby-keyword kw">nil</span>)
+205:       <span class="ruby-identifier">first_obj</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">get_first_obj</span>() {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>}
+206: 
+207:       <span class="ruby-identifier">first</span> = <span class="ruby-keyword kw">nil</span>
+208:       <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">str</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">this</span>, <span class="ruby-identifier">heads</span><span class="ruby-operator">|</span>
+209:         <span class="ruby-identifier">first</span> = <span class="ruby-identifier">first_obj</span>.<span class="ruby-identifier">capture</span>(<span class="ruby-identifier">heads</span>.<span class="ruby-identifier">shift</span>)
+210:         <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">heads</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+211:       <span class="ruby-keyword kw">end</span>
+212:       <span class="ruby-keyword kw">return</span> [<span class="ruby-identifier">first</span>, <span class="ruby-keyword kw">self</span>]
+213:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000264" class="method-detail">
+        <a name="M000264"></a>
+
+        <div class="method-heading">
+          <a href="#M000264" class="method-signature">
+          <span class="method-name">data</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Headers.html#M000264">data</a> method provides a common
+interface to access internal non-raw information stored in the object.
+</p>
+<p>
+The <a href="Headers.html">Headers</a> incarnation returns the internal
+headers array (actually self).
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000264-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000264-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 91</span>
+91:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">data</span>
+92:       <span class="ruby-keyword kw">self</span>
+93:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000265" class="method-detail">
+        <a name="M000265"></a>
+
+        <div class="method-heading">
+          <a href="#M000265" class="method-signature">
+          <span class="method-name">data=</span><span class="method-args">(d)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Headers.html#M000265">data=</a> method provides a common
+interface to access internal non-raw information stored in the object.
+</p>
+<p>
+This method stores creates a shallow copy for anything but another <a
+href="Headers.html">Headers</a> object which it references directly. A few
+rules are enforced:
+</p>
+<pre>
+  * 1-dimensional elements will be expanded to tuples with 'nil' as the
+    second value.
+
+  * Names which are enumerables will be 'join()'ed, but not values.
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000265-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000265-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 104</span>
+104:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">data=</span>(<span class="ruby-identifier">d</span>)
+105:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">d</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Headers</span>
+106:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">replace</span> <span class="ruby-identifier">d</span>
+107:       <span class="ruby-keyword kw">else</span>
+108:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">replace</span> []
+109:         <span class="ruby-identifier">d</span>.<span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span> 
+110:           <span class="ruby-identifier">k</span> = <span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Numeric</span>
+111:           <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>]
+112:         <span class="ruby-keyword kw">end</span>
+113:       <span class="ruby-keyword kw">end</span>
+114:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>
+115:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000274" class="method-detail">
+        <a name="M000274"></a>
+
+        <div class="method-heading">
+          <a href="#M000274" class="method-signature">
+          <span class="method-name">delete_header</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000274-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000274-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 144</span>
+144:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_header</span>(<span class="ruby-identifier">k</span>)
+145:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">delete_if</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">h</span><span class="ruby-operator">|</span> <span class="ruby-identifier">h</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">downcase</span> }
+146:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000267" class="method-detail">
+        <a name="M000267"></a>
+
+        <div class="method-heading">
+          <a href="#M000267" class="method-signature">
+          <span class="method-name">get_all</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000267-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000267-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 123</span>
+123:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_all</span>(<span class="ruby-identifier">k</span>)
+124:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">select</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">h</span><span class="ruby-operator">|</span> <span class="ruby-identifier">h</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">downcase</span> }
+125:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000268" class="method-detail">
+        <a name="M000268"></a>
+
+        <div class="method-heading">
+          <a href="#M000268" class="method-signature">
+          <span class="method-name">get_all_values_for</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000268-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000268-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 127</span>
+127:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_all_values_for</span>(<span class="ruby-identifier">k</span>)
+128:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">get_all</span>(<span class="ruby-identifier">k</span>).<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">h</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> }
+129:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000279" class="method-detail">
+        <a name="M000279"></a>
+
+        <div class="method-heading">
+          <a href="#M000279" class="method-signature">
+          <span class="method-name">get_first_obj</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+See <a href="Headers.html#M000280">capture_full_headers</a>. This method is
+used to resolve the parser for the first entity above the HTTP headers.
+This instance is designed to raise an exception when capturing.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000279-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000279-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 190</span>
+190:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_first_obj</span>; <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;get_first_obj called on base stub&quot;</span>; <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000270" class="method-detail">
+        <a name="M000270"></a>
+
+        <div class="method-heading">
+          <a href="#M000270" class="method-signature">
+          <span class="method-name">get_header</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000270-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000270-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 132</span>
+132:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_header</span>(<span class="ruby-identifier">k</span>)
+133:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">find</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">h</span><span class="ruby-operator">|</span> <span class="ruby-identifier">h</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">downcase</span> }
+134:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000272" class="method-detail">
+        <a name="M000272"></a>
+
+        <div class="method-heading">
+          <span class="method-name">get_header_value</span><span class="method-args">(k)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Headers.html#M000271">get_value_for</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000271" class="method-detail">
+        <a name="M000271"></a>
+
+        <div class="method-heading">
+          <a href="#M000271" class="method-signature">
+          <span class="method-name">get_value_for</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000271-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000271-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 136</span>
+136:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_value_for</span>(<span class="ruby-identifier">k</span>)
+137:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">h</span>=<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">get_header</span>(<span class="ruby-identifier">k</span>)
+138:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">h</span>[<span class="ruby-value">1</span>]
+139:       <span class="ruby-keyword kw">end</span>
+140:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000281" class="method-detail">
+        <a name="M000281"></a>
+
+        <div class="method-heading">
+          <a href="#M000281" class="method-signature">
+          <span class="method-name">reset_capture</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method will non-destructively reset the <a
+href="Headers.html#M000278">capture</a> state on this object. The existing
+headers are maintained when this is called. See also: <a
+href="Headers.html#M000283">capture_complete?</a> <a
+href="Headers.html#M000282">reset_capture!</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000281-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000281-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 218</span>
+218:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset_capture</span>
+219:       <span class="ruby-ivar">@capture_state</span> = <span class="ruby-keyword kw">nil</span>
+220:       <span class="ruby-keyword kw">self</span>
+221:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000282" class="method-detail">
+        <a name="M000282"></a>
+
+        <div class="method-heading">
+          <a href="#M000282" class="method-signature">
+          <span class="method-name">reset_capture!</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method will destructively reset the <a
+href="Headers.html#M000278">capture</a> state on this object. The existing
+headers array is emptied when this is called. See also: <a
+href="Headers.html#M000283">capture_complete?</a>, <a
+href="Headers.html#M000281">reset_capture</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000282-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000282-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 226</span>
+226:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset_capture!</span>
+227:       <span class="ruby-ivar">@capture_state</span> = <span class="ruby-keyword kw">nil</span>
+228:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">data</span> = []
+229:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000276" class="method-detail">
+        <a name="M000276"></a>
+
+        <div class="method-heading">
+          <span class="method-name">set_all_for</span><span class="method-args">(k,v)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Headers.html#M000275">set_header</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000275" class="method-detail">
+        <a name="M000275"></a>
+
+        <div class="method-heading">
+          <a href="#M000275" class="method-signature">
+          <span class="method-name">set_header</span><span class="method-args">(k,v)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000275-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000275-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 148</span>
+148:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_header</span>(<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>)
+149:       <span class="ruby-identifier">sel</span> = <span class="ruby-identifier">get_all</span>(<span class="ruby-identifier">k</span>)
+150: 
+151:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">sel</span>.<span class="ruby-identifier">empty?</span>
+152:         <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>]
+153:         <span class="ruby-keyword kw">return</span> [[<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>]]
+154:       <span class="ruby-keyword kw">else</span>
+155:         <span class="ruby-identifier">sel</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">h</span><span class="ruby-operator">|</span> <span class="ruby-identifier">h</span>[<span class="ruby-value">1</span>] = <span class="ruby-identifier">v</span> }
+156:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">sel</span>
+157:       <span class="ruby-keyword kw">end</span>
+158:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000277" class="method-detail">
+        <a name="M000277"></a>
+
+        <div class="method-heading">
+          <a href="#M000277" class="method-signature">
+          <span class="method-name">to_raw</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Headers.html#M000277">to_raw</a> method returns a raw string
+of headers as they appear on the wire.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000277-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000277-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 163</span>
+163:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_raw</span>
+164:       <span class="ruby-identifier">to_raw_array</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\r\n&quot;</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;\r\n&quot;</span>
+165:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000266" class="method-detail">
+        <a name="M000266"></a>
+
+        <div class="method-heading">
+          <a href="#M000266" class="method-signature">
+          <span class="method-name">to_raw_array</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Headers.html#M000266">to_raw_array</a> method returns an
+interim formatted array of raw &quot;Cookie: Value&quot; strings.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000266-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000266-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/http/headers.rb, line 119</span>
+119:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_raw_array</span>
+120:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">h</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{h}: #{v}&quot;</span> }
+121:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000273" class="method-detail">
+        <a name="M000273"></a>
+
+        <div class="method-heading">
+          <span class="method-name">value_for</span><span class="method-args">(k)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Headers.html#M000271">get_value_for</a>
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
