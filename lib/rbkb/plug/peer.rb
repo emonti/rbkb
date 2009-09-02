@@ -45,7 +45,6 @@ module Plug
 
     def find_peer(addr)
       self.find {|p| p.addr == addr }
-      return nil
     end
 
     def add_peer(addr)
