@@ -1,3 +1,12 @@
+== 0.6.9 / 2009-09-01
+* Enhancements
+  * telson and feed now support -s/--source address:port using TCP with 
+    bind_connect via eventmachine
+  * random_string and random_alphanum added to String extensions
+* Bug-Fix
+  * Plug's PeerList.find_peers was returning nil resulting in problems for 
+    blit -l amongst other things.
+
 == 0.6.8.1 / 2009-06-12
 * Enhancements
   * Added String.rotate_bytes per request for a rotation cypher by 
