@@ -35,7 +35,7 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
     @persist = false
     @transport = :TCP
     @svr_method = :start_server
-    @cli_method = :connect
+    @cli_method = :bind_connect
     @blit_addr = Plug::Blit::DEFAULT_IPADDR
     @blit_port = Plug::Blit::DEFAULT_PORT
 
@@ -74,6 +74,15 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
       end
     end
 
+    arg.on("-s", "--source=(ADDR:?)PORT", "Bind client on port and addr") do |p|
+      if m=/^(?:([\w\.]+):)?(\d+)$/.match(p)
+        @local_addr = $1 if $1
+        @local_port = $2.to_i
+      else
+        bail("Invalid source argument: #{p.inspect}")
+      end
+    end
+
     arg.on("-b", "--blit=(ADDR:)?PORT", "Where to listen for blit") do |b|
       puts b
       unless(m=/^(?:([\w\._-]+):)?(\d+)$/.match(b))
@@ -91,7 +100,7 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
       @feed_opts[:close_at_end] = c
     end
      
-    arg.on("-s", "--[no-]step", "'Continue' prompt between messages") do |s|
+    arg.on("--[no-]step", "'Continue' prompt between messages") do |s|
       @feed_opts[:step] = s
     end
 
@@ -149,14 +158,14 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
       @svr_method = @cli_method = :open_datagram_socket
     end
 
+    @local_port ||= 0
     # Prepare EventMachine arguments based on whether we are a client or server
-    if @listen
-      @evma_addr = @local_addr
-      @evma_port = @local_port
+    if @listen # server
       @meth = @svr_method
+      addr_args = [@local_addr, @local_port]
       @feed_opts[:kind] = :server
       @feed_opts[:no_stop_on_unbind] = true
-    else
+    else # client
 
       ## Get target/listen argument for client mode
       unless (m = /^([\w\.]+):(\d+)$/.match(tgt=@argv.shift))
@@ -167,11 +176,9 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
       @target_port = m[2].to_i
 
       if @transport == :UDP
-        @evma_addr = @local_addr
-        @evma_port = @local_port || 0
+        addr_args = [@local_addr, @local_port]
       else
-        @evma_addr = @target_addr
-        @evma_port = @target_port
+        addr_args = [@local_addr, @local_port, @target_addr, @target_port]
       end
 
       @meth = @cli_method
@@ -182,8 +189,7 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
 
     @em_args=[ 
       @meth, 
-      @evma_addr, 
-      @evma_port, 
+      addr_args,
       Plug::ArrayFeeder, 
       @transport, 
       @feed_opts
