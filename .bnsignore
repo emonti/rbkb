@@ -14,6 +14,7 @@
 *~
 *.swp
 .*.swp
+.yardoc
 announcement.txt
 coverage*/
 doc
