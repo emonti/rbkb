@@ -20,7 +20,6 @@ class Rbkb::Cli::Telson < Rbkb::Cli::PlugCli
       this.local_port = 0
     end
 
-    @srced = false
     @persist = false
   end
 
@@ -32,13 +31,12 @@ class Rbkb::Cli::Telson < Rbkb::Cli::PlugCli
       @persist=true
     end
 
-    arg.on("-s", "--source=(ADDR:?)PORT", "Bind on port (and addr?)") do |p|
+    arg.on("-s", "--source=(ADDR:?)PORT", "Bind client on port and addr") do |p|
       if m=/^(?:([\w\.]+):)?(\d+)$/.match(p)
         @local_addr = $1 if $1
         @local_port = $2.to_i
-        @srced = true
       else
-        bail("Invalid listen argument: #{p.inspect}")
+        bail("Invalid source argument: #{p.inspect}")
       end
     end
   end
@@ -54,23 +52,30 @@ class Rbkb::Cli::Telson < Rbkb::Cli::PlugCli
 
   def go(*args)
     super(*args)
-
     loop do
       EventMachine.run {
         if @transport == :TCP
-          bail("Sorry: --source only works with UDP.") if @srced
 
-          c=EventMachine.connect(@target_addr, @target_port, Plug::Telson, @transport, @plug_opts)
-
+          c=EventMachine.bind_connect( @local_addr,
+                                       @local_port,
+                                       @target_addr, 
+                                       @target_port, 
+                                       Plug::Telson, 
+                                       @transport, 
+                                       @plug_opts )
         elsif @transport == :UDP
-          c=EventMachine.open_datagram_socket( @local_addr, @local_port, Plug::Telson, @transport, @plug_opts)
+          c=EventMachine.open_datagram_socket( @local_addr, 
+                                               @local_port, 
+                                               Plug::Telson, 
+                                               @transport, 
+                                               @plug_opts )
+ 
           c.peers.add_peer_manually(@target_addr, @target_port)
 
         ### someday maybe raw or others?
         else
           raise "bad transport protocol"
         end
-
         EventMachine.start_server(@blit_addr, @blit_port, Plug::Blit, @blit_proto, c)
         Plug::UI::verbose("** BLITSRV-#{@blit_addr}:#{@blit_port}(TCP) Started") # XXX
       }
