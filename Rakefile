@@ -42,6 +42,6 @@ PROJ.rcov.opts += [
   "--exclude", "pcaplet.rb"
 ]
 
-depend_on 'eventmachine', '>= 0.12.0'
+depend_on 'eventmachine', '>= 0.12.8'
 
 # EOF

@@ -74,7 +74,7 @@ your irb sessions and own scripts. See 'lib_usage.rdoc' for more info.
 
 == REQUIREMENTS:
 
-* eventmachine >= 0.12.0
+* eventmachine >= 0.12.8
 
 
 == INSTALL:
