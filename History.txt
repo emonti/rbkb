@@ -1,8 +1,11 @@
+== 0.6.9.1 / 2009-09-08
+  * fixed a typo in random_string()
+
 == 0.6.9 / 2009-09-01
 * Enhancements
   * telson and feed now support -s/--source address:port using TCP with 
     bind_connect via eventmachine
-  * random_string and random_alphanum added to String extensions
+  * random_string and random_alphanum helper methods added 
 * Bug-Fix
   * Plug's PeerList.find_peers was returning nil resulting in problems for 
     blit -l amongst other things.
