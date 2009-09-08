@@ -19,7 +19,7 @@ end
 # Generates a random string of 'size' bytes (8 by default)
 def random_string(size = 8)
   chars = (0..255).map {|c| c.chr }
-  (1..size).collect {|a| char[rand(chars.size)]}
+  (1..size).collect {|a| chars[rand(chars.size)]}
 end
 
 # Simple syntactic sugar to pass any object to a block
