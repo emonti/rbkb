@@ -41,8 +41,7 @@ class BlitPlug
 
       ## Just tack on a blit server???
       @blit = EventMachine::start_server(
-        Plug::Blit::DEFAULT_IPADDR, Plug::Blit::DEFAULT_PORT, Plug::Blit,
-        :TCP, self
+        PLUG_OPTS[:blit_addr], PLUG_OPTS[:blit_port], Plug::Blit, :TCP, self
       )
 
     end
@@ -168,7 +167,12 @@ class BlitPlug
 
 end # module BlitPlug
 
-PLUG_OPTS={ :quiet => false, :out => STDOUT }
+PLUG_OPTS={ 
+  :quiet => false, 
+  :out => STDOUT,
+  :blit_addr => Plug::Blit::DEFAULT_IPADDR, 
+  :blit_port => Plug::Blit::DEFAULT_PORT,
+}
 
 def bail(*msg)
   STDERR.puts msg
@@ -215,6 +219,20 @@ opts = OptionParser.new do |opts|
   opts.on("-q", "--[no-]quiet", "Suppress/Enable conversation dumps.") do |q|
     PLUG_OPTS[:quiet] = q
   end
+
+  opts.on("-b", "--blit ADDR:PORT", 
+          "specify blit listener [address:]port", 
+          "(default: #{PLUG_OPTS[:blit_addr]}:#{PLUG_OPTS[:blit_port]})"
+         ) do |addr|
+
+    unless m = /^(?:([\w\.]+):)?(\d+)$/.match(addr)
+      STDERR.puts "invalid blit address"
+      exit 1
+    end
+    PLUG_OPTS[:blit_addr] = m[1]
+    PLUG_OPTS[:blit_port] = (m[2])? m[2].to_i : nil
+  end
+
 
 end
 
