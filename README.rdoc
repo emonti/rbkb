@@ -81,10 +81,9 @@ your irb sessions and own scripts. See 'lib_usage.rdoc' for more info.
 
 === Gem Installation
 
-rbkb is available as a gem from github:
+rbkb is available as a gem on gemcutter.org:
 
-    gem sources -a http://gems.github.com #(you only have to do this once)
-    gem install emonti-rbkb
+    gem install rbkb --source http://gemcutter.org
 
 
 ==== Gem Install Note
@@ -101,7 +100,7 @@ executable bin/* files somewhere unexpected. To find out where these are and
 either add them to your PATH or copy/symlink them somewhere else like 
 /usr/local/bin/ do this:
 
-    gem contents emonti-rbkb
+    gem contents rbkb
 
 
 === Manual installation:
