@@ -1,3 +1,7 @@
+== 0.6.10 / 2009-09-30
+  * added -b/--blitsrv argument to plugsrv
+  * added --target-tls/--server-tls arguments to plugsrv for TLS support
+
 == 0.6.9.1 / 2009-09-08
   * fixed a typo in random_string()
 

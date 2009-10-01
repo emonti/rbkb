@@ -142,6 +142,8 @@ class BlitPlug
 
       @controller = BlitPlug::Controller.proxy(self)
 
+      start_tls if PLUG_OPTS[:svr_tls]
+
       notify_connection
     end
 
@@ -161,6 +163,7 @@ class BlitPlug
       @sock_peer = Socket.unpack_sockaddr_in(get_peername).reverse
       @sock_peername = @sock_peer.join(':')
       notify_connection
+      start_tls if PLUG_OPTS[:tgt_tls]
     end
 
   end # module TCPClient
@@ -220,19 +223,21 @@ opts = OptionParser.new do |opts|
     PLUG_OPTS[:quiet] = q
   end
 
-  opts.on("-b", "--blit ADDR:PORT", 
+  opts.on("-b", "--blitsrv ADDR:PORT", 
           "specify blit listener [address:]port", 
           "(default: #{PLUG_OPTS[:blit_addr]}:#{PLUG_OPTS[:blit_port]})"
          ) do |addr|
 
     unless m = /^(?:([\w\.]+):)?(\d+)$/.match(addr)
-      STDERR.puts "invalid blit address"
+      STDERR.puts "invalid blit listener argument"
       exit 1
     end
-    PLUG_OPTS[:blit_addr] = m[1]
-    PLUG_OPTS[:blit_port] = (m[2])? m[2].to_i : nil
+    PLUG_OPTS[:blit_addr] = m[1] if m[1]
+    PLUG_OPTS[:blit_port] = m[2].to_i
   end
 
+  opts.on("--[no-]target-tls", "enable/disable TLS to target") {|t| PLUG_OPTS[:tgt_tls] = t }
+  opts.on("--[no-]server-tls", "enable/disable TLS to clients") {|t| PLUG_OPTS[:svr_tls] = t }
 
 end
 
