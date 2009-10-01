@@ -155,8 +155,7 @@ Takes input from a blob of data and output it with its binary length prepended.
 
 === plugsrv
 
-A blit-able reverse TCP proxy. Displays traffic hexdumps. Currently uses
-the default blit port for its blit receiver.
+A blit-able reverse TCP proxy. Displays traffic hexdumps.
 
   Usage: plugsrv [options] target:tport[@[laddr:]lport]
     <target:tport>  = the address of the target service
