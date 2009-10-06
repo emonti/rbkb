@@ -17,9 +17,8 @@ related to pen-testing and reversing.
 
 rbkb is inspired by Matasano BlackBag (a set of similar tools written in C).
 
-See:
-* http://www.matasano.com/log/1048/blackbag-091-new-link-and-minor-fixes/
-* http://www.matasano.com/log/552/code-release-blackbag-09-binary-protocol-reversing-unix-thingies/
+See: 
+blackbag - http://github.com/emonti/rbkb/raw/master/reference/blackbag-0.9.1.tgz
 
 Things go into the black bag as they are stolen (as a compliment!) or dreamed 
 up, usually for simplifying some repetetive task or a desire for a new tool.
