@@ -61,7 +61,13 @@ module Rbkb::Http
     def get_content_length
       @base.content_length if @base
     end
+    alias content_length get_content_length
 
+    def get_content_type
+      @base.content_type if @base
+    end
+    alias content_type get_content_type
+    
     # This method will non-destructively reset the capture state on this object.
     # It is non-destructive in that it will not affect existing captured data 
     # if present.

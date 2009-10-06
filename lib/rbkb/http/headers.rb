@@ -140,11 +140,37 @@ module Rbkb::Http
     end
     alias get_header_value get_value_for
     alias value_for get_value_for
-    
-    def delete_header(k)
-      self.delete_if {|h| h[0].downcase == k.downcase }
+
+    # returns a header value after "fully" parsing it. Any semi-colon separated 
+    # key=value or key parameters after the first value in the header will be 
+    # returned as an extra HeaderParams array in addition to the value. T
+    #
+    # XXX NOTE, the current implementation will incorrectly parse several headers
+    # that may legally contain ';' with no special meaning. 
+    # For example, 'Referer: http://example.com;sometimes_a_url_parameter=1'
+    def get_parameterized_value(k)
+      if v=get_value_for(k)
+        if i=v.index(';')
+          val = v[0,i]
+          parms = v[(i+1)..-1]
+          [ val, HeaderParams.parse( parms ) ]
+        else
+          [ v, HeaderParams.new ]
+        end
+      end
     end
-    
+    alias parameterized_value get_parameterized_value
+
+
+    def set_parameterized_value(k, v)
+      raise "v is not an array. use set_header()" unless v.kind_of? Array
+      parms = v[1]
+      v = v[0].to_s
+      v << parms.to_raw if parms
+      set_header(k,v)
+    end
+
+
     def set_header(k,v)
       sel = get_all(k)
 
@@ -158,6 +184,11 @@ module Rbkb::Http
     end
     alias set_all_for set_header
 
+
+    def delete_header(k)
+      self.delete_if {|h| h[0].downcase == k.downcase }
+    end
+    
     # The to_raw method returns a raw string of headers as they appear
     # on the wire.
     def to_raw
@@ -234,6 +265,8 @@ module Rbkb::Http
     def capture_complete?
       not @capture_state
     end
+    
+
   end
 
 
@@ -242,6 +275,8 @@ module Rbkb::Http
   #
   # To instantiate a new request header, use Headers.request_hdr
   module RequestHeaders
+    NO_PARAMETERS = ["Referer", "Host"]
+
     # This method is used to resolve the parser for the first entity above the 
     # HTTP headers. The incarnation for ResponseHeaders returns ResponseStatus
     # See Headers.capture_full_headers for more information.
@@ -256,7 +291,7 @@ module Rbkb::Http
   #
   # To instantiate a new response header, use Headers.response_hdr
   module ResponseHeaders
-
+    
     # This method is used to resolve the parser for the first entity above the 
     # HTTP headers. The incarnation for ResponseHeaders returns ResponseStatus
     # See Headers.capture_full_headers for more information.
@@ -325,6 +360,7 @@ module Rbkb::Http
       raise "base must be a kind of Base object" if not b.is_a? Base
       @base = b
     end
+
   end
 
 

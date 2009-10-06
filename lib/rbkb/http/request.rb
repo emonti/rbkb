@@ -8,9 +8,21 @@ module Rbkb::Http
     alias first_entity action
     alias first_entity= action=
 
-    def request_parameters
+    def action_parameters
       @action.parameters
     end
+    
+    def body_parameters
+      ctype, ct_parms = @headers.get_parameterized_value('Content-Type')
+      case ctype
+      when /^application\/(?:x-)?(?:www-form-url|url-)encoded(?:\W|$)/
+        FormUrlencodedParams.new(@body)
+      when /^multipart\/form-data$/
+        MultipartFormParams.new(@body, :boundary => ct_parms.get_value_for('boundary'))
+      when /^text\/plain$/
+        raise "text/plain is coming real soon now!"
+      end
+    end    
 
     # Returns a new Headers object extended as RequestHeaders. This is the 
     # default object which will be used when composing fresh Request header

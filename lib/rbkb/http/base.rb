@@ -67,6 +67,13 @@ module Rbkb::Http
       end
     end
 
+    def content_type(hdrs=@headers)
+      raise "headers is nil?" if not hdrs
+      if ctype=hdrs.get_header_value("Content-Type")
+        ctype.split(/\s*;\s*/).first
+      end
+    end
+    
     def attach_new_header(hdr_obj=nil)
       self.headers = hdr_obj
       return hdr_obj

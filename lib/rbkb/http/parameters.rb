@@ -64,17 +64,48 @@ module Rbkb::Http
     end
   end
 
+  class HeaderParams < Parameters
+    def to_raw(quote_val=false)
+      ret = ([nil] + self).map do |k,v| 
+        if v 
+          "#{k}=#{quote_val ? "\"#{v}\"" : v}"
+        else 
+          "#{k}" 
+        end
+      end.join("; ")
+    end
+    
+    def capture(str)
+      raise "arg 0 must be a string" unless str.is_a? String
+      str.split(/\s*;\s*/).each do |p|
+        var, val = p.split('=', 2)
+        if val =~ /^(['"])(.*)\1$/
+          val = $2
+        end
+        self << [var.strip, val]
+      end
+      return self
+    end
+  end
+  
+  
   # The FormUrlencodedParams class is for Parameters values in the 
   # form of 'q=foo&l=1&z=baz' as found in GET query strings and
   # application/www-form-urlencoded or application/x-url-encoded POST 
   # contents.
   class FormUrlencodedParams < Parameters
     def to_raw
-      self.map {|k,v| "#{k}=#{v}"}.join('&')
+      self.map do |k,v| 
+        if v
+          "#{k}=#{v}" 
+        else 
+          "#{k}"
+        end
+      end.join('&')
     end
 
     def capture(str)
-      raise "arg 0 must be a string" unless String === str
+      raise "arg 0 must be a string" unless str.is_a? String
       str.split('&').each do |p| 
         var,val = p.split('=',2)
         self << [var,val]
@@ -84,18 +115,69 @@ module Rbkb::Http
   end
 
 
+  require 'strscan'
+  
   # The MultipartFormParams class is for Parameters in POST data when using
   # the multipart/form-data content type. This is often used for file uploads.
   class MultipartFormParams < Parameters
+    attr_accessor :boundary, :part_headers
+
+    # You must specify a boundary somehow when instantiating a new MultipartFormParams
+    # object. The
+    def initialize(*args)
+      _common_init(*args) do |this|
+        yield this if block_given?
+        this.boundary ||=
+          ( this.opts[:boundary] || rand(0xffffffffffffffff).to_s(16).rjust(48,'-') )
+      end
+    end
+    
     def to_raw
-      self.map {|k,v| "#{k}=#{v}"}.join('&')
+      ret = ""
+      self.each_with_index do |p,i|
+        name, value = p 
+        ret << "--#{boundary.to_s}\n"
+        hdrs = @part_headers[i]
+        if cd = hdrs.get_parameterized_value("Content-Disposition")
+          v, parms = cd
+          parms.set_value_for("name", name) if name
+          hdrs.set_parameterized_value("Content-Disposition", v, parms)
+        else
+          hdrs.set_value_for("Content-Disposition", "form-data; name=#{name}")
+        end
+
+        ret << hdrs.to_raw
+        ret << "#{value}\n"
+      end
+      ret << "#{boundary}--"
+
     end
 
     def capture(str)
       raise "arg 0 must be a string" unless String === str
-      str.split('&').each do |p| 
-        var,val = p.split('=',2)
-        self << [var,val]
+      @part_headers = []
+      self.replace([])
+      
+      s = StringScanner.new(str)
+      bound = /\-\-#{Regexp.escape(@boundary)}\r?\n/
+      unless start=s.scan_until(bound) and start.index(@boundary)==2
+        raise "unexpected start data #{start.inspect}"
+      end
+      
+      while chunk = s.scan_until(bound)
+        part = chunk[0,chunk.index(bound)].chomp
+        phdr, body = part.split(/^\r?\n/, 2)
+        head=Headers.parse(phdr)
+        x, parms = head.get_parameterized_value('Content-Disposition')
+        if parms and name=parms.get_value_for("name")
+          @part_headers << head
+          self << [name, body]
+        else
+          raise "invalid chunk at #{s.pos} bytes"
+        end
+      end
+      unless str[s.pos..-1] =~ /^\-\-#{Regexp.escape(@boundary)}--(?:\r?\n|$)/
+        raise "expected boundary terminator at #{s.pos}"
       end
       return self
     end
