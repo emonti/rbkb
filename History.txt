@@ -1,6 +1,5 @@
-== 0.6.10 / 2009-10-05
-  * added MultiPartFormParams support and TextPlainFormParams
-  * added request body parameter interfaces to rbkb/http
+== 0.6.11 / 2009-10-06
+  * split off rbkb/http as its own package
 
 == 0.6.10 / 2009-09-30
   * added -b/--blitsrv argument to plugsrv
