@@ -94,8 +94,12 @@ module Rbkb::Http
   # application/www-form-urlencoded or application/x-url-encoded POST 
   # contents.
   class FormUrlencodedParams < Parameters
-    def to_raw
-      self.map do |k,v| 
+    def to_raw(url_enc=false)
+      self.map do |k,v|
+        if url_enc
+          k = k.urlenc
+          v = v.urlenc
+        end
         if v
           "#{k}=#{v}" 
         else 
@@ -104,16 +108,46 @@ module Rbkb::Http
       end.join('&')
     end
 
-    def capture(str)
+    def capture(str, url_dec=false)
       raise "arg 0 must be a string" unless str.is_a? String
       str.split('&').each do |p| 
+        k,v = p.split('=',2)
+        if url_dec
+          k = k.urldec
+          v = v.urldec
+        end
+        self << [k, v]
+      end
+      return self
+    end
+  end
+
+  # The TextPlainParams class is for Parameters values in the 
+  # form of 'text/plain' post data. These are usually simple key=value 
+  # pairs separated by a CR?LF. 
+  #
+  # XXX Note, safari seems to think these should be urlencoded, and not
+  # newline separated. joy!
+  class TextPlainFormParams < Parameters
+    def to_raw
+      self.map do |k,v| 
+        if v
+          "#{k}=#{v.urlenc}" 
+        else 
+          "#{k}"
+        end
+      end.join('\r\n')
+    end
+
+    def capture(str)
+      raise "arg 0 must be a string" unless str.is_a? String
+      str.split(/\r?\n/).each do |p| 
         var,val = p.split('=',2)
         self << [var,val]
       end
       return self
     end
   end
-
 
   require 'strscan'
   

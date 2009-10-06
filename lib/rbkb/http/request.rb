@@ -20,9 +20,15 @@ module Rbkb::Http
       when /^multipart\/form-data$/
         MultipartFormParams.new(@body, :boundary => ct_parms.get_value_for('boundary'))
       when /^text\/plain$/
-        raise "text/plain is coming real soon now!"
+        # safari just gives us url-encoded parameters for text/plain.
+        # Joy!
+        if @headers.get_value_for('User-Agent') =~ /\WSafari\W/
+          FormUrlencodedParams.new(@body)
+        else
+          TextPlainFormParams.new(@body)
+        end
       end
-    end    
+    end
 
     # Returns a new Headers object extended as RequestHeaders. This is the 
     # default object which will be used when composing fresh Request header

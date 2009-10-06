@@ -1,3 +1,7 @@
+== 0.6.10 / 2009-10-05
+  * added MultiPartFormParams support and TextPlainFormParams
+  * added request body parameter interfaces to rbkb/http
+
 == 0.6.10 / 2009-09-30
   * added -b/--blitsrv argument to plugsrv
   * added --target-tls/--server-tls arguments to plugsrv for TLS support
