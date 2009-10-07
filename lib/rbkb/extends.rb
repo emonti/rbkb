@@ -579,6 +579,16 @@ class Symbol
 end
 
 class Array
+
+  # should be in std library
+  #
+  #   keys = [:one, :two, :three]
+  #   vals = [1, 2, 3]
+  #
+  def to_hash
+    inject({}) {|hash, i| hash[i[0]] = i[1]; hash}
+  end
+
   # randomizes the order of contents in the Array (self)
   def randomize  ; self.sort_by { rand } ; end
 
