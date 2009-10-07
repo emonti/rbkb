@@ -196,7 +196,23 @@ class String
 
 
   # Produces a character frequency distribution histogram in descending
-  # order.
+  # order. Example:
+  #
+  #   pp some_english_text.char_frequency()
+  #
+  #   [[" ", 690],
+  #    ["e", 354],
+  #    ["t", 242],
+  #    ["o", 233],
+  #    ["i", 218],
+  #    ["a", 176],
+  #    ["s", 172],
+  #    ["r", 172],
+  #    ["n", 167],
+  #    ["d", 106],
+  #    ...
+  #   ]
+  #     
   def char_frequency
     hits = {}
     self.each_byte {|c| hits[c.chr] ||= 0; hits[c.chr] += 1 }
