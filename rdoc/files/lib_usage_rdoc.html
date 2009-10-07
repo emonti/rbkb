@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: lib_usage.rdoc</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>lib_usage.rdoc</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>lib_usage.rdoc
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Wed Sep 30 23:41:13 -0500 2009</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h3>Using the rbkb library&#8216;s Monkey Patches</h3>
+<p>
+Much of rbkb is implemented as a bunch of monkeypatches to <a
+href="../classes/Array.html">Array</a>, <a
+href="../classes/String.html">String</a>, <a
+href="../classes/Numeric.html">Numeric</a> and other base classes. If this
+suits your fancy (some people despise monkeypatches, this is not their
+fancy) then you can &#8216;require &quot;rbkb&quot;&#8217; from your irb
+sessions and own scripts.
+</p>
+<p>
+The monkey-patches were designed to let you approximate use of the rbkb
+shell commands from IRB or ruby scripts.
+</p>
+<p>
+(My dirty secret: I use IRB for like&#8230; everything!)
+</p>
+<p>
+Using the rbkb library in ruby will let you do things like the following
+(just some samples, see rdoc for more info).
+</p>
+<p>
+Do stuff with strings:
+</p>
+<pre>
+  ## sexify with hexify
+  foo = &quot;helu foo&quot;            #=&gt; &quot;helu foo&quot;
+  foo.hexify                  #=&gt; &quot;68656c7520666f6f&quot;
+
+  ## a little easier to read
+  foo.hexify(:delim =&gt; ' ')   #=&gt; &quot;68 65 6c 75 20 66 6f 6f&quot;
+
+  # and back
+  _.unhexify                  #=&gt; &quot;helu foo&quot;
+
+  ## break out your hexdump -C styles
+  foodump = &quot;helu foo&quot;.hexdump(:out =&gt; StringIO.new)
+  #=&gt; &quot;00000000  68 65 6c 75 20 66 6f 6f  |helu foo|\n00000008\n&quot;
+  puts foodump
+  # 00000000  68 65 6c 75 20 66 6f 6f  |helu foo|
+  # 00000008
+  # =&gt; nil
+  foo.hexdump(:out =&gt; $stdout)
+  # 00000000  68 65 6c 75 20 66 6f 6f  |helu foo|
+  # 00000008
+  # =&gt; nil
+
+  ## reverse a hexdump
+  foodump.dehexdump             #=&gt; &quot;helu foo&quot;
+
+  ## 'strings' like /usr/bin/strings
+  dat = File.read(&quot;/bin/ls&quot;)
+  pp dat.strings
+  # [[4132, 4143, :ascii, &quot;__PAGEZERO\000&quot;],
+  #  [4188, 4195, :ascii, &quot;__TEXT\000&quot;],
+  # ...
+  #  [72427, 72470, :ascii, &quot;*Apple Code Signing Certification Authority&quot;],
+  #  [72645, 72652, :ascii, &quot;X[N~EQ &quot;]]
+
+  ## look for stuff in binaries
+  dat.bgrep(&quot;__PAGEZERO&quot;)         #=&gt; [[4132, 4142, &quot;__PAGEZERO&quot;], [40996, 41006, &quot;__PAGEZERO&quot;]]
+  dat.bgrep(0xCAFEBABE.to_bytes)  #=&gt; [[0, 4, &quot;\312\376\272\276&quot;]]
+</pre>
+<p>
+Do stuff with numbers:
+</p>
+<pre>
+  ## Do you have an irrational distaste for pack/unpack? I do.
+  0xff.to_bytes                     #=&gt; &quot;\000\000\000\377&quot;
+  be = 0xff.to_bytes(:big)          #=&gt; &quot;\000\000\000\377&quot;
+  le = 0xff.to_bytes(:little)       #=&gt; &quot;\377\000\000\000&quot;
+  le16 = 0xff.to_bytes(:little,2)   #=&gt; &quot;\377\000&quot;
+
+  ## Strings can go the other way too
+  [be, le, le16].map {|n| n.dat_to_num(:big) } # default
+  #=&gt; [255, 4278190080, 65280]
+  [be, le, le16].map {|n| n.dat_to_num(:little) }
+  #=&gt; [4278190080, 255, 255]
+
+  ## Calculate padding for a given alignment
+  10.pad(16)     #=&gt; 6
+  16.pad(16)     #=&gt; 0
+  30.pad(16)     #=&gt; 2
+  32.pad(16)     #=&gt; 0
+</pre>
+<p>
+Interact with &#8216;telson&#8217; and &#8216;plugsrv&#8217; directly from
+IRB:
+</p>
+<pre>
+  ## In a separate window from your irb session do something like:
+  #
+  #  $ telson rubyforge.com:80 -r
+  #  ** TELSON-192.168.11.2:58118(TCP) Started
+  #  ** BLITSRV-127.0.0.1:25195(TCP) Started
+  #  ** TELSON-192.168.11.2:58118(TCP) CONNECTED TO PEER-205.234.109.19:80(TCP)
+
+  ## You can blit any string from within IRB!
+
+  ## A minor setup step is required... (I put this in my .irbrc)
+  Plug::Blit.blit_init              #=&gt; nil
+
+  &quot;GET / HTTP/1.0\r\n\r\n&quot;.blit                 #=&gt; 28
+  ## Watch the basic HTTP request get made and responded to in the
+  ## other window.
+
+  (&quot;GET /&quot;+ &quot;A&quot;*30 +&quot; HTTP/1.0\r\n\r\n&quot;).blit   #=&gt; 58
+  ## Watch the bogus HTTP request get made and responded to in the
+  ## other window.
+</pre>
+<p>
+Some simple web encoding stuff:
+</p>
+<pre>
+  xss=&quot;&lt;script&gt;alert('helu ' + document.cookie)&lt;/script&quot;
+
+  # URL percent-encode stuff
+  xss.urlenc
+  #=&gt; &quot;%3cscript%3ealert%28%27helu%3a%20%27%20%2b%20document.cookie%29%3c%2fscript%3e&quot;
+
+  # Base64 encode stuff
+  _.b64
+  #=&gt; &quot;JTNjc2NyaXB0JTNlYWxlcnQlMjglMjdoZWx1JTNhJTIwJTI3JTIwJTJiJTIwZG9jdW1lbnQuY29va2llJTI5JTNjJTJmc2NyaXB0JTNl&quot;
+
+  ## And back
+  _.d64
+  #=&gt; &quot;%3cscript%3ealert%28%27helu%3a%20%27%20%2b%20document.cookie%29%3c%2fscript%3e&quot;
+
+  _.urldec
+  #=&gt; &quot;&lt;script&gt;alert('helu: ' + document.cookie)&lt;/script&gt;&quot;
+</pre>
+<p>
+Miscellaneous stuff:
+</p>
+<pre>
+  # rediculous laziness!
+  0x41.printable?         #=&gt; true
+  0x01.printable?         #=&gt; false
+
+  # Make random gobbledygook and insults
+  &quot;helu foo&quot;.randomize    #=&gt; &quot;ouofleh &quot;
+  &quot;helu foo&quot;.randomize    #=&gt; &quot;foul hoe&quot;
+</pre>
+<p>
+Pretend (badly) to be smart:
+</p>
+<pre>
+  # Cletus say's he's &quot;sneaky&quot;
+  cletus = &quot;my secrets are safe&quot;.xor(&quot;sneaky&quot;)
+  #=&gt; &quot;\036\027E\022\016\032\001\v\021\022K\030\001\vE\022\n\037\026&quot;
+
+  # Only not really so sneaky
+  cletus.xor &quot;my secrets&quot;     #=&gt; &quot;sneakysnea&amp;a!x qxzb&quot;
+  cletus.xor &quot;my secrets are&quot; #=&gt; &quot;sneakysneakysn(k*ls&quot;
+  cletus.xor &quot;sneaky&quot;         #=&gt; &quot;my secrets are safe&quot;
+
+  # Now make Cletus feel worse. With... MATH!
+  # (ala entropy scores)
+  &quot;A&quot;.entropy                               #=&gt; 0.0
+  &quot;AB&quot;.entropy                              #=&gt; 1.0
+  &quot;BC&quot;.entropy                              #=&gt; 1.0
+  (0..255).map {|x| x.chr}.join.entropy     #=&gt; 8.0
+
+  # &quot;You see, Cletus, you might have done this...&quot;
+  sdat = &quot;my secrets are very secret &quot;*60
+  require 'openssl'
+  c = OpenSSL::Cipher::Cipher.new(&quot;aes-256-cbc&quot;)
+  c.encrypt
+  c.key = Digest::SHA1.hexdigest(&quot;sneaky&quot;)
+  c.iv = c.random_iv
+
+  # &quot;So, Cletus, when you say 'sneaky'... this is exactly how 'sneaky' you are&quot;
+  c.update(sdat).entropy
+  #=&gt; 7.64800383393901
+  sdat.xor(&quot;sneaky&quot;).entropy
+  #=&gt; 3.77687372599433
+  sdat.entropy
+  #=&gt; 3.07487577558377
+</pre>
+<p>
+I recommend reading some of the rdoc if you&#8216;re interested in more of
+these little helpers. Time permitting, I&#8216;ll try to keep the docs
+useful and up to date.
+</p>
+<p>
+Comments are welcome.
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1587 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: String</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">String</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/lib/rbkb/extends_rb.html">
+                lib/rbkb/extends.rb
+                </a>
+        <br />
+                <a href="../files/lib/rbkb/plug/blit_rb.html">
+                lib/rbkb/plug/blit.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="Object.html">
+                Object
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+Mixins and class-specific items
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000052">^</a>&nbsp;&nbsp;
+      <a href="#M000036">b64</a>&nbsp;&nbsp;
+      <a href="#M000061">bgrep</a>&nbsp;&nbsp;
+      <a href="#M000073">blit</a>&nbsp;&nbsp;
+      <a href="#M000067">camelize</a>&nbsp;&nbsp;
+      <a href="#M000068">camelize_meth</a>&nbsp;&nbsp;
+      <a href="#M000048">char_frequency</a>&nbsp;&nbsp;
+      <a href="#M000070">class_name</a>&nbsp;&nbsp;
+      <a href="#M000071">const_lookup</a>&nbsp;&nbsp;
+      <a href="#M000065">crc32</a>&nbsp;&nbsp;
+      <a href="#M000064">cstring</a>&nbsp;&nbsp;
+      <a href="#M000037">d64</a>&nbsp;&nbsp;
+      <a href="#M000046">dat_to_n</a>&nbsp;&nbsp;
+      <a href="#M000043">dat_to_num</a>&nbsp;&nbsp;
+      <a href="#M000069">decamelize</a>&nbsp;&nbsp;
+      <a href="#M000058">dedump</a>&nbsp;&nbsp;
+      <a href="#M000057">dehexdump</a>&nbsp;&nbsp;
+      <a href="#M000047">entropy</a>&nbsp;&nbsp;
+      <a href="#M000042">hex_to_num</a>&nbsp;&nbsp;
+      <a href="#M000056">hexdump</a>&nbsp;&nbsp;
+      <a href="#M000040">hexify</a>&nbsp;&nbsp;
+      <a href="#M000033">ishex?</a>&nbsp;&nbsp;
+      <a href="#M000039">lalign</a>&nbsp;&nbsp;
+      <a href="#M000044">lazy_to_n</a>&nbsp;&nbsp;
+      <a href="#M000045">lazy_to_num</a>&nbsp;&nbsp;
+      <a href="#M000066">pipe_magick</a>&nbsp;&nbsp;
+      <a href="#M000038">ralign</a>&nbsp;&nbsp;
+      <a href="#M000054">randomize</a>&nbsp;&nbsp;
+      <a href="#M000055">randomize!</a>&nbsp;&nbsp;
+      <a href="#M000053">rotate_bytes</a>&nbsp;&nbsp;
+      <a href="#M000063">starts_with?</a>&nbsp;&nbsp;
+      <a href="#M000062">strings</a>&nbsp;&nbsp;
+      <a href="#M000050">substitution</a>&nbsp;&nbsp;
+      <a href="#M000051">substitution_xor</a>&nbsp;&nbsp;
+      <a href="#M000072">to_stringio</a>&nbsp;&nbsp;
+      <a href="#M000059">undump</a>&nbsp;&nbsp;
+      <a href="#M000060">unhexdump</a>&nbsp;&nbsp;
+      <a href="#M000041">unhexify</a>&nbsp;&nbsp;
+      <a href="#M000035">urldec</a>&nbsp;&nbsp;
+      <a href="#M000034">urlenc</a>&nbsp;&nbsp;
+      <a href="#M000049">xor</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000052" class="method-detail">
+        <a name="M000052"></a>
+
+        <div class="method-heading">
+          <a href="#M000052" class="method-signature">
+          <span class="method-name">^</span><span class="method-args">(x)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+convert bytes to number then <a href="String.html#M000049">xor</a> against
+another byte-string or number
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000052-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000052-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 252</span>
+252:   <span class="ruby-keyword kw">def</span> <span class="ruby-operator">^</span>(<span class="ruby-identifier">x</span>)
+253:     <span class="ruby-identifier">x</span> = <span class="ruby-identifier">x</span>.<span class="ruby-identifier">dat_to_num</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Numeric</span>
+254:     (<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dat_to_num</span> <span class="ruby-operator">^</span> <span class="ruby-identifier">x</span>)<span class="ruby-comment cmt">#.to_bytes</span>
+255:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000036" class="method-detail">
+        <a name="M000036"></a>
+
+        <div class="method-heading">
+          <a href="#M000036" class="method-signature">
+          <span class="method-name">b64</span><span class="method-args">(len=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Base64 encode
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000036-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000036-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 62</span>
+62:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">b64</span>(<span class="ruby-identifier">len</span>=<span class="ruby-keyword kw">nil</span>)
+63:     <span class="ruby-identifier">ret</span> = [<span class="ruby-keyword kw">self</span>].<span class="ruby-identifier">pack</span>(<span class="ruby-value str">&quot;m&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-value str">&quot;\n&quot;</span>, <span class="ruby-value str">&quot;&quot;</span>)
+64:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">len</span> <span class="ruby-keyword kw">and</span> <span class="ruby-constant">Numeric</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">len</span> 
+65:       <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-node">/.{1,#{len}}/</span>).<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\n&quot;</span>
+66:     <span class="ruby-keyword kw">else</span>
+67:       <span class="ruby-identifier">ret</span>
+68:     <span class="ruby-keyword kw">end</span>
+69:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000061" class="method-detail">
+        <a name="M000061"></a>
+
+        <div class="method-heading">
+          <a href="#M000061" class="method-signature">
+          <span class="method-name">bgrep</span><span class="method-args">(find, align=nil) {|[pos+off, pos+endoff, match]| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Binary grep
+</p>
+<p>
+Parameters:
+</p>
+<pre>
+  find  : A Regexp or string to search for in self
+  align : nil | numeric alignment (matches only made if aligned)
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000061-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000061-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 375</span>
+375:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bgrep</span>(<span class="ruby-identifier">find</span>, <span class="ruby-identifier">align</span>=<span class="ruby-keyword kw">nil</span>)
+376:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">align</span> <span class="ruby-keyword kw">and</span> (<span class="ruby-keyword kw">not</span> <span class="ruby-identifier">align</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Integer</span>) <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">align</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">0</span>)
+377:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;alignment must be a integer &gt;= 0&quot;</span>
+378:     <span class="ruby-keyword kw">end</span>
+379: 
+380:     <span class="ruby-identifier">dat</span>=<span class="ruby-keyword kw">self</span>
+381:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">find</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Regexp</span>
+382:       <span class="ruby-identifier">search</span> = <span class="ruby-identifier">lambda</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">m</span>, <span class="ruby-identifier">buf</span><span class="ruby-operator">|</span> 
+383:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">m</span> = <span class="ruby-identifier">m</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">buf</span>)
+384:           <span class="ruby-identifier">mtch</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">0</span>]
+385:           <span class="ruby-identifier">off</span>,<span class="ruby-identifier">endoff</span> = <span class="ruby-identifier">m</span>.<span class="ruby-identifier">offset</span>(<span class="ruby-value">0</span>)
+386:           <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">off</span>, <span class="ruby-identifier">endoff</span>, <span class="ruby-identifier">mtch</span>
+387:         <span class="ruby-keyword kw">end</span>
+388:       <span class="ruby-keyword kw">end</span>
+389:     <span class="ruby-keyword kw">else</span>
+390:       <span class="ruby-identifier">search</span> = <span class="ruby-identifier">lambda</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span>, <span class="ruby-identifier">buf</span><span class="ruby-operator">|</span>
+391:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">off</span> = <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">s</span>)
+392:           <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">off</span>, <span class="ruby-identifier">off</span><span class="ruby-operator">+</span><span class="ruby-identifier">s</span>.<span class="ruby-identifier">size</span>, <span class="ruby-identifier">s</span>
+393:         <span class="ruby-keyword kw">end</span>
+394:       <span class="ruby-keyword kw">end</span>
+395:     <span class="ruby-keyword kw">end</span>
+396: 
+397:     <span class="ruby-identifier">ret</span>=[]
+398:     <span class="ruby-identifier">pos</span> = <span class="ruby-value">0</span>
+399:     <span class="ruby-keyword kw">while</span> (<span class="ruby-identifier">res</span> = <span class="ruby-identifier">search</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">find</span>, <span class="ruby-identifier">dat</span>[<span class="ruby-identifier">pos</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]))
+400:       <span class="ruby-identifier">off</span>, <span class="ruby-identifier">endoff</span>, <span class="ruby-identifier">match</span> = <span class="ruby-identifier">res</span>
+401:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">align</span> <span class="ruby-keyword kw">and</span> ( <span class="ruby-identifier">pad</span> = (<span class="ruby-identifier">pos</span><span class="ruby-operator">+</span><span class="ruby-identifier">off</span>).<span class="ruby-identifier">pad</span>(<span class="ruby-identifier">align</span>) ) <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+402:         <span class="ruby-identifier">pos</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">pad</span>
+403:       <span class="ruby-keyword kw">else</span>
+404:         <span class="ruby-identifier">hit</span> = [<span class="ruby-identifier">pos</span><span class="ruby-operator">+</span><span class="ruby-identifier">off</span>, <span class="ruby-identifier">pos</span><span class="ruby-operator">+</span><span class="ruby-identifier">endoff</span>, <span class="ruby-identifier">match</span>]
+405:         <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">block_given?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-keyword kw">yield</span>([<span class="ruby-identifier">pos</span><span class="ruby-operator">+</span><span class="ruby-identifier">off</span>, <span class="ruby-identifier">pos</span><span class="ruby-operator">+</span><span class="ruby-identifier">endoff</span>, <span class="ruby-identifier">match</span>])
+406:           <span class="ruby-identifier">ret</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">hit</span>
+407:         <span class="ruby-keyword kw">end</span>
+408:         <span class="ruby-identifier">pos</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">endoff</span>
+409:       <span class="ruby-keyword kw">end</span>
+410:     <span class="ruby-keyword kw">end</span>
+411:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">ret</span>
+412:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000073" class="method-detail">
+        <a name="M000073"></a>
+
+        <div class="method-heading">
+          <a href="#M000073" class="method-signature">
+          <span class="method-name">blit</span><span class="method-args">(idx=0)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000073-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000073-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/plug/blit.rb, line 218</span>
+218:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">blit</span>(<span class="ruby-identifier">idx</span>=<span class="ruby-value">0</span>)
+219:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;blit must be initialized with blit_init&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">Blit</span>.<span class="ruby-identifier">initialized?</span>
+220:     <span class="ruby-constant">Plug</span><span class="ruby-operator">::</span><span class="ruby-constant">Blit</span>.<span class="ruby-identifier">blit_send</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">idx</span>)
+221:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000067" class="method-detail">
+        <a name="M000067"></a>
+
+        <div class="method-heading">
+          <a href="#M000067" class="method-signature">
+          <span class="method-name">camelize</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Converts a &#8216;_&#8217; delimited string to CamelCase like
+&#8216;foo_class&#8217; into &#8216;FooClass&#8217;. See also: <a
+href="String.html#M000068">camelize_meth</a>, <a
+href="String.html#M000069">decamelize</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000067-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000067-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 557</span>
+557:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">camelize</span>
+558:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/(^|_)([a-z])/</span>) { <span class="ruby-identifier">$2</span>.<span class="ruby-identifier">upcase</span> }
+559:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000068" class="method-detail">
+        <a name="M000068"></a>
+
+        <div class="method-heading">
+          <a href="#M000068" class="method-signature">
+          <span class="method-name">camelize_meth</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Converts a &#8216;_&#8217; delimited string to method style camelCase like
+&#8216;foo_method&#8217; into &#8216;fooMethod&#8217;. See also: <a
+href="String.html#M000067">camelize</a>, <a
+href="String.html#M000069">decamelize</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000068-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000068-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 564</span>
+564:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">camelize_meth</span>
+565:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/_([a-z])/</span>) { <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">upcase</span> }
+566:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000048" class="method-detail">
+        <a name="M000048"></a>
+
+        <div class="method-heading">
+          <a href="#M000048" class="method-signature">
+          <span class="method-name">char_frequency</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Produces a character frequency distribution histogram in descending order.
+Example:
+</p>
+<pre>
+  pp some_english_text.char_frequency()
+
+  [[&quot; &quot;, 690],
+   [&quot;e&quot;, 354],
+   [&quot;t&quot;, 242],
+   [&quot;o&quot;, 233],
+   [&quot;i&quot;, 218],
+   [&quot;a&quot;, 176],
+   [&quot;s&quot;, 172],
+   [&quot;r&quot;, 172],
+   [&quot;n&quot;, 167],
+   [&quot;d&quot;, 106],
+   ...
+  ]
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000048-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000048-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 216</span>
+216:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">char_frequency</span>
+217:     <span class="ruby-identifier">hits</span> = {}
+218:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">each_byte</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">hits</span>[<span class="ruby-identifier">c</span>.<span class="ruby-identifier">chr</span>] <span class="ruby-operator">||=</span> <span class="ruby-value">0</span>; <span class="ruby-identifier">hits</span>[<span class="ruby-identifier">c</span>.<span class="ruby-identifier">chr</span>] <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> }
+219:     <span class="ruby-identifier">hits</span>.<span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">sort</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span>,<span class="ruby-identifier">b</span><span class="ruby-operator">|</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">a</span>[<span class="ruby-value">1</span>] }
+220:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000070" class="method-detail">
+        <a name="M000070"></a>
+
+        <div class="method-heading">
+          <a href="#M000070" class="method-signature">
+          <span class="method-name">class_name</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+convert a string to its idiomatic ruby class name
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000070-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000070-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 583</span>
+583:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">class_name</span>
+584:     <span class="ruby-identifier">r</span> = <span class="ruby-value str">&quot;&quot;</span>
+585:     <span class="ruby-identifier">up</span> = <span class="ruby-keyword kw">true</span>
+586:     <span class="ruby-identifier">each_byte</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+587:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span> <span class="ruby-operator">==</span> <span class="ruby-value">95</span>
+588:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">up</span>
+589:           <span class="ruby-identifier">r</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;::&quot;</span>
+590:         <span class="ruby-keyword kw">else</span>
+591:           <span class="ruby-identifier">up</span> = <span class="ruby-keyword kw">true</span>
+592:         <span class="ruby-keyword kw">end</span>
+593:       <span class="ruby-keyword kw">else</span>
+594:         <span class="ruby-identifier">m</span> = <span class="ruby-identifier">up</span> <span class="ruby-value">? </span><span class="ruby-operator">:</span><span class="ruby-identifier">upcase</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">:to_s</span>
+595:         <span class="ruby-identifier">r</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">c</span>.<span class="ruby-identifier">chr</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">m</span>))
+596:         <span class="ruby-identifier">up</span> = <span class="ruby-keyword kw">false</span>
+597:       <span class="ruby-keyword kw">end</span>
+598:     <span class="ruby-keyword kw">end</span>
+599:     <span class="ruby-identifier">r</span>
+600:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000071" class="method-detail">
+        <a name="M000071"></a>
+
+        <div class="method-heading">
+          <a href="#M000071" class="method-signature">
+          <span class="method-name">const_lookup</span><span class="method-args">(ns=Object)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns a reference to actual constant for a given name in namespace can be
+used to lookup classes from enums and such
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000071-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000071-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 605</span>
+605:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">const_lookup</span>(<span class="ruby-identifier">ns</span>=<span class="ruby-constant">Object</span>)
+606:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span>=<span class="ruby-identifier">ns</span>.<span class="ruby-identifier">constants</span>.<span class="ruby-identifier">select</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">n</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class_name</span> } <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">empty?</span>
+607:       <span class="ruby-identifier">ns</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">first</span>)
+608:     <span class="ruby-keyword kw">end</span>
+609:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000065" class="method-detail">
+        <a name="M000065"></a>
+
+        <div class="method-heading">
+          <a href="#M000065" class="method-signature">
+          <span class="method-name">crc32</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+returns CRC32 checksum for the string object
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000065-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000065-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 526</span>
+526:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">crc32</span>
+527:     <span class="ruby-comment cmt">## pure ruby version. slower, but here for reference (found on some forum)</span>
+528:     <span class="ruby-comment cmt">#  r = 0xFFFFFFFF</span>
+529:     <span class="ruby-comment cmt">#  self.each_byte do |b|</span>
+530:     <span class="ruby-comment cmt">#    r ^= b</span>
+531:     <span class="ruby-comment cmt">#    8.times do</span>
+532:     <span class="ruby-comment cmt">#      r = (r&gt;&gt;1) ^ (0xEDB88320 * (r &amp; 1))</span>
+533:     <span class="ruby-comment cmt">#    end</span>
+534:     <span class="ruby-comment cmt">#  end</span>
+535:     <span class="ruby-comment cmt">#  r ^ 0xFFFFFFFF</span>
+536:     <span class="ruby-comment cmt">## or... we can just use:</span>
+537:     <span class="ruby-constant">Zlib</span>.<span class="ruby-identifier">crc32</span> <span class="ruby-keyword kw">self</span>
+538:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000064" class="method-detail">
+        <a name="M000064"></a>
+
+        <div class="method-heading">
+          <a href="#M000064" class="method-signature">
+          <span class="method-name">cstring</span><span class="method-args">(off=0)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns a single null-terminated ascii string from beginning of self. This
+will return the entire string if no null is encountered.
+</p>
+<p>
+Parameters:
+</p>
+<pre>
+  off = specify an optional beggining offset
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000064-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000064-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 521</span>
+521:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cstring</span>(<span class="ruby-identifier">off</span>=<span class="ruby-value">0</span>)
+522:     <span class="ruby-keyword kw">self</span>[ <span class="ruby-identifier">off</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">index</span>(<span class="ruby-value str">&quot;\x00&quot;</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">size</span> ]
+523:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000037" class="method-detail">
+        <a name="M000037"></a>
+
+        <div class="method-heading">
+          <a href="#M000037" class="method-signature">
+          <span class="method-name">d64</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Base64 decode
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000037-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000037-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 72</span>
+72:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">d64</span>;  <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">unpack</span>(<span class="ruby-value str">&quot;m&quot;</span>)[<span class="ruby-value">0</span>];  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000046" class="method-detail">
+        <a name="M000046"></a>
+
+        <div class="method-heading">
+          <span class="method-name">dat_to_n</span><span class="method-args">(order=:big)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="String.html#M000043">dat_to_num</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000043" class="method-detail">
+        <a name="M000043"></a>
+
+        <div class="method-heading">
+          <a href="#M000043" class="method-signature">
+          <span class="method-name">dat_to_num</span><span class="method-args">(order=:big)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+A &quot;generalized&quot; lazy bytestring -&gt; numeric converter.
+</p>
+<p>
+Parameters:
+</p>
+<pre>
+  order =&gt; :big or :little endian (default is :big)
+</pre>
+<p>
+Bonus: should work seamlessly with really large <a
+href="String.html#M000062">strings</a>.
+</p>
+<pre>
+  &gt;&gt; (&quot;\xFF&quot;*10).dat_to_num
+  =&gt; 1208925819614629174706175
+  &gt;&gt; (&quot;\xFF&quot;*20).dat_to_num
+  =&gt; 1461501637330902918203684832716283019655932542975
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000043-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000043-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 167</span>
+167:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dat_to_num</span>(<span class="ruby-identifier">order</span>=<span class="ruby-identifier">:big</span>)
+168:     <span class="ruby-identifier">s</span>=<span class="ruby-keyword kw">self</span>
+169:     <span class="ruby-identifier">s</span>.<span class="ruby-identifier">reverse!</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">order</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:little</span>
+170:     <span class="ruby-identifier">r</span> = <span class="ruby-value">0</span>
+171:     <span class="ruby-identifier">s</span>.<span class="ruby-identifier">each_byte</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">r</span> = ((<span class="ruby-identifier">r</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">8</span>) <span class="ruby-operator">|</span> <span class="ruby-identifier">c</span>)}
+172:     <span class="ruby-identifier">r</span>
+173:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000069" class="method-detail">
+        <a name="M000069"></a>
+
+        <div class="method-heading">
+          <a href="#M000069" class="method-signature">
+          <span class="method-name">decamelize</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Converts a CamelCase or camelCase string into &#8216;_&#8217; delimited
+form like &#8216;FooBar&#8217; or &#8216;fooBar&#8217; into
+&#8216;foo_bar&#8217;.
+</p>
+<p>
+Note: This method only handles camel humps. Strings with consecutive
+uppercase chars like &#8216;FooBAR&#8217; will be converted to
+&#8216;foo_bar&#8216;
+</p>
+<p>
+See also: <a href="String.html#M000067">camelize</a>, <a
+href="String.html#M000068">camelize_meth</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000069-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000069-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 576</span>
+576:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">decamelize</span>
+577:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/(^|[a-z])([A-Z])/</span>) <span class="ruby-keyword kw">do</span> 
+578:       (<span class="ruby-identifier">$1</span>.<span class="ruby-identifier">empty?</span>)<span class="ruby-operator">?</span> <span class="ruby-identifier">$2</span> <span class="ruby-operator">:</span> <span class="ruby-node">&quot;#{$1}_#{$2}&quot;</span>
+579:     <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">downcase</span>
+580:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000058" class="method-detail">
+        <a name="M000058"></a>
+
+        <div class="method-heading">
+          <span class="method-name">dedump</span><span class="method-args">(opt={})</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="String.html#M000057">dehexdump</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000057" class="method-detail">
+        <a name="M000057"></a>
+
+        <div class="method-heading">
+          <a href="#M000057" class="method-signature">
+          <span class="method-name">dehexdump</span><span class="method-args">(opt={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Converts a <a href="String.html#M000056">hexdump</a> back to binary - takes
+the same options as <a href="String.html#M000056">hexdump</a>(). Fairly
+flexible. Should work both with &#8216;xxd&#8217; and &#8216;<a
+href="String.html#M000056">hexdump</a> -C&#8217; style dumps.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000057-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000057-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 337</span>
+337:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dehexdump</span>(<span class="ruby-identifier">opt</span>={})
+338:     <span class="ruby-identifier">s</span>=<span class="ruby-keyword kw">self</span>
+339:     <span class="ruby-identifier">out</span> = <span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:out</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">StringIO</span>.<span class="ruby-identifier">new</span>
+340:     <span class="ruby-identifier">len</span> = (<span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:len</span>] <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:len</span>] <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)<span class="ruby-operator">?</span> <span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:len</span>] <span class="ruby-operator">:</span> <span class="ruby-value">16</span>
+341: 
+342:     <span class="ruby-identifier">hcrx</span> = <span class="ruby-regexp re">/[A-Fa-f0-9]/</span>
+343:     <span class="ruby-identifier">dumprx</span> = <span class="ruby-node">/^(#{hcrx}+):?\s*((?:#{hcrx}{2}\s*){0,#{len}})/</span>
+344:     <span class="ruby-identifier">off</span> = <span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:start_addr</span>] <span class="ruby-operator">||</span> <span class="ruby-value">0</span>
+345: 
+346:     <span class="ruby-identifier">i</span>=<span class="ruby-value">1</span>
+347:     <span class="ruby-comment cmt"># iterate each line of hexdump</span>
+348:     <span class="ruby-identifier">s</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\r?\n/</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">hl</span><span class="ruby-operator">|</span>
+349:       <span class="ruby-comment cmt"># match and check offset</span>
+350:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">m</span> = <span class="ruby-identifier">dumprx</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">hl</span>) <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">hex</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">off</span>
+351:         <span class="ruby-identifier">i</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span>
+352:         <span class="ruby-comment cmt"># take the data chunk and unhexify it</span>
+353:         <span class="ruby-identifier">raw</span> = <span class="ruby-identifier">$2</span>.<span class="ruby-identifier">unhexify</span>
+354:         <span class="ruby-identifier">off</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">raw</span>)
+355:       <span class="ruby-keyword kw">else</span>
+356:         <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Hexdump parse error on line #{i} #{s}&quot;</span>
+357:       <span class="ruby-keyword kw">end</span>
+358:     <span class="ruby-keyword kw">end</span>
+359: 
+360:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">out</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">StringIO</span>
+361:       <span class="ruby-identifier">out</span>.<span class="ruby-identifier">string</span>
+362:     <span class="ruby-keyword kw">end</span>
+363:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000047" class="method-detail">
+        <a name="M000047"></a>
+
+        <div class="method-heading">
+          <a href="#M000047" class="method-signature">
+          <span class="method-name">entropy</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+calculates <a href="String.html#M000047">entropy</a> in string
+</p>
+<p>
+TQBF&#8216;s description: &quot;I also added a chi-squared test to quickly
+figure out <a href="String.html#M000047">entropy</a> of a string, in
+&quot;bits of randomness per byte&quot;. This is useful, so&#8230;&quot;
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000047-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000047-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 186</span>
+186:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">entropy</span>
+187:     <span class="ruby-identifier">e</span> = <span class="ruby-value">0</span>
+188:     <span class="ruby-value">0</span>.<span class="ruby-identifier">upto</span>(<span class="ruby-value">255</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+189:       <span class="ruby-identifier">x</span> = <span class="ruby-identifier">count</span>(<span class="ruby-identifier">i</span>.<span class="ruby-identifier">chr</span>)<span class="ruby-operator">/</span><span class="ruby-identifier">size</span>.<span class="ruby-identifier">to_f</span>
+190:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">x</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+191:         <span class="ruby-identifier">e</span> <span class="ruby-operator">+=</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">x</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">log2</span>
+192:       <span class="ruby-keyword kw">end</span>
+193:     <span class="ruby-keyword kw">end</span>
+194:     <span class="ruby-identifier">e</span>
+195:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000042" class="method-detail">
+        <a name="M000042"></a>
+
+        <div class="method-heading">
+          <a href="#M000042" class="method-signature">
+          <span class="method-name">hex_to_num</span><span class="method-args">(order=:big)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Converts a hex value to numeric.
+</p>
+<p>
+Parameters:
+</p>
+<pre>
+  order =&gt; :big or :little endian (default is :big)
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000042-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000042-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 140</span>
+140:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hex_to_num</span>(<span class="ruby-identifier">order</span>=<span class="ruby-identifier">:big</span>)
+141:     <span class="ruby-identifier">s</span>=<span class="ruby-keyword kw">self</span>
+142:     <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;invalid hex value: '#{s.inspect}'&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">ishex?</span>
+143: 
+144:     <span class="ruby-identifier">r</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">order</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:little</span>
+145:           <span class="ruby-identifier">s</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/.{2}/</span>).<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">join</span>
+146:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">order</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:big</span>
+147:           <span class="ruby-identifier">s</span> 
+148:         <span class="ruby-keyword kw">else</span>
+149:           <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid byte order #{order.inspect}&quot;</span>
+150:         <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">hex</span>
+151:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000056" class="method-detail">
+        <a name="M000056"></a>
+
+        <div class="method-heading">
+          <a href="#M000056" class="method-signature">
+          <span class="method-name">hexdump</span><span class="method-args">(opt={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns or prints a <a href="String.html#M000056">hexdump</a> in the style
+of &#8216;<a href="String.html#M000056">hexdump</a> -C&#8216;
+</p>
+<p>
+:len =&gt; optionally specify a length other than 16 for a wider or thinner
+dump. If length is an odd number, it will be rounded up.
+</p>
+<p>
+:out =&gt; optionally specify an alternate IO object for output. By
+default, <a href="String.html#M000056">hexdump</a> will output to STDOUT.
+Pass a StringIO object and it will return it as a string.
+</p>
+<p>
+Example:
+</p>
+<p>
+Here&#8216;s the default behavior done explicitely:
+</p>
+<pre>
+  &gt;&gt; xxd = dat.hexdump(:len =&gt; 16, :out =&gt; StringIO.new)
+  =&gt; &lt;a string containing hexdump&gt;
+</pre>
+<p>
+Here&#8216;s how to change it to STDERR
+</p>
+<pre>
+  &gt;&gt; xxd = dat.hexdump(:len =&gt; 16, :out =&gt; STDERR)
+  &lt;prints hexdump on STDERR&gt;
+  -&gt; nil # return value is nil!
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000056-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 301</span>
+301:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hexdump</span>(<span class="ruby-identifier">opt</span>={})
+302:     <span class="ruby-identifier">s</span>=<span class="ruby-keyword kw">self</span>
+303:     <span class="ruby-identifier">out</span> = <span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:out</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">StringIO</span>.<span class="ruby-identifier">new</span>
+304:     <span class="ruby-identifier">len</span> = (<span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:len</span>] <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:len</span>] <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)<span class="ruby-operator">?</span> <span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:len</span>] <span class="ruby-operator">+</span> (<span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:len</span>] <span class="ruby-operator">%</span> <span class="ruby-value">2</span>) <span class="ruby-operator">:</span> <span class="ruby-value">16</span>
+305: 
+306:     <span class="ruby-identifier">off</span> = <span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:start_addr</span>] <span class="ruby-operator">||</span> <span class="ruby-value">0</span>
+307:     <span class="ruby-identifier">offlen</span> = <span class="ruby-identifier">opt</span>[<span class="ruby-identifier">:start_len</span>] <span class="ruby-operator">||</span> <span class="ruby-value">8</span>
+308: 
+309:     <span class="ruby-identifier">hlen</span>=<span class="ruby-identifier">len</span><span class="ruby-operator">/</span><span class="ruby-value">2</span>
+310: 
+311:     <span class="ruby-identifier">s</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-node">/(?:.|\n){1,#{len}}/</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span>
+312:       <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">off</span>.<span class="ruby-identifier">to_s</span>(<span class="ruby-value">16</span>).<span class="ruby-identifier">rjust</span>(<span class="ruby-identifier">offlen</span>, <span class="ruby-value str">&quot;0&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">'  '</span>)
+313: 
+314:       <span class="ruby-identifier">i</span>=<span class="ruby-value">0</span>
+315:       <span class="ruby-identifier">m</span>.<span class="ruby-identifier">each_byte</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+316:         <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">to_s</span>(<span class="ruby-value">16</span>).<span class="ruby-identifier">rjust</span>(<span class="ruby-value">2</span>,<span class="ruby-value str">&quot;0&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; &quot;</span>
+317:         <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span>(<span class="ruby-value str">' '</span>) <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">i</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span>) <span class="ruby-operator">==</span> <span class="ruby-identifier">hlen</span>
+318:       <span class="ruby-keyword kw">end</span>
+319: 
+320:       <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span>(<span class="ruby-value str">&quot;   &quot;</span> <span class="ruby-operator">*</span> (<span class="ruby-identifier">len</span><span class="ruby-operator">-</span><span class="ruby-identifier">i</span>) ) <span class="ruby-comment cmt"># pad</span>
+321:       <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span>(<span class="ruby-value str">&quot; &quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">hlen</span>
+322: 
+323:       <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span>(<span class="ruby-value str">&quot; |&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">tr</span>(<span class="ruby-value str">&quot;\0-\37\177-\377&quot;</span>, <span class="ruby-value str">'.'</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;|\n&quot;</span>)
+324:       <span class="ruby-identifier">off</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">length</span>
+325:     <span class="ruby-keyword kw">end</span>
+326: 
+327:     <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">off</span>.<span class="ruby-identifier">to_s</span>(<span class="ruby-value">16</span>).<span class="ruby-identifier">rjust</span>(<span class="ruby-identifier">offlen</span>,<span class="ruby-value str">'0'</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\n&quot;</span>)
+328: 
+329:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">out</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">StringIO</span>
+330:       <span class="ruby-identifier">out</span>.<span class="ruby-identifier">string</span>
+331:     <span class="ruby-keyword kw">end</span>
+332:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000040" class="method-detail">
+        <a name="M000040"></a>
+
+        <div class="method-heading">
+          <a href="#M000040" class="method-signature">
+          <span class="method-name">hexify</span><span class="method-args">(opts={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Convert a string to ASCII hex string. Supports a few options for format:
+</p>
+<pre>
+  :delim - delimter between each hex byte
+  :prefix - prefix before each hex byte
+  :suffix - suffix after each hex byte
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000040-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000040-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 99</span>
+ 99:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hexify</span>(<span class="ruby-identifier">opts</span>={})
+100:     <span class="ruby-identifier">s</span>=<span class="ruby-keyword kw">self</span>
+101:     <span class="ruby-identifier">delim</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:delim</span>]
+102:     <span class="ruby-identifier">pre</span> = (<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:prefix</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;&quot;</span>)
+103:     <span class="ruby-identifier">suf</span> = (<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:suffix</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;&quot;</span>)
+104: 
+105:     <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">rx</span>=<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:rx</span>]) <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">rx</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Regexp</span>
+106:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;rx must be a regular expression for a character class&quot;</span>
+107:     <span class="ruby-keyword kw">end</span>
+108: 
+109:     <span class="ruby-identifier">hx</span>=<span class="ruby-constant">Rbkb</span><span class="ruby-operator">::</span><span class="ruby-constant">HEXCHARS</span>
+110: 
+111:     <span class="ruby-identifier">out</span>=<span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+112: 
+113:     <span class="ruby-identifier">s</span>.<span class="ruby-identifier">each_byte</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> 
+114:       <span class="ruby-identifier">hc</span> = <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">rx</span> <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">rx</span>.<span class="ruby-identifier">match</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">chr</span>)
+115:              <span class="ruby-identifier">c</span>.<span class="ruby-identifier">chr</span> 
+116:            <span class="ruby-keyword kw">else</span>
+117:              <span class="ruby-identifier">pre</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">hx</span>[(<span class="ruby-identifier">c</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-value">4</span>)] <span class="ruby-operator">+</span> <span class="ruby-identifier">hx</span>[(<span class="ruby-identifier">c</span> <span class="ruby-operator">&amp;</span> <span class="ruby-value">0xf</span> )]) <span class="ruby-operator">+</span> <span class="ruby-identifier">suf</span>
+118:            <span class="ruby-keyword kw">end</span>
+119:       <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">hc</span>)
+120:     <span class="ruby-keyword kw">end</span>
+121:     <span class="ruby-identifier">out</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">delim</span>)
+122:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000033" class="method-detail">
+        <a name="M000033"></a>
+
+        <div class="method-heading">
+          <a href="#M000033" class="method-signature">
+          <span class="method-name">ishex?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+shortcut for hex sanity with regex
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000033-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000033-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 37</span>
+37:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ishex?</span> ; (<span class="ruby-keyword kw">self</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^[a-f0-9]+$/i</span>)<span class="ruby-operator">?</span> <span class="ruby-keyword kw">true</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">false</span> ; <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000039" class="method-detail">
+        <a name="M000039"></a>
+
+        <div class="method-heading">
+          <a href="#M000039" class="method-signature">
+          <span class="method-name">lalign</span><span class="method-args">(a, p=' ')</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+left-align to &#8216;a&#8217; alignment padded with &#8216;p&#8216;
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000039-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000039-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 84</span>
+84:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lalign</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">p</span>=<span class="ruby-value str">' '</span>)
+85:     <span class="ruby-identifier">s</span>=<span class="ruby-keyword kw">self</span>
+86:     <span class="ruby-identifier">p</span> <span class="ruby-operator">||=</span> <span class="ruby-value str">' '</span>
+87:     <span class="ruby-identifier">l</span> = <span class="ruby-identifier">s</span>.<span class="ruby-identifier">length</span>
+88:     <span class="ruby-identifier">pad</span> = <span class="ruby-identifier">l</span>.<span class="ruby-identifier">pad</span>(<span class="ruby-identifier">a</span>)
+89:     <span class="ruby-identifier">s</span>.<span class="ruby-identifier">ljust</span>(<span class="ruby-identifier">pad</span><span class="ruby-operator">+</span><span class="ruby-identifier">l</span>, <span class="ruby-identifier">p</span>)
+90:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000044" class="method-detail">
+        <a name="M000044"></a>
+
+        <div class="method-heading">
+          <span class="method-name">lazy_to_n</span><span class="method-args">(order=:big)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="String.html#M000043">dat_to_num</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000045" class="method-detail">
+        <a name="M000045"></a>
+
+        <div class="method-heading">
+          <span class="method-name">lazy_to_num</span><span class="method-args">(order=:big)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="String.html#M000043">dat_to_num</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000066" class="method-detail">
+        <a name="M000066"></a>
+
+        <div class="method-heading">
+          <a href="#M000066" class="method-signature">
+          <span class="method-name">pipe_magick</span><span class="method-args">(arg=&quot;&quot;)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This attempts to identify a blob of data using &#8216;file(1)&#8217; via
+popen3 (using popen3 because IO.popen blows) Tried doing this with a fmagic
+ruby extention to libmagic, but it was a whole lot slower.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000066-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000066-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 544</span>
+544:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pipe_magick</span>(<span class="ruby-identifier">arg</span>=<span class="ruby-value str">&quot;&quot;</span>)
+545:     <span class="ruby-identifier">ret</span>=<span class="ruby-value str">&quot;&quot;</span>
+546:     <span class="ruby-constant">Open3</span>.<span class="ruby-identifier">popen3</span>(<span class="ruby-node">&quot;file #{arg} -&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">w</span>,<span class="ruby-identifier">r</span>,<span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
+547:       <span class="ruby-identifier">w</span>.<span class="ruby-identifier">write</span> <span class="ruby-keyword kw">self</span>; <span class="ruby-identifier">w</span>.<span class="ruby-identifier">close</span>
+548:       <span class="ruby-identifier">ret</span> = <span class="ruby-identifier">r</span>.<span class="ruby-identifier">read</span> ; <span class="ruby-identifier">r</span>.<span class="ruby-identifier">close</span>
+549:       <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">sub!</span>(<span class="ruby-regexp re">/^\/dev\/stdin: /</span>, <span class="ruby-value str">&quot;&quot;</span>)
+550:     <span class="ruby-keyword kw">end</span>
+551:     <span class="ruby-identifier">ret</span>
+552:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000038" class="method-detail">
+        <a name="M000038"></a>
+
+        <div class="method-heading">
+          <a href="#M000038" class="method-signature">
+          <span class="method-name">ralign</span><span class="method-args">(a, p=' ')</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+right-align to &#8216;a&#8217; alignment padded with &#8216;p&#8216;
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000038-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000038-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 75</span>
+75:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ralign</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">p</span>=<span class="ruby-value str">' '</span>)
+76:     <span class="ruby-identifier">s</span>=<span class="ruby-keyword kw">self</span>
+77:     <span class="ruby-identifier">p</span> <span class="ruby-operator">||=</span> <span class="ruby-value str">' '</span>
+78:     <span class="ruby-identifier">l</span> = <span class="ruby-identifier">s</span>.<span class="ruby-identifier">length</span>
+79:     <span class="ruby-identifier">pad</span> = <span class="ruby-identifier">l</span>.<span class="ruby-identifier">pad</span>(<span class="ruby-identifier">a</span>)
+80:     <span class="ruby-identifier">s</span>.<span class="ruby-identifier">rjust</span>(<span class="ruby-identifier">pad</span><span class="ruby-operator">+</span><span class="ruby-identifier">l</span>, <span class="ruby-identifier">p</span>)
+81:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000054" class="method-detail">
+        <a name="M000054"></a>
+
+        <div class="method-heading">
+          <a href="#M000054" class="method-signature">
+          <span class="method-name">randomize</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="String.html">String</a> randomizer
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000054-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000054-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 272</span>
+272:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">randomize</span> ; <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">''</span>).<span class="ruby-identifier">randomize</span>.<span class="ruby-identifier">to_s</span> ; <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000055" class="method-detail">
+        <a name="M000055"></a>
+
+        <div class="method-heading">
+          <a href="#M000055" class="method-signature">
+          <span class="method-name">randomize!</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+In-place string randomizer
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000055-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000055-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 276</span>
+276:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">randomize!</span> ; <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">replace</span>(<span class="ruby-identifier">randomize</span>) <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000053" class="method-detail">
+        <a name="M000053"></a>
+
+        <div class="method-heading">
+          <a href="#M000053" class="method-signature">
+          <span class="method-name">rotate_bytes</span><span class="method-args">(k=0)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Byte rotation as found in lame ciphers. This was cribbed from Timur Duehr
+with only a minor change.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000053-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000053-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 260</span>
+260:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rotate_bytes</span>(<span class="ruby-identifier">k</span>=<span class="ruby-value">0</span>)
+261:     <span class="ruby-identifier">r</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>
+262:     <span class="ruby-identifier">i</span>=<span class="ruby-value">0</span>
+263:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">each_byte</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">b</span><span class="ruby-operator">|</span> 
+264:       <span class="ruby-identifier">r</span>[<span class="ruby-identifier">i</span>] = ((<span class="ruby-identifier">b</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">k</span>) <span class="ruby-operator">%</span> <span class="ruby-value">384</span>).<span class="ruby-identifier">chr</span>
+265:       <span class="ruby-identifier">i</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span>
+266:     <span class="ruby-keyword kw">end</span>
+267:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">r</span>
+268:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000063" class="method-detail">
+        <a name="M000063"></a>
+
+        <div class="method-heading">
+          <a href="#M000063" class="method-signature">
+          <span class="method-name">starts_with?</span><span class="method-args">(dat)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Does string &quot;start with&quot; dat? No clue whether/when this is faster
+than a regex, but it is easier to type.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000063-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000063-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 510</span>
+510:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">starts_with?</span>(<span class="ruby-identifier">dat</span>)
+511:     <span class="ruby-keyword kw">self</span>[<span class="ruby-value">0</span>,<span class="ruby-identifier">dat</span>.<span class="ruby-identifier">size</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">dat</span>
+512:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000062" class="method-detail">
+        <a name="M000062"></a>
+
+        <div class="method-heading">
+          <a href="#M000062" class="method-signature">
+          <span class="method-name">strings</span><span class="method-args">(opts={}) {|*mret| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+A &#8216;<a href="String.html#M000062">strings</a>&#8217; method a-la unix
+<a href="String.html#M000062">strings</a> utility. Finds printable <a
+href="String.html#M000062">strings</a> in a binary blob. Supports ASCII and
+little endian unicode (though only for ASCII printable character.)
+</p>
+<h3>Parameters and options:</h3>
+<pre>
+ * Use the :minimum parameter to specify minimum number of characters
+   to match. (default = 6)
+
+ * Use the :encoding parameter as one of :ascii, :unicode, or :both
+   (default = :ascii)
+
+ * The 'strings' method uses Regexp under the hood. Therefore
+   you can pass a character class for &quot;valid characters&quot; with :valid
+   (default = /[\r\n [:print:]]/)
+
+ * Supports an optional block, which will be passed |offset, type, string|
+   for each match.
+   The block's boolean return value also determines whether the match
+   passes or fails (true or false/nil) and gets returned by the function.
+</pre>
+<h3>Return Value:</h3>
+<p>
+Returns an array consisting of matches with the following elements:
+</p>
+<pre>
+  [[start_offset, end_offset, string_type, string], ...]
+
+ * string_type will be one of :ascii or :unicode
+ * end_offset will include the terminating null character
+ * end_offset will include all null bytes in unicode strings (including
+ * both terminating nulls)
+
+  If strings are null terminated, the trailing null *IS* included
+  in the end_offset. Unicode matches will also include null bytes.
+</pre>
+<p>
+Todos?
+</p>
+<pre>
+   - better unicode support (i.e. not using half-assed unicode)
+   - support other encodings such as all those the binutils strings does?
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000062-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000062-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 453</span>
+453:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">strings</span>(<span class="ruby-identifier">opts</span>={})
+454:     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:encoding</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">:both</span>
+455:     <span class="ruby-identifier">prx</span> = (<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:valid</span>] <span class="ruby-operator">||</span> <span class="ruby-regexp re">/[\r\n [:print:]]/</span>)
+456:     <span class="ruby-identifier">min</span> = (<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:minimum</span>] <span class="ruby-operator">||</span> <span class="ruby-value">6</span>)
+457:     <span class="ruby-identifier">align</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:align</span>]
+458: 
+459:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Minimum must be numeric and &gt; 0&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">min</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Numeric</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">min</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+460: 
+461:     <span class="ruby-identifier">arx</span> = <span class="ruby-node">/(#{prx}{#{min}}?#{prx}*\x00?)/</span>
+462:     <span class="ruby-identifier">urx</span> = <span class="ruby-node">/((?:#{prx}\x00){#{min}}(?:#{prx}\x00)*(?:\x00\x00)?)/</span>
+463: 
+464:     <span class="ruby-identifier">rx</span> = <span class="ruby-keyword kw">case</span> (<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:encoding</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">:both</span>).<span class="ruby-identifier">to_sym</span>
+465:          <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:ascii</span>   
+466:            <span class="ruby-identifier">arx</span>
+467:          <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:unicode</span> 
+468:            <span class="ruby-identifier">urx</span>
+469:          <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:both</span>    
+470:            <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">union</span>( <span class="ruby-identifier">arx</span>, <span class="ruby-identifier">urx</span> )
+471:          <span class="ruby-keyword kw">else</span> 
+472:            <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Encoding must be :unicode, :ascii, or :both&quot;</span>
+473:          <span class="ruby-keyword kw">end</span>
+474: 
+475:     <span class="ruby-identifier">off</span>=<span class="ruby-value">0</span>
+476:     <span class="ruby-identifier">ret</span> = []
+477: 
+478:     <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">mtch</span> = <span class="ruby-identifier">rx</span>.<span class="ruby-identifier">match</span>(<span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">off</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>])
+479:       <span class="ruby-comment cmt"># calculate relative offsets</span>
+480:       <span class="ruby-identifier">rel_off</span> = <span class="ruby-identifier">mtch</span>.<span class="ruby-identifier">offset</span>(<span class="ruby-value">0</span>)
+481:       <span class="ruby-identifier">startoff</span> = <span class="ruby-identifier">off</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">rel_off</span>[<span class="ruby-value">0</span>]
+482:       <span class="ruby-identifier">endoff</span>   = <span class="ruby-identifier">off</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">rel_off</span>[<span class="ruby-value">1</span>]
+483:       <span class="ruby-identifier">off</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">rel_off</span>[<span class="ruby-value">1</span>]
+484: 
+485:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">align</span> <span class="ruby-keyword kw">and</span> (<span class="ruby-identifier">pad</span>=<span class="ruby-identifier">startoff</span>.<span class="ruby-identifier">pad</span>(<span class="ruby-identifier">align</span>)) <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+486:         <span class="ruby-identifier">off</span> = <span class="ruby-identifier">startoff</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">pad</span>
+487:         <span class="ruby-keyword kw">next</span>
+488:       <span class="ruby-keyword kw">end</span>
+489: 
+490:       <span class="ruby-identifier">stype</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">mtch</span>[<span class="ruby-value">1</span>]
+491:                 <span class="ruby-identifier">:ascii</span>
+492:               <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">mtch</span>[<span class="ruby-value">2</span>]
+493:                 <span class="ruby-identifier">:unicode</span>
+494:               <span class="ruby-keyword kw">end</span>
+495: 
+496: 
+497:       <span class="ruby-identifier">mret</span> = [<span class="ruby-identifier">startoff</span>, <span class="ruby-identifier">endoff</span>, <span class="ruby-identifier">stype</span>, <span class="ruby-identifier">mtch</span>[<span class="ruby-value">0</span>] ]
+498: 
+499:       <span class="ruby-comment cmt"># yield to a block for additional criteria</span>
+500:       <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span> <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">not</span> <span class="ruby-keyword kw">yield</span>( <span class="ruby-operator">*</span><span class="ruby-identifier">mret</span> )
+501: 
+502:       <span class="ruby-identifier">ret</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">mret</span>
+503:     <span class="ruby-keyword kw">end</span>
+504: 
+505:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">ret</span>
+506:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000050" class="method-detail">
+        <a name="M000050"></a>
+
+        <div class="method-heading">
+          <a href="#M000050" class="method-signature">
+          <span class="method-name">substitution</span><span class="method-args">(keymap)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+(en|de)ciphers using a substition cipher en/decoder ring in the form of a
+hash with orig =&gt; substitute mappings
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000050-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000050-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 237</span>
+237:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">substitution</span>(<span class="ruby-identifier">keymap</span>)
+238:     <span class="ruby-identifier">split</span>(<span class="ruby-value str">''</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> (<span class="ruby-identifier">sub</span>=<span class="ruby-identifier">keymap</span>[<span class="ruby-identifier">c</span>]) <span class="ruby-operator">?</span> <span class="ruby-identifier">sub</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">c</span> }.<span class="ruby-identifier">join</span>
+239:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000051" class="method-detail">
+        <a name="M000051"></a>
+
+        <div class="method-heading">
+          <a href="#M000051" class="method-signature">
+          <span class="method-name">substitution_xor</span><span class="method-args">(keymap)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+(en|de)crypts using a substition <a href="String.html#M000049">xor</a>
+en/decoder ring in the form of a hash with orig =&gt; substitute mappings.
+Used in conjunction with <a href="String.html#M000048">char_frequency</a>,
+this sometimes provides a shorter way to derive a single character <a
+href="String.html#M000049">xor</a> key used in conjunction with <a
+href="String.html#M000048">char_frequency</a>.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000051-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000051-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 246</span>
+246:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">substitution_xor</span>(<span class="ruby-identifier">keymap</span>)
+247:     <span class="ruby-identifier">split</span>(<span class="ruby-value str">''</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> (<span class="ruby-identifier">sub</span>=<span class="ruby-identifier">keymap</span>[<span class="ruby-identifier">c</span>]) <span class="ruby-operator">?</span> <span class="ruby-identifier">sub</span>.<span class="ruby-identifier">xor</span>(<span class="ruby-identifier">c</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">c</span> }.<span class="ruby-identifier">join</span>
+248:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000072" class="method-detail">
+        <a name="M000072"></a>
+
+        <div class="method-heading">
+          <a href="#M000072" class="method-signature">
+          <span class="method-name">to_stringio</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Return a self encapsulated in a StringIO object. This is handy.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000072-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000072-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 612</span>
+612:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_stringio</span>
+613:     <span class="ruby-constant">StringIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>)
+614:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000059" class="method-detail">
+        <a name="M000059"></a>
+
+        <div class="method-heading">
+          <span class="method-name">undump</span><span class="method-args">(opt={})</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="String.html#M000057">dehexdump</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000060" class="method-detail">
+        <a name="M000060"></a>
+
+        <div class="method-heading">
+          <span class="method-name">unhexdump</span><span class="method-args">(opt={})</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="String.html#M000057">dehexdump</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000041" class="method-detail">
+        <a name="M000041"></a>
+
+        <div class="method-heading">
+          <a href="#M000041" class="method-signature">
+          <span class="method-name">unhexify</span><span class="method-args">(d=/\s*/)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Convert ASCII hex string to raw.
+</p>
+<p>
+Parameters:
+</p>
+<pre>
+  d = optional 'delimiter' between hex bytes (zero+ spaces by default)
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000041-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000041-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 130</span>
+130:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unhexify</span>(<span class="ruby-identifier">d</span>=<span class="ruby-regexp re">/\s*/</span>)
+131:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-node">/([A-Fa-f0-9]{1,2})#{d}?/</span>) { <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">hex</span>.<span class="ruby-identifier">chr</span> }
+132:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000035" class="method-detail">
+        <a name="M000035"></a>
+
+        <div class="method-heading">
+          <a href="#M000035" class="method-signature">
+          <span class="method-name">urldec</span><span class="method-args">(opts={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Undo percent-hexified url encoding data
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000035-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000035-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 55</span>
+55:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">urldec</span>(<span class="ruby-identifier">opts</span>={})
+56:     <span class="ruby-identifier">s</span>=<span class="ruby-keyword kw">self</span>
+57:     <span class="ruby-identifier">s</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-value str">'+'</span>, <span class="ruby-value str">' '</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:noplus</span>]
+58:     <span class="ruby-identifier">s</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/%([A-Fa-f0-9]{2})/</span>) {<span class="ruby-identifier">$1</span>.<span class="ruby-identifier">hex</span>.<span class="ruby-identifier">chr</span>}
+59:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000034" class="method-detail">
+        <a name="M000034"></a>
+
+        <div class="method-heading">
+          <a href="#M000034" class="method-signature">
+          <span class="method-name">urlenc</span><span class="method-args">(opts={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Encode into percent-<a href="String.html#M000040">hexify</a> url encoding
+format
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000034-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000034-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 40</span>
+40:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">urlenc</span>(<span class="ruby-identifier">opts</span>={})
+41:     <span class="ruby-identifier">s</span>=<span class="ruby-keyword kw">self</span>
+42:     <span class="ruby-identifier">plus</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:plus</span>]
+43:     <span class="ruby-keyword kw">unless</span> (<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:rx</span>] <span class="ruby-operator">||=</span> <span class="ruby-regexp re">/[^A-Za-z0-9_\.~-]/</span>).<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Regexp</span>
+44:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;rx must be a regular expression for a character class&quot;</span>
+45:     <span class="ruby-keyword kw">end</span>
+46:     <span class="ruby-identifier">hx</span> = <span class="ruby-constant">Rbkb</span><span class="ruby-operator">::</span><span class="ruby-constant">HEXCHARS</span>
+47: 
+48:     <span class="ruby-identifier">s</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:rx</span>]) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> 
+49:       <span class="ruby-identifier">c</span>=<span class="ruby-identifier">c</span>[<span class="ruby-value">0</span>]
+50:       (<span class="ruby-identifier">plus</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">c</span><span class="ruby-operator">==</span><span class="ruby-value">32</span>)<span class="ruby-operator">?</span> <span class="ruby-value str">'+'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">&quot;%&quot;</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">hx</span>[(<span class="ruby-identifier">c</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-value">4</span>)] <span class="ruby-operator">+</span> <span class="ruby-identifier">hx</span>[(<span class="ruby-identifier">c</span> <span class="ruby-operator">&amp;</span> <span class="ruby-value">0xf</span> )])
+51:     <span class="ruby-keyword kw">end</span>
+52:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000049" class="method-detail">
+        <a name="M000049"></a>
+
+        <div class="method-heading">
+          <a href="#M000049" class="method-signature">
+          <span class="method-name">xor</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="String.html#M000049">xor</a> against a key. key will be repeated
+or truncated to self.size.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000049-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000049-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/extends.rb, line 224</span>
+224:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">xor</span>(<span class="ruby-identifier">k</span>)
+225:     <span class="ruby-identifier">s</span>=<span class="ruby-keyword kw">self</span>
+226:     <span class="ruby-identifier">out</span>=<span class="ruby-constant">StringIO</span>.<span class="ruby-identifier">new</span> ; <span class="ruby-identifier">i</span>=<span class="ruby-value">0</span>;
+227:     <span class="ruby-identifier">s</span>.<span class="ruby-identifier">each_byte</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> 
+228:       <span class="ruby-identifier">out</span>.<span class="ruby-identifier">write</span>((<span class="ruby-identifier">x</span> <span class="ruby-operator">^</span> (<span class="ruby-identifier">k</span>[<span class="ruby-identifier">i</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">k</span>[<span class="ruby-identifier">i</span>=<span class="ruby-value">0</span>]) ).<span class="ruby-identifier">chr</span>)
+229:       <span class="ruby-identifier">i</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span>
+230:     <span class="ruby-keyword kw">end</span>
+231:     <span class="ruby-identifier">out</span>.<span class="ruby-identifier">string</span>
+232:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

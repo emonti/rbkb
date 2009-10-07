@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: History.txt</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>History.txt</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>History.txt
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Wed Oct 07 10:55:01 -0500 2009</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h2>0.6.11 / 2009-10-06</h2>
+<pre>
+  * split off rbkb/http as its own package
+  * added some new String crypto utilities in extends
+</pre>
+<h2>0.6.10 / 2009-09-30</h2>
+<pre>
+  * added -b/--blitsrv argument to plugsrv
+  * added --target-tls/--server-tls arguments to plugsrv for TLS support
+</pre>
+<h2>0.6.9.1 / 2009-09-08</h2>
+<pre>
+  * fixed a typo in random_string()
+</pre>
+<h2>0.6.9 / 2009-09-01</h2>
+<ul>
+<li>Enhancements
+
+<ul>
+<li>telson and feed now support -s/&#8212;source address:port using TCP with
+bind_connect via eventmachine
+
+</li>
+<li>random_string and random_alphanum helper methods added
+
+</li>
+</ul>
+</li>
+<li>Bug-Fix
+
+<ul>
+<li><a href="../classes/Plug.html">Plug</a>&#8216;s PeerList.find_peers was
+returning nil resulting in problems for blit -l amongst other things.
+
+</li>
+</ul>
+</li>
+</ul>
+<h2>0.6.8.1 / 2009-06-12</h2>
+<ul>
+<li>Enhancements
+
+<ul>
+<li>Added <a href="../classes/String.html#M000053">String.rotate_bytes</a> per
+request for a rotation cypher by wardwouts@github. I pilfered this
+implementation mostly from Timur Duehr.
+
+</li>
+</ul>
+</li>
+</ul>
+<h2>0.6.8 / 2009-06-04</h2>
+<ul>
+<li>Enhancements
+
+<ul>
+<li>0.6.8 is geared towards beginning to make rbkb compatible with ruby 1.9.x
+(tested on 1.9.1). Had to sacrifice the &#8216;uuid&#8217; helper method
+since something happened to SHA1 in ruby 1.9. It may make a comeback if
+anybody yells about this.
+
+</li>
+</ul>
+</li>
+<li>Known Issues:
+
+<ul>
+<li>There are problems with binary releases of eventmachine with 1.9.1 on win32
+this does not appear to be caused by rbkb, however we&#8216;re keeping an
+eye on it. For now, this is causing the plug tools to crash and test cases
+to fail on 1.9.1 win32.
+
+</li>
+</ul>
+</li>
+</ul>
+<h2>0.6.7</h2>
+<ul>
+<li>Enhancements
+
+<ul>
+<li>Http::Parameters was given the same treatement as headers got in 0.6.6.
+Technically params are supposed to be unique, but we try to stay flexible
+in <a href="../classes/Rbkb.html">Rbkb</a>.
+
+</li>
+</ul>
+</li>
+<li>Bug-fix:
+
+<ul>
+<li>Fixed a silly typing bug in Http::Parameters.set_param introduced around
+0.6.6
+
+</li>
+</ul>
+</li>
+</ul>
+<h2>0.6.6</h2>
+<ul>
+<li>Bug-fix:
+
+<ul>
+<li>Http library improperly made headers unique by name. The library has been
+changed so that headers no longer tries to pretend to be a hash.
+
+</li>
+</ul>
+</li>
+</ul>
+<h2>0.6.5.2</h2>
+<ul>
+<li>Enhancements
+
+<ul>
+<li>d64 and b64 now support the -f option for input files as rdoc indicates
+Thanks to Cory Scott for catching this doc error and for his patch.
+
+</li>
+</ul>
+</li>
+</ul>
+<h2>0.6.5.1</h2>
+<ul>
+<li>Minor bug-fix
+
+<ul>
+<li>fixed a problem with the gem, version bump is for github visibility
+
+</li>
+</ul>
+</li>
+</ul>
+<h2>0.6.5 / 2009-03-24</h2>
+<ul>
+<li>Enhancements
+
+<ul>
+<li>Added a http protocol library (Rbkb::Http)
+
+</li>
+<li>Added TLS support to telson (-S/&#8212;start-tls in cli)
+
+</li>
+<li>Added raw dump output to telson (-d raw/hex in cli : hex is default)
+
+</li>
+</ul>
+</li>
+</ul>
+<h2>0.6.4 / 2009-03-20</h2>
+<ul>
+<li>Enhancements
+
+<ul>
+<li>Added unit tests for all cli utilities. Most are fairly complete.
+
+</li>
+</ul>
+</li>
+</ul>
+<h2>0.6.3 / 2009-03-10</h2>
+<ul>
+<li>Enhancements
+
+<ul>
+<li>Started using bones to help manage this mess. History.txt is born!
+
+</li>
+<li>begun adding test cases for cli utils
+
+</li>
+<li>crc32 takes an optional filename argument as first arg
+
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

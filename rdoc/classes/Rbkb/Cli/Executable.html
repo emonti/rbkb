@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: Rbkb::Cli::Executable</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">Rbkb::Cli::Executable</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../files/lib/rbkb/cli_rb.html">
+                lib/rbkb/cli.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="../../Object.html">
+                Object
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+<a href="Executable.html">Rbkb::Cli::Executable</a> is an abstract class
+for creating command line executables using the Ruby Black Bag framework.
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000183">bail</a>&nbsp;&nbsp;
+      <a href="#M000184">bail_args</a>&nbsp;&nbsp;
+      <a href="#M000182">exit</a>&nbsp;&nbsp;
+      <a href="#M000187">go</a>&nbsp;&nbsp;
+      <a href="#M000185">make_parser</a>&nbsp;&nbsp;
+      <a href="#M000181">new</a>&nbsp;&nbsp;
+      <a href="#M000186">parse</a>&nbsp;&nbsp;
+      <a href="#M000180">run</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">argv</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">exit_status</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">oparse</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">opts</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">stderr</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">stdin</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">stdout</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000181" class="method-detail">
+        <a name="M000181"></a>
+
+        <div class="method-heading">
+          <a href="#M000181" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(param={}) {|self if block_given?| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Instantiates a <a href="Executable.html#M000181">new</a> <a
+href="Executable.html">Executable</a> object.
+</p>
+<p>
+The &#8216;param&#8217; argument is a named value hash. The following keys
+are significant:
+</p>
+<pre>
+ :argv   - An array of cli arguments (default ARGV)
+ :opts    - executable/function options for use when running 'go'
+ :stdout, - IO redirection (mostly for unit tests)
+ :stderr,
+ :stdin
+</pre>
+<p>
+The above keys are deleted from the &#8216;param&#8217; hash and stored as
+instance variables with attr_accessors. All other parameters are ignored.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000181-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000181-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/cli.rb, line 34</span>
+34:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">param</span>={})
+35:       <span class="ruby-ivar">@argv</span>   <span class="ruby-operator">||=</span> <span class="ruby-identifier">param</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:argv</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">ARGV</span>
+36:       <span class="ruby-ivar">@stdout</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">param</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:stdout</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">STDOUT</span>
+37:       <span class="ruby-ivar">@stderr</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">param</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:stderr</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">STDERR</span>
+38:       <span class="ruby-ivar">@stdin</span>  <span class="ruby-operator">||=</span> <span class="ruby-identifier">param</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:stdin</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">STDIN</span>
+39:       <span class="ruby-ivar">@opts</span>   <span class="ruby-operator">||=</span> <span class="ruby-identifier">param</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:opts</span>) <span class="ruby-operator">||</span> {}
+40:       <span class="ruby-ivar">@parser_got_range</span>=<span class="ruby-keyword kw">nil</span>
+41:       <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+42:       <span class="ruby-identifier">make_parser</span>()
+43:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000180" class="method-detail">
+        <a name="M000180"></a>
+
+        <div class="method-heading">
+          <a href="#M000180" class="method-signature">
+          <span class="method-name">run</span><span class="method-args">(param={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000180-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000180-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/cli.rb, line 13</span>
+13:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">run</span>(<span class="ruby-identifier">param</span>={})
+14:       <span class="ruby-identifier">new</span>(<span class="ruby-identifier">param</span>).<span class="ruby-identifier">go</span>
+15:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000183" class="method-detail">
+        <a name="M000183"></a>
+
+        <div class="method-heading">
+          <a href="#M000183" class="method-signature">
+          <span class="method-name">bail</span><span class="method-args">(msg)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method exits with a message on stderr
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000183-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000183-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/cli.rb, line 58</span>
+58:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bail</span>(<span class="ruby-identifier">msg</span>)
+59:       <span class="ruby-ivar">@stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">msg</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">msg</span>
+60:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">exit</span>(<span class="ruby-value">1</span>)
+61:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000184" class="method-detail">
+        <a name="M000184"></a>
+
+        <div class="method-heading">
+          <a href="#M000184" class="method-signature">
+          <span class="method-name">bail_args</span><span class="method-args">(arg_err)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method wraps a &#8216;<a
+href="Executable.html#M000183">bail</a>&#8217; with a basic argument error
+mesage and hint for the &#8217;-h or &#8212;help&#8217; flag The
+&#8216;arg_err&#8217; parameter is a string with the erroneous arguments
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000184-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000184-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/cli.rb, line 67</span>
+67:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bail_args</span>(<span class="ruby-identifier">arg_err</span>)
+68:       <span class="ruby-identifier">bail</span> <span class="ruby-node">&quot;Error: bad arguments - #{arg_err}\n  Hint: Use -h or --help&quot;</span>
+69:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000182" class="method-detail">
+        <a name="M000182"></a>
+
+        <div class="method-heading">
+          <a href="#M000182" class="method-signature">
+          <span class="method-name">exit</span><span class="method-args">(ret)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Wrapper for Kernel.exit() so we can unit test cli tools
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000182-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000182-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/cli.rb, line 47</span>
+47:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">exit</span>(<span class="ruby-identifier">ret</span>)
+48:       <span class="ruby-ivar">@exit_status</span> = <span class="ruby-identifier">ret</span>
+49:       <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">defined?</span> <span class="ruby-constant">Rbkb</span><span class="ruby-operator">::</span><span class="ruby-constant">Cli</span><span class="ruby-operator">::</span><span class="ruby-constant">TESTING</span>
+50:         <span class="ruby-identifier">throw</span>(((<span class="ruby-identifier">ret</span><span class="ruby-operator">==</span><span class="ruby-value">0</span>)<span class="ruby-operator">?</span> <span class="ruby-identifier">:exit_zero</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">:exit_err</span>), <span class="ruby-identifier">ret</span>)
+51:       <span class="ruby-keyword kw">else</span>
+52:         <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">exit</span>(<span class="ruby-identifier">ret</span>)
+53:       <span class="ruby-keyword kw">end</span>
+54:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000187" class="method-detail">
+        <a name="M000187"></a>
+
+        <div class="method-heading">
+          <a href="#M000187" class="method-signature">
+          <span class="method-name">go</span><span class="method-args">(argv=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Abstract &#8216;runner&#8217;. Override this method with super() from
+inherited executables. The base method just slurps in an optional argv and
+runs &#8216;<a href="Executable.html#M000186">parse</a>&#8217; if it
+hasn&#8216;t already
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000187-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000187-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/cli.rb, line 109</span>
+109:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">go</span>(<span class="ruby-identifier">argv</span>=<span class="ruby-keyword kw">nil</span>)
+110:       <span class="ruby-ivar">@exit_status</span> = <span class="ruby-keyword kw">nil</span>
+111:       <span class="ruby-ivar">@argv</span> = <span class="ruby-identifier">argv</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">argv</span> 
+112: 
+113:       <span class="ruby-identifier">parse</span>
+114: 
+115:       <span class="ruby-comment cmt"># the overriding class implements actual functionality beyond here</span>
+116:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000185" class="method-detail">
+        <a name="M000185"></a>
+
+        <div class="method-heading">
+          <a href="#M000185" class="method-signature">
+          <span class="method-name">make_parser</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Prepares an OptionsParser object with blackbag standard options This is
+called from within initialize() and should be overridden in inherited
+classes to add additional OptionParser-based parsers.
+</p>
+<p>
+See <a href="Executable.html#M000186">parse</a> for actual parsing.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000185-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000185-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/rbkb/cli.rb, line 77</span>
+77:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">make_parser</span>
+78:       <span class="ruby-ivar">@oparse</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">OptionParser</span>.<span class="ruby-identifier">new</span> 
+79:       <span class="ruby-ivar">@oparse</span>.<span class="ruby-identifier">banner</span> = <span class="ruby-node">&quot;Usage: #{File.basename $0} [options]&quot;</span>
+80: 
+81:       <span class="ruby-ivar">@oparse</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-h&quot;</span>, <span class="ruby-value str">&quot;--help&quot;</span>, <span class="ruby-value str">&quot;Show this message&quot;</span>) <span class="ruby-keyword kw">do</span>
+82:         <span class="ruby-identifier">bail</span>(<span class="ruby-ivar">@oparse</span>)
+83:       <span class="ruby-keyword kw">end</span>
+84: 
+85:       <span class="ruby-ivar">@oparse</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-v&quot;</span>, <span class="ruby-value str">&quot;--version&quot;</span>, <span class="ruby-value str">&quot;Show version and exit&quot;</span>) <span class="ruby-keyword kw">do</span>
+86:         <span class="ruby-ivar">@stdout</span>.<span class="ruby-identifier">puts</span>(<span class="ruby-node">&quot;Ruby BlackBag version #{Rbkb::VERSION}&quot;</span>)
+87:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">exit</span>(<span class="ruby-value">0</span>)
+88:       <span class="ruby-keyword kw">end</span>
+89: 
+90:       <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@oparse</span>
+91:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000186" class="method-detail">
+        <a name="M000186"></a>
+
+        <div class="method-heading">
+          <a href="#M000186" class="method-signature">
+          <span class="method-name">parse</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Abstract argument parser. Override this method with super() from inherited
+executables. The base method just calls OptionParser.parse! on the internal
+@oparse object.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000186-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000186-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/rbkb/cli.rb, line 97</span>
+ 97:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>
+ 98:       <span class="ruby-comment cmt"># parse flag arguments</span>
+ 99:       <span class="ruby-ivar">@oparse</span>.<span class="ruby-identifier">parse!</span>(<span class="ruby-ivar">@argv</span>) <span class="ruby-keyword kw">rescue</span>(<span class="ruby-identifier">bail_args</span>(<span class="ruby-identifier">$!</span>))
+100:       <span class="ruby-ivar">@parsed</span>=<span class="ruby-keyword kw">true</span>
+101: 
+102:       <span class="ruby-comment cmt"># the overriding class may implement additional arguments from here</span>
+103:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
