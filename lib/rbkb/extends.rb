@@ -19,7 +19,7 @@ end
 # Generates a random string of 'size' bytes (8 by default)
 def random_string(size = 8)
   chars = (0..255).map {|c| c.chr }
-  (1..size).collect {|a| chars[rand(chars.size)]}
+  (1..size).collect {|a| chars[rand(chars.size)]}.join
 end
 
 # Simple syntactic sugar to pass any object to a block
@@ -194,6 +194,16 @@ class String
     e
   end
 
+
+  # Produces a character frequency distribution histogram in descending
+  # order.
+  def char_frequency
+    hits = {}
+    self.each_byte {|c| hits[c.chr] ||= 0; hits[c.chr] += 1 }
+    hits.to_a.sort {|a,b| b[1] <=> a[1] }
+  end
+   
+
   # xor against a key. key will be repeated or truncated to self.size.
   def xor(k)
     s=self
@@ -205,11 +215,29 @@ class String
     out.string
   end
 
+
+  # (en|de)ciphers using a substition cipher en/decoder ring in the form of a 
+  # hash with orig => substitute mappings
+  def substitution(keymap)
+    split('').map {|c| (sub=keymap[c]) ? sub : c }.join
+  end
+
+
+  # (en|de)crypts using a substition xor en/decoder ring in the form of 
+  # a hash with orig => substitute mappings. Used in conjunction with 
+  # char_frequency, this sometimes provides a shorter way to derive a single 
+  # character xor key used in conjunction with char_frequency.
+  def substitution_xor(keymap)
+    split('').map {|c| (sub=keymap[c]) ? sub.xor(c) : c }.join
+  end
+
+
   # convert bytes to number then xor against another byte-string or number
   def ^(x)
     x = x.dat_to_num unless x.is_a? Numeric
     (self.dat_to_num ^ x)#.to_bytes
   end
+
 
   # Byte rotation as found in lame ciphers.
   # This was cribbed from Timur Duehr with only a minor change.
@@ -223,8 +251,10 @@ class String
     return r
   end
 
+
   # String randomizer
   def randomize ; self.split('').randomize.to_s ; end
+
 
   # In-place string randomizer
   def randomize! ; self.replace(randomize) end
@@ -552,7 +582,6 @@ class String
     end
     r
   end
-
   
 
   # Returns a reference to actual constant for a given name in namespace
@@ -580,13 +609,19 @@ end
 
 class Array
 
-  # should be in std library
+  # Should be in the std library.
   #
   #   keys = [:one, :two, :three]
   #   vals = [1, 2, 3]
   #
-  def to_hash
-    inject({}) {|hash, i| hash[i[0]] = i[1]; hash}
+  #   keys.zip(vals).to_hash
+  #   #=> {:two=>2, :three=>3, :one=>1}})
+  #
+  #   keys.to_hash(vals)
+  #   #=> {:two=>2, :three=>3, :one=>1}})
+  def to_hash(vals=nil)
+    a = vals ? self.zip(vals) : self
+    a.inject({}) {|hash, i| hash[i[0]] = i[1]; hash}
   end
 
   # randomizes the order of contents in the Array (self)
