@@ -1,5 +1,6 @@
 == 0.6.11 / 2009-10-06
   * split off rbkb/http as its own package
+  * added some new String crypto utilities in extends
 
 == 0.6.10 / 2009-09-30
   * added -b/--blitsrv argument to plugsrv
