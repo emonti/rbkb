@@ -4,6 +4,7 @@
 require "stringio"
 require 'zlib'
 require 'open3'
+require 'enumerator'
 
 module Rbkb
   DEFAULT_BYTE_ORDER=:big
@@ -33,8 +34,28 @@ end if not defined? with
 # Mixins and class-specific items
 
 class String
+  # fake the ruby 1.9 String#bytes method if we don't have one
+  def bytes
+    Enumerable::Enumerator.new(self, :each_byte)
+  end if not defined?("".bytes)
+
+  # fake the ruby 1.9 String#getbyte method if we don't have one
+  def getbyte(i)
+    self[i]
+  end if RUBY_VERSION.to_f < 1.9 and not defined?("".getbyte)
+
+  # fake the ruby 1.9 String#ord method if we don't have one
+  def ord
+    getbyte(0)
+  end if not defined?("".ord)
+
+  # Works just like each_with_index, but with each_byte
+  def each_byte_with_index
+    bytes.each_with_index {|b,i| yield(b,i) }
+  end 
+
   # shortcut for hex sanity with regex
-  def ishex? ; (self =~ /^[a-f0-9]+$/i)? true : false ; end 
+  def ishex? ; (self =~ /^[a-f0-9]+$/i) != nil ; end 
 
   # Encode into percent-hexify url encoding format
   def urlenc(opts={})
@@ -46,7 +67,7 @@ class String
     hx = Rbkb::HEXCHARS
 
     s.gsub(opts[:rx]) do |c| 
-      c=c[0]
+      c=c.ord
       (plus and c==32)? '+' : "%" + (hx[(c >> 4)] + hx[(c & 0xf )])
     end
   end
@@ -69,24 +90,22 @@ class String
   end
 
   # Base64 decode
-  def d64;  self.unpack("m")[0];  end
+  def d64;  self.unpack("m").first ;  end
 
   # right-align to 'a' alignment padded with 'p'
   def ralign(a, p=' ')
-    s=self
     p ||= ' '
-    l = s.length
+    l = self.length
     pad = l.pad(a)
-    s.rjust(pad+l, p)
+    self.rjust(pad+l, p)
   end
 
   # left-align to 'a' alignment padded with 'p'
   def lalign(a, p=' ')
-    s=self
     p ||= ' '
-    l = s.length
+    l = self.length
     pad = l.pad(a)
-    s.ljust(pad+l, p)
+    self.ljust(pad+l, p)
   end
 
 
@@ -97,7 +116,6 @@ class String
   #   :suffix - suffix after each hex byte
   # 
   def hexify(opts={})
-    s=self
     delim = opts[:delim]
     pre = (opts[:prefix] || "")
     suf = (opts[:suffix] || "")
@@ -110,7 +128,7 @@ class String
 
     out=Array.new
 
-    s.each_byte do |c| 
+    self.each_byte do |c| 
       hc = if (rx and not rx.match c.chr)
              c.chr 
            else
@@ -205,11 +223,6 @@ class String
   #    ["t", 242],
   #    ["o", 233],
   #    ["i", 218],
-  #    ["a", 176],
-  #    ["s", 172],
-  #    ["r", 172],
-  #    ["n", 167],
-  #    ["d", 106],
   #    ...
   #   ]
   #     
@@ -219,16 +232,14 @@ class String
     hits.to_a.sort {|a,b| b[1] <=> a[1] }
   end
    
-
   # xor against a key. key will be repeated or truncated to self.size.
   def xor(k)
-    s=self
-    out=StringIO.new ; i=0;
-    s.each_byte do |x| 
-      out.write((x ^ (k[i] || k[i=0]) ).chr)
-      i+=1
-    end
-    out.string
+    i=0
+    self.bytes.map do |b|
+      x = k.getbyte(i) || k.getbyte(i=0)
+      i+=1 
+      (b ^ x).chr
+    end.join
   end
 
 
@@ -320,7 +331,7 @@ class String
       out.write("   " * (len-i) ) # pad
       out.write(" ") if i < hlen
 
-      out.write(" |" + m.tr("\0-\37\177-\377", '.') + "|\n")
+      out.write(" |#{m.tr("\0-\37\177-\377", '.')}|\n")
       off += m.length
     end
 
