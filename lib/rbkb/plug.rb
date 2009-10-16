@@ -4,6 +4,8 @@
 
 require "rbkb"
 
+begin require 'rubygems' ; rescue LoadError ; end
+require 'eventmachine'
 require "rbkb/plug/plug"
 require "rbkb/plug/blit"
 
