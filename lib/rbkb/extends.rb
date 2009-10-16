@@ -36,7 +36,7 @@ end if not defined? with
 class String
   # fake the ruby 1.9 String#bytes method if we don't have one
   def bytes
-    Enumerable::Enumerator.new(self, :each_byte)
+    ::Enumerable::Enumerator.new(self, :each_byte)
   end if not defined?("".bytes)
 
   # fake the ruby 1.9 String#getbyte method if we don't have one
