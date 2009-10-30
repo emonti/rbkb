@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rbkb}
-  s.version = "0.6.11"
+  s.version = "0.6.12"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Eric Monti"]
-  s.date = %q{2009-10-07}
+  s.date = %q{2009-10-16}
   s.description = %q{Rbkb is a collection of ruby-based pen-testing and reversing tools. Inspired by Matasano Blackbag.}
   s.email = %q{emonti@matasano.com}
   s.executables = ["b64", "bgrep", "blit", "c", "crc32", "d64", "dedump", "feed", "hexify", "len", "plugsrv", "rex", "rstrings", "slice", "telson", "unhexify", "urldec", "urlenc", "xor"]

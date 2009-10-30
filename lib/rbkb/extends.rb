@@ -269,13 +269,10 @@ class String
   # Byte rotation as found in lame ciphers.
   # This was cribbed from Timur Duehr with only a minor change.
   def rotate_bytes(k=0)
-    r = self.dup
-    i=0
-    self.each_byte do |b| 
-      r[i] = ((b + k) % 384).chr
-      i+=1
-    end
-    return r
+    k = (256 + k) if k < 0
+    self.bytes.map do |c|
+      ((c + k) & 0xff)
+    end.join()
   end
 
 

@@ -22,3 +22,4 @@ pkg
 bin/experimental
 reference
 *.gem
+.DS_Store
