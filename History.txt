@@ -1,6 +1,6 @@
 == 0.6.12 / 2009-10-15
   * better ruby 1.8 <-> 1.9 portability
-  * tweaked rotate_bytes while dorking around with rotation lameness
+  * tweaked rotate_bytes to "wrap" on char boundary and rotate backwards safely
 
 == 0.6.11 / 2009-10-06
   * split off rbkb/http as its own package
