@@ -29,6 +29,11 @@ module Plug
       end
     end
 
+    def start_tls(sender)
+      UI.logmsg(self.name, "#{sender.name} initiated TLS")
+      @owner.start_tls
+    end
+
     def close
       @owner.unbind unless @transport == :UDP
     end

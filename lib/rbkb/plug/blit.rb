@@ -74,10 +74,10 @@ module Plug
         return true
       end
 
-      peer.start_tls
+      peer.start_tls(self)
     end
  
-    def make_starttls(peerno)
+    def self.make_starttls(peerno)
       self.blit_header(:starttls) + peerno.to_bytes(:big, 2)
     end
 

@@ -19,9 +19,13 @@ module Plug
 
     def self.debug(*msg); LOGCFG[:out].puts msg if LOGCFG[:debug] ; end
 
+    def self.logmsg(name, msg)
+      log "%% #{name} - #{msg}"
+    end
+
     def self.dump(from, to, dat)
       if dump=LOGCFG[:dump]
-        LOGCFG[:out].puts "%% #{from} SAYS TO #{to} LEN=#{dat.size}" if LOGCFG[:verbose]
+        log "%% #{from} SAYS TO #{to} LEN=#{dat.size}" if LOGCFG[:verbose]
         case dump
         when :hex
           dat.hexdump(:out => LOGCFG[:out])
@@ -30,7 +34,7 @@ module Plug
         else
           LOGCFG[:out].puts dat
         end
-        LOGCFG[:out].puts "%%" if LOGCFG[:verbose]
+        log "%%" if LOGCFG[:verbose]
       end
     end
   end
