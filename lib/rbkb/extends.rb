@@ -49,6 +49,24 @@ class String
     getbyte(0)
   end if not defined?("".ord)
 
+  if defined?("".force_encoding('BINARY'))
+    # This is so disgusting... but str.encode('BINARY') 
+    # fails hard whenever certain utf-8 characters 
+    # present. Try "\xca\xfe\xba\xbe".encode('BINARY')
+    # for kicks.
+    def force_to_binary
+      self.dup.force_encoding('binary')
+    end
+  else
+    def force_encoding(ignore_me_for_compatability)
+      self
+    end 
+
+    def force_to_binary
+      self
+    end
+  end
+
   # Works just like each_with_index, but with each_byte
   def each_byte_with_index
     bytes.each_with_index {|b,i| yield(b,i) }
@@ -457,21 +475,26 @@ class String
   #    - support other encodings such as all those the binutils strings does?
   def strings(opts={})
     opts[:encoding] ||= :both
-    prx = (opts[:valid] || /[\r\n [:print:]]/)
     min = (opts[:minimum] || 6)
-    align = opts[:align]
 
     raise "Minimum must be numeric and > 0" unless min.kind_of? Numeric and min > 0
 
-    arx = /(#{prx}{#{min}}?#{prx}*\x00?)/
-    urx = /((?:#{prx}\x00){#{min}}(?:#{prx}\x00)*(?:\x00\x00)?)/
+    acc = /[\s[:print:]]/
+    ucc = /(?:#{acc}\x00)/
+
+    arx = /(#{acc}{#{min}}#{acc}*\x00?)/
+    urx = /(#{ucc}{#{min}}#{ucc}*(?:\x00\x00)?)/
 
     rx = case (opts[:encoding] || :both).to_sym
          when :ascii   
+           mtype_blk = lambda {|x| :ascii }
            arx
          when :unicode 
+           mtype_blk = lambda {|x| :unicode }
            urx
          when :both    
+           mtype_blk = lambda {|x| (x[2].nil?)? :ascii : :unicode }
+
            Regexp.union( arx, urx )
          else 
            raise "Encoding must be :unicode, :ascii, or :both"
@@ -480,25 +503,13 @@ class String
     off=0
     ret = []
 
-    while mtch = rx.match(self[off..-1])
-      # calculate relative offsets
-      rel_off = mtch.offset(0)
-      startoff = off + rel_off[0]
-      endoff   = off + rel_off[1]
-      off += rel_off[1]
+    # wow ruby 1.9 string encoding is a total cluster
+    self.force_to_binary.scan(rx) do 
+      mtch = $~
 
-      if align and (pad=startoff.pad(align)) != 0
-        off = startoff + pad
-        next
-      end
+      stype = mtype_blk.call(mtch)
 
-      stype = if mtch[1]
-                :ascii
-              elsif mtch[2]
-                :unicode
-              end
-
-
+      startoff, endoff = mtch.offset(0)
       mret = [startoff, endoff, stype, mtch[0] ]
 
       # yield to a block for additional criteria
@@ -513,7 +524,7 @@ class String
   # Does string "start with" dat?
   # No clue whether/when this is faster than a regex, but it is easier to type.
   def starts_with?(dat)
-    self[0,dat.size] == dat
+    self.index(dat) == 0
   end
 
   # Returns a single null-terminated ascii string from beginning of self.
@@ -524,7 +535,7 @@ class String
   #   off = specify an optional beggining offset
   #
   def cstring(off=0)
-    self[ off, self.index("\x00") || self.size ]
+    self[ off, (self.index("\x00") || self.size) ]
   end
 
   # returns CRC32 checksum for the string object

@@ -1,3 +1,7 @@
+== 0.6.13 / 2009-10-15
+  * got strings working using scan() in 1.9 had to punt ':align' option for now
+  * Added -S (starttls) arg. to blit for initiating SSL on a plug peer
+
 == 0.6.12 / 2009-10-15
   * better ruby 1.8 <-> 1.9 portability
   * tweaked rotate_bytes to "wrap" on char boundary and rotate backwards safely

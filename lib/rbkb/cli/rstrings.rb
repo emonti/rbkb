@@ -12,7 +12,6 @@ class Rbkb::Cli::Rstrings < Rbkb::Cli::Executable
         :end_off => -1, 
         :encoding => :both, 
         :minimum => 6,
-        :align => nil,
         :indat => Array.new,
         :fnames => Array.new,
       }.each {|k,v| this.opts[k] ||= v }
@@ -47,11 +46,6 @@ class Rbkb::Cli::Rstrings < Rbkb::Cli::Executable
     arg.on("-l", "--min-length=NUM", Numeric,
       "Minimum length of strings (default=#{@opts[:minimum]})") do |l|
         @opts[:minimum] = l
-    end
-
-    arg.on("-a", "--align=ALIGNMENT", Numeric, 
-      "Match only on alignment (default=none)") do |a|
-        (@opts[:align] = a) > 0 or bail "bad alignment '#{a}'"
     end
 
     return arg
@@ -97,7 +91,7 @@ class Rbkb::Cli::Rstrings < Rbkb::Cli::Executable
         end
         @stdout << "#{(off+start_off).to_hex.rjust(8,"0")}:"+
                    "#{(len+start_off).to_hex.rjust(8,"0")}:"+
-                   "#{type.to_s[0,1]}:#{str.delete("\000").inspect}\n"
+                   "#{type.to_s[0,1]}:#{str.delete("\x00").inspect}\n"
       end
       i+=1
     end

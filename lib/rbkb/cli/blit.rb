@@ -31,6 +31,10 @@ class Rbkb::Cli::Blit < Rbkb::Cli::Executable
       @opts[:b_proto] = t.upcase.to_sym
     end
 
+    arg.on("-S", "--starttls", "Start TLS handshake for the peer index (-i)") do |s|
+      @blit_msg = Plug::Blit.make_starttls(@opts[:b_peeridx])
+    end
+
     arg.on("-b", "--blitsrv=ADDR:PORT", 
            "Where to send blit messages") do |b|
 

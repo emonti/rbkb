@@ -15,6 +15,7 @@ module Plug
       2 => :delete,
       5 => :sendmsg,
       6 => :list_peers,
+      7 => :starttls,
 
       0xfe => :clear,
       0xff => :kill,
@@ -63,6 +64,21 @@ module Plug
     def self.blit_header(op)
       return nil unless opno = OPCODES.invert[op]
       SIG + opno.chr
+    end
+
+    def starttls
+      unless ( peerno=@buf.read(2) and peerno.size == 2 and
+               peer=@peers[peerno.dat_to_num(:big)] )
+
+        UI.log "** BLIT-ERROR(Malformed or missing peer for starttls)"
+        return true
+      end
+
+      peer.start_tls
+    end
+ 
+    def make_starttls(peerno)
+      self.blit_header(:starttls) + peerno.to_bytes(:big, 2)
     end
 
     def mute
@@ -202,13 +218,17 @@ module Plug
       blit_raw(msg)
     end
 
+    def self.blit_starttls(idx = 0)
+      msg = make_starttls(idx)
+      blit_raw(msg)
+    end
+
     def self.blit_raw(buf)
       raise "use blit_init first!" unless self.initialized?
       @blit_handler.call buf
     end
 
   end  # of module Blit
-
 
 end # of module Plug
 
