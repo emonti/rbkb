@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rbkb}
-  s.version = "0.6.12"
+  s.version = "0.6.13"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Eric Monti"]
-  s.date = %q{2009-11-02}
+  s.date = %q{2010-09-21}
   s.description = %q{Rbkb is a collection of ruby-based pen-testing and reversing tools. Inspired by Matasano Blackbag.}
   s.email = %q{emonti@matasano.com}
   s.executables = ["b64", "bgrep", "blit", "c", "crc32", "d64", "dedump", "feed", "hexify", "len", "plugsrv", "rex", "rstrings", "slice", "telson", "unhexify", "urldec", "urlenc", "xor"]
@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--line-numbers", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{rbkb}
-  s.rubygems_version = %q{1.3.4}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{Rbkb is a collection of ruby-based pen-testing and reversing tools}
   s.test_files = ["test/test_cli_b64.rb", "test/test_cli_bgrep.rb", "test/test_cli_blit.rb", "test/test_cli_chars.rb", "test/test_cli_crc32.rb", "test/test_cli_d64.rb", "test/test_cli_dedump.rb", "test/test_cli_feed.rb", "test/test_cli_helper.rb", "test/test_cli_hexify.rb", "test/test_cli_len.rb", "test/test_cli_rstrings.rb", "test/test_cli_slice.rb", "test/test_cli_telson.rb", "test/test_cli_unhexify.rb", "test/test_cli_urldec.rb", "test/test_cli_urlenc.rb", "test/test_cli_xor.rb", "test/test_helper.rb", "test/test_rbkb.rb"]
 
@@ -26,13 +26,10 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<eventmachine>, [">= 0.12.8"])
-      s.add_development_dependency(%q<bones>, [">= 2.5.1"])
     else
       s.add_dependency(%q<eventmachine>, [">= 0.12.8"])
-      s.add_dependency(%q<bones>, [">= 2.5.1"])
     end
   else
     s.add_dependency(%q<eventmachine>, [">= 0.12.8"])
-    s.add_dependency(%q<bones>, [">= 2.5.1"])
   end
 end
