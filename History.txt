@@ -1,3 +1,7 @@
+== 0.6.14 / 2010-11-29
+  * Minor fixes to cli offset and integer hexification formatting
+  * Unit tests got some more love for ruby 1.9 unit test compatability
+
 == 0.6.13 / 2009-10-15
   * got strings working using scan() in 1.9 had to punt ':align' option for now
   * Added -S (starttls) arg. to blit for initiating SSL on a plug peer
