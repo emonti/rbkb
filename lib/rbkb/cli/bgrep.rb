@@ -71,10 +71,7 @@ class Rbkb::Cli::Bgrep < Rbkb::Cli::Executable
       dat.bgrep(@find, @opts[:align]) do |hit_start, hit_end, match|
         @stdout.write "#{fname}:" if fname and @opts[:include_fname]
 
-        @stdout.write(
-          "#{(hit_start).to_hex.rjust(8,"0")}:"+
-          "#{(hit_end).to_hex.rjust(8,"0")}:b:"+
-          "#{match.inspect}\n")
+        @stdout.write("%0.8x:%0.8x:b:#{match.inspect}\n" %[hit_start, hit_end])
       end
 
       break unless fname=@argv.shift

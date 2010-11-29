@@ -27,7 +27,7 @@ class Rbkb::Cli::Crc32 < Rbkb::Cli::Executable
   def go(*args)
     super(*args)
     @opts[:indat] ||= @stdin.read()
-    @stdout.puts @opts[:indat][ @opts[:first] .. @opts[:last] ].crc32.to_hex
+    @stdout.puts( "%0.8x" % @opts[:indat][ @opts[:first] .. @opts[:last] ].crc32 )
     self.exit(0)
   end
 end
