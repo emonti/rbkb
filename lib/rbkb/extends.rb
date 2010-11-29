@@ -5,6 +5,10 @@ require "stringio"
 require 'zlib'
 require 'open3'
 require 'enumerator'
+require 'digest/md5'
+require 'digest/sha1'
+require 'digest/sha2'
+
 
 module Rbkb
   DEFAULT_BYTE_ORDER=:big
@@ -552,6 +556,29 @@ class String
     ## or... we can just use:
     Zlib.crc32 self
   end
+
+  # @return [Digest::MD5] the MD5 digest/checksum for this string.
+  def md5
+    d=Digest::MD5.new()
+    d.update(self)
+    d
+  end
+  alias md5sum md5
+
+  # @return [Digest::SHA1] the SHA1 digest for this string.
+  def sha1
+    d=Digest::SHA1.new()
+    d.update(self)
+    d
+  end
+
+  # @return [Digest::SHA2] the SHA2 digest for this string.
+  def sha2
+    d=Digest::SHA2.new()
+    d.update(self)
+    d
+  end
+  alias sha256 sha2
 
   # This attempts to identify a blob of data using 'file(1)' via popen3
   # (using popen3 because IO.popen blows)
