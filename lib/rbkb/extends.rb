@@ -225,8 +225,9 @@ class String
   # string, in "bits of randomness per byte". This is useful, so..."
   def entropy
     e = 0
+    b = self.bytes
     0.upto(255) do |i|
-      x = count(i.chr)/size.to_f
+      x = b.count(i)/size.to_f
       if x > 0
         e += - x * x.log2
       end
