@@ -64,7 +64,7 @@ class TestCliBgrep < Test::Unit::TestCase
     @stdin_io.write(@rawdat*2) ; @stdin_io.rewind
     assert_equal 0, go_with_args(%w(-x 41424344))
     assert_equal( %(00000041:00000045:b:"ABCD"\n)+
-                  %(00000141:00000145:b:"ABCD"\n), 
+                  %(00000141:00000145:b:"ABCD"\n),
                   @stdout_io.string )
   end
 
@@ -83,8 +83,8 @@ class TestCliBgrep < Test::Unit::TestCase
       with_testfile do |fname2, f2|
         f2.write(@rawdat) ; f2.close
         assert_equal 0, go_with_args(["-r", "ABCD", fname1, fname2])
-        assert_equal( %(#{fname1}:00000041:00000045:b:"ABCD"\n)+ 
-                      %(#{fname2}:00000041:00000045:b:"ABCD"\n), 
+        assert_equal( %(#{fname1}:00000041:00000045:b:"ABCD"\n)+
+                      %(#{fname2}:00000041:00000045:b:"ABCD"\n),
                       @stdout_io.string )
       end
     end
@@ -97,8 +97,8 @@ class TestCliBgrep < Test::Unit::TestCase
       with_testfile do |fname2, f2|
         f2.write(@rawdat) ; f2.close
         assert_equal 0, go_with_args(%w(--filename -r ABCD) + [fname1, fname2])
-        assert_equal( %(#{fname1}:00000041:00000045:b:"ABCD"\n)+ 
-                      %(#{fname2}:00000041:00000045:b:"ABCD"\n), 
+        assert_equal( %(#{fname1}:00000041:00000045:b:"ABCD"\n)+
+                      %(#{fname2}:00000041:00000045:b:"ABCD"\n),
                       @stdout_io.string )
       end
     end
@@ -111,8 +111,8 @@ class TestCliBgrep < Test::Unit::TestCase
       with_testfile do |fname2, f2|
         f2.write(@rawdat) ; f2.close
         assert_equal 0, go_with_args(%w(-n -r ABCD) + [fname1, fname2])
-        assert_equal( %(#{fname1}:00000041:00000045:b:"ABCD"\n)+ 
-                      %(#{fname2}:00000041:00000045:b:"ABCD"\n), 
+        assert_equal( %(#{fname1}:00000041:00000045:b:"ABCD"\n)+
+                      %(#{fname2}:00000041:00000045:b:"ABCD"\n),
                       @stdout_io.string )
       end
     end
@@ -126,8 +126,8 @@ class TestCliBgrep < Test::Unit::TestCase
       with_testfile do |fname2, f2|
         f2.write(@rawdat) ; f2.close
         assert_equal 0, go_with_args(%w(--no-filename -r ABCD)+[fname1, fname2])
-        assert_equal( %(00000041:00000045:b:"ABCD"\n)+ 
-                      %(00000041:00000045:b:"ABCD"\n), 
+        assert_equal( %(00000041:00000045:b:"ABCD"\n)+
+                      %(00000041:00000045:b:"ABCD"\n),
                       @stdout_io.string )
       end
     end

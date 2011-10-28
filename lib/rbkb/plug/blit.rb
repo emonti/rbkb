@@ -1,4 +1,4 @@
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 module Plug
@@ -48,7 +48,7 @@ module Plug
     def initbuf
       @buf = StringIO.new
     end
-    
+
     def receive_data dat
       return unless (@buf.write(dat) > SIG.size) or (@buf.pos > (SIG.size + 1))
 
@@ -59,7 +59,7 @@ module Plug
 
       initbuf if self.send(op)
     end
-    
+
 
     def self.blit_header(op)
       return nil unless opno = OPCODES.invert[op]
@@ -76,7 +76,7 @@ module Plug
 
       peer.start_tls(self)
     end
- 
+
     def self.make_starttls(peerno)
       self.blit_header(:starttls) + peerno.to_bytes(:big, 2)
     end
@@ -139,8 +139,8 @@ module Plug
     #   str      data
     def self.make_sendmsg(idx, dat)
       self.blit_header(:sendmsg) +
-        idx.to_bytes(:big, 2) + 
-        dat.size.to_bytes(:big, 4) + 
+        idx.to_bytes(:big, 2) +
+        dat.size.to_bytes(:big, 4) +
         dat
     end
 
@@ -187,7 +187,7 @@ module Plug
     #----------------------------------------------------------------------
 
     BLIT_HANDLERS = {
-      :TCP => lambda {|msg| 
+      :TCP => lambda {|msg|
         s=TCPSocket.new(@blit_addr, @blit_port)
         wl=s.write(msg)
         s.close

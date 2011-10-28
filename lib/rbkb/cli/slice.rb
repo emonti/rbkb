@@ -1,9 +1,9 @@
 require 'rbkb/cli'
 
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
-# Returns a slice from input. This is just a shell interface to a String.slice 
+# Returns a slice from input. This is just a shell interface to a String.slice
 # operation.
 class Rbkb::Cli::Slice < Rbkb::Cli::Executable
 

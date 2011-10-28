@@ -6,7 +6,7 @@ require 'fileutils'
 require 'ostruct'
 require 'find'
 
-class OpenStruct; undef :gem if defined? :gem; end 
+class OpenStruct; undef :gem if defined? :gem; end
 
 # TODO: make my own openstruct type object that includes descriptions
 # TODO: use the descriptions to output help on the available bones options
@@ -251,7 +251,7 @@ def manifest
   files = []
   exclude = PROJ.exclude.dup
   comment = %r/^\s*#/
- 
+
   # process the ignore file and add the items there to the exclude list
   if test(?f, PROJ.ignore_file)
     ary = []

@@ -1,4 +1,4 @@
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 
@@ -65,7 +65,7 @@ module Plug
     end
 
 
-    # plug_peer creates a peering association for a given peer based on 
+    # plug_peer creates a peering association for a given peer based on
     # get_peername. The existing or newly created peer object is returned.
     def plug_peer
       paddr = get_peername
@@ -73,25 +73,25 @@ module Plug
     end
 
 
-    # plug_receive is used by receive_data to divert incoming messages. 
-    # The "peer" is added if it is not already present. This instance 
+    # plug_receive is used by receive_data to divert incoming messages.
+    # The "peer" is added if it is not already present. This instance
     # will check whether # a peer is "muted" and will return the peer if not.
     # This method can be overriden by child classes to implement additional
     # checks. It receives "dat" so that such checks can optionally make
     # forwarding decisions based on message data contents as well.
     #
-    # Returns: 
+    # Returns:
     #   - nil : indicates that the message should be stifled
-    #   - A peer object : indicates that the message should be processed 
+    #   - A peer object : indicates that the message should be processed
     #     further
     def plug_receive(dat)
       peer = plug_peer
       return peer unless peer.mute
     end
-   
-    # This instance of the say method is an abstract stub and just 
-    # "dumps" the message. It should be overridden and optionally called 
-    # with super() if you actually want to do anything useful when 
+
+    # This instance of the say method is an abstract stub and just
+    # "dumps" the message. It should be overridden and optionally called
+    # with super() if you actually want to do anything useful when
     # incoming messages are received.
     def say(dat, sender)
       UI.dump(sender.name, self.name, dat)
@@ -109,7 +109,7 @@ module Plug
 
     def receive_data(dat)
       if peer=plug_receive(dat)
-        say(dat, peer) 
+        say(dat, peer)
       end
       return peer
     end
@@ -127,7 +127,7 @@ module Plug
       UI.log "** Connection " + ((@peers.empty?)? "refused." : "closed.")
       unless @no_stop_on_unbind
         UI.log "STOPPING!!"
-        EM.stop  
+        EM.stop
       end
     end
   end
@@ -136,7 +136,7 @@ module Plug
   # An abstract module to implement custom servers for any protocol
   # incoming messages are diverted to 'process(dat, sender)' which takes
   # a block, the yields to which are messages to respond with
-  module UdpServer 
+  module UdpServer
     include Base
 
     def kind ; :server ; end
@@ -163,9 +163,9 @@ module Plug
   # messages. Useful as a generic blit-able loop
   module ArrayFeeder
     include Base
-    attr_accessor :pos, :feed, :step, :close_at_end, :go_first, 
+    attr_accessor :pos, :feed, :step, :close_at_end, :go_first,
                   :squelch_exhausted
-    
+
     def initialize(*args)
       super(*args)
 
@@ -174,7 +174,7 @@ module Plug
 
       raise "feed must be enumerable" unless Enumerable === @feed
     end
-    
+
     def go
       if @go_first
         feed_data
@@ -188,7 +188,7 @@ module Plug
       return peer
     end
 
-    
+
     def say(dat, sender)
       super(dat, sender)
       if @step

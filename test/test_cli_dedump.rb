@@ -71,7 +71,7 @@ _EOF_
   end # setup
 
   def test_file_input_arg
-    with_testfile do |fname, tf| 
+    with_testfile do |fname, tf|
       tf.write @tst_dump;  tf.close
       assert_equal 0, go_with_args([fname])
       assert_equal(@tst_string, @stdout_io.string)

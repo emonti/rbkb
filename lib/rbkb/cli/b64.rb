@@ -1,6 +1,6 @@
 require 'rbkb/cli'
 
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 # b64 converts strings or raw data to base-64 encoding.

@@ -7,10 +7,10 @@ require 'eventmachine'
 # See README.rdoc for license information
 #
 # This is a plug-board message feeder from static data sources.
-# The "feed" handles messages opaquely and just plays them in the given 
+# The "feed" handles messages opaquely and just plays them in the given
 # sequence.
 #
-# Feed can do the following things with minimum fuss: 
+# Feed can do the following things with minimum fuss:
 #   - Import messages from files, yaml, or pcap
 #   - Inject custom/modified messages with "blit"
 #   - Run as a server or client using UDP or TCP
@@ -41,7 +41,7 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
 
 
     ## Default options sent to the Feed handler
-    @feed_opts = { 
+    @feed_opts = {
       :close_at_end => false,
       :step => false,
       :go_first => false
@@ -49,7 +49,7 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
 
     super(*args)
 
-    # TODO Plug::UI obviously need fixing. 
+    # TODO Plug::UI obviously need fixing.
     # TODO It shouldn't be driven by constants for configuration
     Plug::UI::LOGCFG[:verbose] = true
     Plug::UI::LOGCFG[:dump] = :hex
@@ -99,7 +99,7 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
     arg.on("-e", "--[no-]end", "End connection when feed is exhausted") do |c|
       @feed_opts[:close_at_end] = c
     end
-     
+
     arg.on("--[no-]step", "'Continue' prompt between messages") do |s|
       @feed_opts[:step] = s
     end
@@ -187,11 +187,11 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
 
     @feed_opts[:feed] ||= []
 
-    @em_args=[ 
-      @meth, 
+    @em_args=[
+      @meth,
       addr_args,
-      Plug::ArrayFeeder, 
-      @transport, 
+      Plug::ArrayFeeder,
+      @transport,
       @feed_opts
     ].flatten
 

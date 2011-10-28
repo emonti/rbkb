@@ -13,7 +13,7 @@ module CliTest
     @stderr_io = StringIO_compat.new
     @stdin_io  = StringIO_compat.new
     @cli_obj = @cli_class.new(
-      :stdout => @stdout_io, 
+      :stdout => @stdout_io,
       :stderr => @stderr_io,
       :stdin => @stdin_io
     )
@@ -32,9 +32,9 @@ module CliTest
 
   def run_with_args(argv=[])
     param = {
-      :stdout => @stdout_io, 
-      :stderr => @stderr_io, 
-      :stdin => @stdin_io, 
+      :stdout => @stdout_io,
+      :stderr => @stderr_io,
+      :stdin => @stdin_io,
       :argv => argv
     }
     catch(:exit_err){ catch(:exit_zero) { @cli_class.run(param) } }
@@ -54,7 +54,7 @@ module CliTest
 
   ### These are all basic CLI tests which every derived class should be able
   ### to pass.
-  ### They'll be imported into individual TestCli.... suites 
+  ### They'll be imported into individual TestCli.... suites
   ### along with the standard set up convenience methods above
 
   # Every command should print usage when -h supplied
@@ -75,7 +75,7 @@ module CliTest
     assert_match(/Ruby BlackBag version #{Rbkb::VERSION}/, @stdout_io.string)
   end
 
-  # Every command should exit cleanly with a numeric 0/non-zero exit code 
+  # Every command should exit cleanly with a numeric 0/non-zero exit code
   # when called without arguments.
   # (and nothing on STDIN for cases when it is expected)
   def test_clean_exit_with_no_arguments

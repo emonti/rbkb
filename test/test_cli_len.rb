@@ -29,7 +29,7 @@ class TestCliLen < Test::Unit::TestCase
   end
 
   def test_file_input_flag
-    with_testfile do |fname, tf| 
+    with_testfile do |fname, tf|
       tf.write @tst_in;  tf.close
       assert_equal 0, go_with_args(["-f", fname])
       assert_equal("\x00\x00\x00\x0a" + @tst_in, @stdout_io.string)

@@ -79,7 +79,7 @@ class GemPackageTask < Rake::PackageTask
       end
     end
   end
-  
+
   def gem_file
     if @gem_spec.platform == Gem::Platform::RUBY
       "#{package_name}.gem"

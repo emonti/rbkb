@@ -32,7 +32,7 @@ namespace :spec do
       t.rcov_opts = PROJ.rcov.opts + ['--exclude', 'spec']
     end
 
-    RCov::VerifyTask.new(:verify) do |t| 
+    RCov::VerifyTask.new(:verify) do |t|
       t.threshold = PROJ.rcov.threshold
       t.index_html = File.join(PROJ.rcov.dir, 'index.html')
       t.require_exact_threshold = PROJ.rcov.threshold_exact

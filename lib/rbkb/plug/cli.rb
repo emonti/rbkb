@@ -3,7 +3,7 @@ require 'rbkb/plug'
 require 'eventmachine'
 
 
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 module Rbkb::Cli
@@ -14,7 +14,7 @@ module Rbkb::Cli
     RX_HOST_AND_PORT = /^([\w\._-]+):(\d+)$/
     RX_PORT_OPT_ADDR = /^(?:([\w\._-]+):)?(\d+)$/
 
-    attr_accessor :blit_addr, :blit_port, :blit_proto, 
+    attr_accessor :blit_addr, :blit_port, :blit_proto,
                   :local_addr, :local_port, :transport,
                   :target_addr, :target_port, :plug_opts
 
@@ -27,7 +27,7 @@ module Rbkb::Cli
         yield this if block_given?
       end
 
-      # TODO Plug::UI obviously need fixing. 
+      # TODO Plug::UI obviously need fixing.
       # TODO It shouldn't be driven by constants for configuration
       Plug::UI::LOGCFG[:verbose] = true
       Plug::UI::LOGCFG[:dump] = :hex
@@ -46,7 +46,7 @@ module Rbkb::Cli
         Plug::UI::LOGCFG[:verbose] = false # XXX
       end
 
-      arg.on("-d", "--dump-format=hex/raw", 
+      arg.on("-d", "--dump-format=hex/raw",
              "Output conversations in hexdump or raw") do |d|
         if m=/^(hex|raw)$/i.match(d)
           Plug::UI::LOGCFG[:dump] = m[1].downcase.to_sym # XXX

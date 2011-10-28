@@ -1,6 +1,6 @@
 require 'rbkb/cli'
 
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 
 # len prepends a binary length number in front of its input and outputs
@@ -13,8 +13,8 @@ class Rbkb::Cli::Len < Rbkb::Cli::Executable
 
     super(*args) do |this|
       {
-        :nudge => 0, 
-        :size => 4, 
+        :nudge => 0,
+        :size => 4,
         :endian => @endpair[0],
       }.each {|k,v| this.opts[k] ||= v}
 
@@ -32,12 +32,12 @@ class Rbkb::Cli::Len < Rbkb::Cli::Executable
       @opts[:nudge] += n
     end
 
-    arg.on("-s", "--size=SIZE", Numeric, 
+    arg.on("-s", "--size=SIZE", Numeric,
            "Size of length field in bytes") do |s|
       bail("Size must be greater than 0") unless (@opts[:size] = s) > 0
     end
 
-    arg.on("-x", "--[no-]swap", 
+    arg.on("-x", "--[no-]swap",
            "Swap endianness. Default=#{@opts[:endian]}") do |x|
       @opts[:endian] = @endpair[(x)? 1 : 0]
     end
@@ -46,7 +46,7 @@ class Rbkb::Cli::Len < Rbkb::Cli::Executable
       @opts[:tot]=t
     end
 
-    arg.on("-l", "--length=LEN", Numeric, 
+    arg.on("-l", "--length=LEN", Numeric,
            "Ignore all other flags and use static LEN") do |l|
       @opts[:static]=l
     end

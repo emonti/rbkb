@@ -1,6 +1,6 @@
 require 'rbkb/cli'
 
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 # urldec converts a url percent-encoded string back to its raw form.
