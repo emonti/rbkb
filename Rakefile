@@ -36,7 +36,7 @@ PROJ.notes.tags << "X"+"XX" # muhah! so we don't note our-self
 
 # exclude rcov.rb and external libs from rcov report
 PROJ.rcov.opts += [
-  "--exclude",  "rcov.rb", 
+  "--exclude",  "rcov.rb",
   "--exclude", "eventmachine",
   "--exclude", "pcap_misc.rb",
   "--exclude", "pcaplet.rb"

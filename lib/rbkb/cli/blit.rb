@@ -1,7 +1,7 @@
 require 'rbkb/cli'
 require 'rbkb/plug'
 
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 # blit is for use with any of the "plug" tools such as telson, feed, blitplug.
@@ -26,7 +26,7 @@ class Rbkb::Cli::Blit < Rbkb::Cli::Executable
 
     arg.banner += " <data | blank for stdin>"
 
-    arg.on("-t", "--trans-protocol=PROTO", 
+    arg.on("-t", "--trans-protocol=PROTO",
                  "Blit transport protocol TCP/UDP") do |t|
       @opts[:b_proto] = t.upcase.to_sym
     end
@@ -35,7 +35,7 @@ class Rbkb::Cli::Blit < Rbkb::Cli::Executable
       @blit_msg = Plug::Blit.make_starttls(@opts[:b_peeridx])
     end
 
-    arg.on("-b", "--blitsrv=ADDR:PORT", 
+    arg.on("-b", "--blitsrv=ADDR:PORT",
            "Where to send blit messages") do |b|
 
       unless(m=/^(?:([\w\.]+):)?(\d+)$/.match(b))
@@ -45,7 +45,7 @@ class Rbkb::Cli::Blit < Rbkb::Cli::Executable
       @opts[:b_port] = m[1] if m[1]
     end
 
-    arg.on("-i", "--peer-index=IDX", Numeric, 
+    arg.on("-i", "--peer-index=IDX", Numeric,
            "Index for remote peer to receive") do |i|
       @opts[:b_peeridx] = i
     end
@@ -68,7 +68,7 @@ class Rbkb::Cli::Blit < Rbkb::Cli::Executable
       if @opts[:indat].nil?
         @opts[:indat] = (@argv.length > 0)?  @argv.join(" ") : @stdin.read()
       end
-      @blit_msg = Plug::Blit.make_sendmsg(@opts[:b_peeridx], @opts[:indat]) 
+      @blit_msg = Plug::Blit.make_sendmsg(@opts[:b_peeridx], @opts[:indat])
     end
   end
 

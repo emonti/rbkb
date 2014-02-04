@@ -5,7 +5,7 @@
  * Rips through input attempting to identify contents with magic(5)
  *
  * This is, ofcourse, verrrry slow... and verrry prone to false positives..
- * 
+ *
  * At this point this is still just a half-baked idea being played with.
  * The idea here is to use specialized libmagic databases to look for specific
  * things.
@@ -42,7 +42,7 @@ int magic_ripper(char *buf, size_t siz)
       return(-1);
 
     left = siz-off;
-    magik = magic_buffer(cookie, pbuf, 
+    magik = magic_buffer(cookie, pbuf,
         ((left=siz-off) > MAGIK_CHUNKLEN? MAGIK_CHUNKLEN : left) );
 
     if ((magik) && ((memcmp(magik, "data\0", 5)) != 0))
@@ -54,7 +54,7 @@ int magic_ripper(char *buf, size_t siz)
   }
 }
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
   char *buf, *filename;
   int fd, len;

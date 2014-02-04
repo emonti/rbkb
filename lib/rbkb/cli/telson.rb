@@ -1,12 +1,12 @@
 require 'rbkb/plug/cli'
 
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
-# This is an implementation of the original blackbag "telson" around 
-# ruby and eventmachine. 
+# This is an implementation of the original blackbag "telson" around
+# ruby and eventmachine.
 #
-# Telson can do the following things with minimum fuss: 
+# Telson can do the following things with minimum fuss:
 #   - Run as a "stubbed" network client using UDP or TCP
 #   - Debugging network protocols
 #   - Observe client/server behaviors using different messages at
@@ -58,18 +58,18 @@ class Rbkb::Cli::Telson < Rbkb::Cli::PlugCli
 
           c=EventMachine.bind_connect( @local_addr,
                                        @local_port,
-                                       @target_addr, 
-                                       @target_port, 
-                                       Plug::Telson, 
-                                       @transport, 
+                                       @target_addr,
+                                       @target_port,
+                                       Plug::Telson,
+                                       @transport,
                                        @plug_opts )
         elsif @transport == :UDP
-          c=EventMachine.open_datagram_socket( @local_addr, 
-                                               @local_port, 
-                                               Plug::Telson, 
-                                               @transport, 
+          c=EventMachine.open_datagram_socket( @local_addr,
+                                               @local_port,
+                                               Plug::Telson,
+                                               @transport,
                                                @plug_opts )
- 
+
           c.peers.add_peer_manually(@target_addr, @target_port)
 
         ### someday maybe raw or others?

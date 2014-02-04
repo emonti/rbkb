@@ -1,4 +1,4 @@
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 
@@ -44,7 +44,7 @@ module Plug
     def initialize(owner, *args)
       @owner = owner
       @transport = @owner.transport
-      
+
       super(*args)
     end
 

@@ -11,7 +11,7 @@ class TestCliSlice < Test::Unit::TestCase
     @stdin_io.write(@rawdat) ; @stdin_io.rewind
   end
 
-  def test_stdin 
+  def test_stdin
     assert_equal 0, go_with_args(%w{0})
     assert_equal @rawdat, @stdout_io.string
   end
@@ -22,7 +22,7 @@ class TestCliSlice < Test::Unit::TestCase
   end
 
   def test_file_input_opt
-    with_testfile do |fname, tf| 
+    with_testfile do |fname, tf|
       tf.write @rawdat;  tf.close
       assert_equal 0, go_with_args(["-f", fname, "0"])
       assert_equal(@rawdat, @stdout_io.string)

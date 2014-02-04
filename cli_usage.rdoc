@@ -76,7 +76,7 @@ Usage: d64 [options] <data | blank for stdin>
 
 === dedump
 
-Reverses a hexdump back to raw data. Designed to work with hexdumps created 
+Reverses a hexdump back to raw data. Designed to work with hexdumps created
 by Unix utilities like 'xxd' as well as 'hexdump -C'.
 
   Usage: dedump [options] <input-file | blank for stdin>
@@ -91,14 +91,14 @@ This is a plug-board message feeder from static data sources.
 The "feed" handles messages opaquely and just plays them as a server or
 client in the given sequence.
 
-Feed can do the following things with minimum fuss: 
+Feed can do the following things with minimum fuss:
 * Import messages from files, yaml, or pcap
 * Inject custom/modified messages with "blit"
 * Run as a server or client using UDP or TCP
 * Bootstrap protocols without a lot of work up front
 * Skip uninteresting messages and focus attention on the fun ones.
 * Replay conversations for relatively unfamiliar protocols.
-* Observe client/server behaviors using different messages at 
+* Observe client/server behaviors using different messages at
   various phases of a conversation.
 
   Usage: feed [options] host:port
@@ -125,7 +125,7 @@ Feed can do the following things with minimum fuss:
 
 === hexify
 
-Converts a string or raw data to hex characters. Input can be supplied via 
+Converts a string or raw data to hex characters. Input can be supplied via
 stdin, a string argument, or a file (with -f).
 
   Usage: hexify [options] <data | blank for stdin>
@@ -208,15 +208,15 @@ Returns a slice from input. Just a shell interface to a string slice operation.
 
 === telson
 
-This is an implementation of the original blackbag "telson" using ruby and 
-eventmachine. 
+This is an implementation of the original blackbag "telson" using ruby and
+eventmachine.
 
-Telson is for doing the following things with minimum fuss: 
+Telson is for doing the following things with minimum fuss:
 
 * Run as a stubbed network client using UDP or TCP
 * Use blit to communicate with the other side.
 * Debug network protocols
-* Observe client/server behaviors using different messages at various phases 
+* Observe client/server behaviors using different messages at various phases
   of a conversation.
 
   Usage: telson [options] host:port
@@ -234,7 +234,7 @@ Telson is for doing the following things with minimum fuss:
 
 === unhexify
 
-unhexify converts a string of hex bytes back to raw data. Input can be 
+unhexify converts a string of hex bytes back to raw data. Input can be
 supplied via stdin, a hex-string argument, or a file containing hex (use -f).
 
   Usage: unhexify [options] <data | blank for stdin>
@@ -246,7 +246,7 @@ supplied via stdin, a hex-string argument, or a file containing hex (use -f).
 
 === urldec
 
-Decodes a url percent-encoded string. 
+Decodes a url percent-encoded string.
 Input from stdin, file, or command-line argument.
 
   Usage: urldec [options] <data | blank for stdin>
@@ -270,7 +270,7 @@ Input from stdin, file, or command-line argument.
 
 === xor
 
-Repeating string xor. Takes input and XOR's it against a string. 
+Repeating string xor. Takes input and XOR's it against a string.
 String can be provided in hex.
 
   Usage: xor [options] -k|-s <key> <data | stdin>

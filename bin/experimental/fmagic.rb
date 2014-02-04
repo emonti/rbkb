@@ -28,7 +28,7 @@ begin
   #   => "ASCII text, with no line terminators"
   #   irb(main):002:0> "\x1f\x8b".magic
   #   => "gzip compressed data"
-  # 
+  #
   # XXX this is horribly slow on large chunks of data, but then most everything
   # in ruby is...
   require 'filemagic'

@@ -1,9 +1,9 @@
 require 'rbkb/cli'
 
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
-# Reverses a hexdump back to raw data. Designed to work with hexdumps created 
+# Reverses a hexdump back to raw data. Designed to work with hexdumps created
 # by Unix utilities like 'xxd' as well as 'hexdump -C'.
 class Rbkb::Cli::Dedump < Rbkb::Cli::Executable
   def initialize(*args)
@@ -17,7 +17,7 @@ class Rbkb::Cli::Dedump < Rbkb::Cli::Executable
     arg = super()
     arg.banner += " <input-file | blank for stdin>"
 
-    arg.on("-l", "--length LEN", Numeric, 
+    arg.on("-l", "--length LEN", Numeric,
       "Bytes per line in hexdump (Default: #{@opts[:len]})") do |l|
         bail("Length must be greater than zero") unless (@opts[:len] = l) > 0
     end
@@ -34,7 +34,7 @@ class Rbkb::Cli::Dedump < Rbkb::Cli::Executable
     super(*args)
 
     # Default to standard input
-    @opts[:indat] ||= @stdin.read() 
+    @opts[:indat] ||= @stdin.read()
 
     self.exit(1) unless((@opts[:len] ||= @opts[:indat].length) > 0)
 

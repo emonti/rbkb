@@ -1,6 +1,6 @@
 require 'rbkb/cli'
 
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 # searches for a binary string in input. string can be provided 'hexified'
@@ -25,12 +25,12 @@ class Rbkb::Cli::Bgrep < Rbkb::Cli::Executable
       @opts[:rx] = r
     end
 
-    arg.on("-a", "--align=BYTES", Numeric, 
+    arg.on("-a", "--align=BYTES", Numeric,
            "Only match on alignment boundary") do |a|
       @opts[:align] = a
     end
 
-    arg.on("-n", "--[no-]filename", 
+    arg.on("-n", "--[no-]filename",
            "Toggle filenames. (Default: #{@opts[:include_fname]})") do |n|
       @opts[:include_fname] = n
     end
@@ -67,7 +67,7 @@ class Rbkb::Cli::Bgrep < Rbkb::Cli::Executable
       dat = @stdin.read
     end
 
-    loop do 
+    loop do
       dat.bgrep(@find, @opts[:align]) do |hit_start, hit_end, match|
         @stdout.write "#{fname}:" if fname and @opts[:include_fname]
 

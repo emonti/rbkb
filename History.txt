@@ -23,35 +23,35 @@
 
 == 0.6.9 / 2009-09-01
 * Enhancements
-  * telson and feed now support -s/--source address:port using TCP with 
+  * telson and feed now support -s/--source address:port using TCP with
     bind_connect via eventmachine
-  * random_string and random_alphanum helper methods added 
+  * random_string and random_alphanum helper methods added
 * Bug-Fix
-  * Plug's PeerList.find_peers was returning nil resulting in problems for 
+  * Plug's PeerList.find_peers was returning nil resulting in problems for
     blit -l amongst other things.
 
 == 0.6.8.1 / 2009-06-12
 * Enhancements
-  * Added String.rotate_bytes per request for a rotation cypher by 
+  * Added String.rotate_bytes per request for a rotation cypher by
     wardwouts@github. I pilfered this implementation mostly from Timur Duehr.
 
 == 0.6.8 / 2009-06-04
 * Enhancements
-  * 0.6.8 is geared towards beginning to make rbkb compatible with ruby 1.9.x 
-    (tested on 1.9.1). Had to sacrifice the 'uuid' helper method 
-    since something happened to SHA1 in ruby 1.9. It may make a comeback if 
+  * 0.6.8 is geared towards beginning to make rbkb compatible with ruby 1.9.x
+    (tested on 1.9.1). Had to sacrifice the 'uuid' helper method
+    since something happened to SHA1 in ruby 1.9. It may make a comeback if
     anybody yells about this.
 * Known Issues:
   * There are problems with binary releases of eventmachine with 1.9.1 on win32
-    this does not appear to be caused by rbkb, however we're keeping an eye on 
-    it. For now, this is causing the plug tools to crash and test cases to 
+    this does not appear to be caused by rbkb, however we're keeping an eye on
+    it. For now, this is causing the plug tools to crash and test cases to
     fail on 1.9.1 win32.
 
 == 0.6.7
 * Enhancements
-  * Http::Parameters was given the same treatement as headers got in 0.6.6. 
-    Technically params are supposed to be unique, but we try to stay flexible 
-    in Rbkb. 
+  * Http::Parameters was given the same treatement as headers got in 0.6.6.
+    Technically params are supposed to be unique, but we try to stay flexible
+    in Rbkb.
 * Bug-fix:
   * Fixed a silly typing bug in Http::Parameters.set_param introduced
     around 0.6.6
@@ -61,12 +61,12 @@
   * Http library improperly made headers unique by name. The library has
     been changed so that headers no longer tries to pretend to be a hash.
 
-== 0.6.5.2 
+== 0.6.5.2
 * Enhancements
   * d64 and b64 now support the -f option for input files as rdoc indicates
     Thanks to Cory Scott for catching this doc error and for his patch.
 
-== 0.6.5.1 
+== 0.6.5.1
 * Minor bug-fix
   * fixed a problem with the gem, version bump is for github visibility
 

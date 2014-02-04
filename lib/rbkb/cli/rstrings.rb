@@ -1,6 +1,6 @@
 require 'rbkb/cli'
 
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 # rstrings is Unix "strings" in ruby... with some extra stuff
@@ -8,9 +8,9 @@ class Rbkb::Cli::Rstrings < Rbkb::Cli::Executable
   def initialize(*args)
     super(*args) do |this|
       {
-        :start_off => 0, 
-        :end_off => -1, 
-        :encoding => :both, 
+        :start_off => 0,
+        :end_off => -1,
+        :encoding => :both,
         :minimum => 6,
         :indat => Array.new,
         :fnames => Array.new,
@@ -38,7 +38,7 @@ class Rbkb::Cli::Rstrings < Rbkb::Cli::Executable
       @opts[:end_off] = (m[2])? m[0].hex : m[0].to_i
     end
 
-    arg.on("-t", "--encoding-type=TYPE", 
+    arg.on("-t", "--encoding-type=TYPE",
       "Encoding: ascii/unicode/both (default=#{@opts[:encoding]})") do |t|
         @opts[:encoding] = t.to_sym
     end

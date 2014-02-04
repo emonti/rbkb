@@ -1,4 +1,4 @@
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 
@@ -22,10 +22,10 @@ module FeedImport
       pcap = Pcap::Capture.open_offline(file)
       pcap.setfilter filter if filter
       pcap.each_packet do |pkt|
-        if ( (pkt.udp? and dat=pkt.udp_data) or 
+        if ( (pkt.udp? and dat=pkt.udp_data) or
              (pkt.tcp? and dat=pkt.tcp_data and not dat.empty?)
-           ) 
-             ret <<  dat 
+           )
+             ret <<  dat
         end
       end
       return ret

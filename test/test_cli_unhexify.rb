@@ -33,7 +33,7 @@ class TestCliUnhexify < Test::Unit::TestCase
 
 
   def test_file_input
-    with_testfile do |fname, tf| 
+    with_testfile do |fname, tf|
       tf.write "6865785f746573745f666f6f";  tf.close
       assert_equal 0, go_with_args(["-f", fname])
       assert_equal("hex_test_foo", @stdout_io.string)

@@ -1,4 +1,4 @@
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 require "stringio"
@@ -54,8 +54,8 @@ class String
   end if not defined?("".ord)
 
   if defined?("".force_encoding('BINARY'))
-    # This is so disgusting... but str.encode('BINARY') 
-    # fails hard whenever certain utf-8 characters 
+    # This is so disgusting... but str.encode('BINARY')
+    # fails hard whenever certain utf-8 characters
     # present. Try "\xca\xfe\xba\xbe".encode('BINARY')
     # for kicks.
     def force_to_binary
@@ -64,7 +64,7 @@ class String
   else
     def force_encoding(ignore_me_for_compatability)
       self
-    end 
+    end
 
     def force_to_binary
       self
@@ -74,10 +74,10 @@ class String
   # Works just like each_with_index, but with each_byte
   def each_byte_with_index
     bytes.each_with_index {|b,i| yield(b,i) }
-  end 
+  end
 
   # shortcut for hex sanity with regex
-  def ishex? ; (self =~ /^[a-f0-9]+$/i) != nil ; end 
+  def ishex? ; (self =~ /^[a-f0-9]+$/i) != nil ; end
 
   # Encode into percent-hexify url encoding format
   def urlenc(opts={})
@@ -88,12 +88,12 @@ class String
     end
     hx = Rbkb::HEXCHARS
 
-    s.gsub(opts[:rx]) do |c| 
+    s.gsub(opts[:rx]) do |c|
       c=c.ord
       (plus and c==32)? '+' : "%" + (hx[(c >> 4)] + hx[(c & 0xf )])
     end
   end
-  
+
   # Undo percent-hexified url encoding data
   def urldec(opts={})
     s=self
@@ -104,7 +104,7 @@ class String
   # Base64 encode
   def b64(len=nil)
     ret = [self].pack("m").gsub("\n", "")
-    if len and Numeric === len 
+    if len and Numeric === len
       ret.scan(/.{1,#{len}}/).join("\n") + "\n"
     else
       ret
@@ -136,7 +136,7 @@ class String
   #   :delim - delimter between each hex byte
   #   :prefix - prefix before each hex byte
   #   :suffix - suffix after each hex byte
-  # 
+  #
   def hexify(opts={})
     delim = opts[:delim]
     pre = (opts[:prefix] || "")
@@ -150,9 +150,9 @@ class String
 
     out=Array.new
 
-    self.each_byte do |c| 
+    self.each_byte do |c|
       hc = if (rx and not rx.match c.chr)
-             c.chr 
+             c.chr
            else
              pre + (hx[(c >> 4)] + hx[(c & 0xf )]) + suf
            end
@@ -162,7 +162,7 @@ class String
   end
 
 
-  # Convert ASCII hex string to raw. 
+  # Convert ASCII hex string to raw.
   #
   # Parameters:
   #
@@ -174,7 +174,7 @@ class String
   # Converts a hex value to numeric.
   #
   # Parameters:
-  #   
+  #
   #   order => :big or :little endian (default is :big)
   #
   def hex_to_num(order=:big)
@@ -184,7 +184,7 @@ class String
     r = if order == :little
           s.scan(/.{2}/).reverse.join
         elsif order == :big
-          s 
+          s
         else
           raise "Invalid byte order #{order.inspect}"
         end.hex
@@ -194,7 +194,7 @@ class String
   # A "generalized" lazy bytestring -> numeric converter.
   #
   # Parameters:
-  #   
+  #
   #   order => :big or :little endian (default is :big)
   #
   # Bonus: should work seamlessly with really large strings.
@@ -248,34 +248,34 @@ class String
   #    ["i", 218],
   #    ...
   #   ]
-  #     
+  #
   def char_frequency
     hits = {}
     self.each_byte {|c| hits[c.chr] ||= 0; hits[c.chr] += 1 }
     hits.to_a.sort {|a,b| b[1] <=> a[1] }
   end
-   
+
   # xor against a key. key will be repeated or truncated to self.size.
   def xor(k)
     i=0
     self.bytes.map do |b|
       x = k.getbyte(i) || k.getbyte(i=0)
-      i+=1 
+      i+=1
       (b ^ x).chr
     end.join
   end
 
 
-  # (en|de)ciphers using a substition cipher en/decoder ring in the form of a 
+  # (en|de)ciphers using a substition cipher en/decoder ring in the form of a
   # hash with orig => substitute mappings
   def substitution(keymap)
     split('').map {|c| (sub=keymap[c]) ? sub : c }.join
   end
 
 
-  # (en|de)crypts using a substition xor en/decoder ring in the form of 
-  # a hash with orig => substitute mappings. Used in conjunction with 
-  # char_frequency, this sometimes provides a shorter way to derive a single 
+  # (en|de)crypts using a substition xor en/decoder ring in the form of
+  # a hash with orig => substitute mappings. Used in conjunction with
+  # char_frequency, this sometimes provides a shorter way to derive a single
   # character xor key used in conjunction with char_frequency.
   def substitution_xor(keymap)
     split('').map {|c| (sub=keymap[c]) ? sub.xor(c) : c }.join
@@ -306,11 +306,11 @@ class String
 
   # Returns or prints a hexdump in the style of 'hexdump -C'
   #
-  # :len => optionally specify a length other than 16 for a wider or thinner 
+  # :len => optionally specify a length other than 16 for a wider or thinner
   # dump. If length is an odd number, it will be rounded up.
   #
   # :out => optionally specify an alternate IO object for output. By default,
-  # hexdump will output to STDOUT.  Pass a StringIO object and it will return 
+  # hexdump will output to STDOUT.  Pass a StringIO object and it will return
   # it as a string.
   #
   # Example:
@@ -395,7 +395,7 @@ class String
 
 
   # Binary grep
-  # 
+  #
   # Parameters:
   #
   #   find  : A Regexp or string to search for in self
@@ -407,7 +407,7 @@ class String
 
     dat=self
     if find.kind_of? Regexp
-      search = lambda do |m, buf| 
+      search = lambda do |m, buf|
         if m = m.match(buf)
           mtch = m[0]
           off,endoff = m.offset(0)
@@ -441,7 +441,7 @@ class String
 
   # A 'strings' method a-la unix strings utility. Finds printable strings in
   # a binary blob.
-  # Supports ASCII and little endian unicode (though only for ASCII printable 
+  # Supports ASCII and little endian unicode (though only for ASCII printable
   # character.)
   #
   # === Parameters and options:
@@ -458,7 +458,7 @@ class String
   #
   #  * Supports an optional block, which will be passed |offset, type, string|
   #    for each match.
-  #    The block's boolean return value also determines whether the match 
+  #    The block's boolean return value also determines whether the match
   #    passes or fails (true or false/nil) and gets returned by the function.
   #
   # === Return Value:
@@ -471,7 +471,7 @@ class String
   #  * end_offset will include the terminating null character
   #  * end_offset will include all null bytes in unicode strings (including
   #  * both terminating nulls)
-  # 
+  #
   #   If strings are null terminated, the trailing null *IS* included
   #   in the end_offset. Unicode matches will also include null bytes.
   #
@@ -491,17 +491,17 @@ class String
     urx = /(#{ucc}{#{min}}#{ucc}*(?:\x00\x00)?)/
 
     rx = case (opts[:encoding] || :both).to_sym
-         when :ascii   
+         when :ascii
            mtype_blk = lambda {|x| :ascii }
            arx
-         when :unicode 
+         when :unicode
            mtype_blk = lambda {|x| :unicode }
            urx
-         when :both    
+         when :both
            mtype_blk = lambda {|x| (x[2].nil?)? :ascii : :unicode }
 
            Regexp.union( arx, urx )
-         else 
+         else
            raise "Encoding must be :unicode, :ascii, or :both"
          end
 
@@ -509,7 +509,7 @@ class String
     ret = []
 
     # wow ruby 1.9 string encoding is a total cluster
-    self.force_to_binary.scan(rx) do 
+    self.force_to_binary.scan(rx) do
       mtch = $~
 
       stype = mtype_blk.call(mtch)
@@ -595,7 +595,7 @@ class String
     ret
   end
 
-  # Converts a '_' delimited string to CamelCase like 'foo_class' into 
+  # Converts a '_' delimited string to CamelCase like 'foo_class' into
   # 'FooClass'.
   # See also: camelize_meth, decamelize
   def camelize
@@ -608,17 +608,17 @@ class String
   def camelize_meth
     self.gsub(/_([a-z])/) { $1.upcase }
   end
-  
+
 
   # Converts a CamelCase or camelCase string into '_' delimited form like
-  # 'FooBar' or 'fooBar' into 'foo_bar'. 
+  # 'FooBar' or 'fooBar' into 'foo_bar'.
   #
-  # Note: This method only handles camel humps. Strings with consecutive 
+  # Note: This method only handles camel humps. Strings with consecutive
   # uppercase chars like 'FooBAR' will be converted to 'foo_bar'
   #
   # See also: camelize, camelize_meth
   def decamelize
-    self.gsub(/(^|[a-z])([A-Z])/) do 
+    self.gsub(/(^|[a-z])([A-Z])/) do
       ($1.empty?)? $2 : "#{$1}_#{$2}"
     end.downcase
   end
@@ -642,7 +642,7 @@ class String
     end
     r
   end
-  
+
 
   # Returns a reference to actual constant for a given name in namespace
   # can be used to lookup classes from enums and such
@@ -707,7 +707,7 @@ class Numeric
 
   # tells you whether a number is within printable range
   def printable?; self >= 0x20 and self <= 0x7e; end
- 
+
   # just to go with the flow
   def randomize ; rand(self) ; end
 
@@ -720,7 +720,7 @@ class Numeric
   # Accepts a block for some transformation on each byte.
   # (used by to_bytes and to_hex under the hood)
   #
-  # args: 
+  # args:
   #   order: byte order - :big or :little
   #                       (only :big has meaning)
   #   siz:  pack to this size. larger numbers will wrap
@@ -729,7 +729,7 @@ class Numeric
     n=self
     siz ||= self.size
     ret=[]
-    siz.times do 
+    siz.times do
       c = (n % 256)
       if block_given? then (c = yield(c)) end
       ret << c
@@ -742,7 +742,7 @@ class Numeric
   #
   # Uses to_chars under the hood. See also: to_hex
   #
-  # args: 
+  # args:
   #   siz:  pack to this size. larger numbers will wrap
   #   order: byte order - :big or :little
   #                       (only :big has meaning)
@@ -755,13 +755,13 @@ class Numeric
   #
   # Uses to_chars under the hood. See also: to_bytes
   #
-  # args: 
+  # args:
   #   siz:  pack to this size. larger numbers will wrap
   #   order: byte order - :big or :little
   #                       (only :big has meaning)
   #
   def to_hex(o=nil, s=nil)
-    to_chars(o,s) {|c| 
+    to_chars(o,s) {|c|
       Rbkb::HEXCHARS[c.clear_bits(0xf) >> 4]+Rbkb::HEXCHARS[c.clear_bits(0xf0)]
     }.join
   end

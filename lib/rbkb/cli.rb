@@ -1,7 +1,7 @@
 require 'rbkb'
 require 'optparse'
 
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 module Rbkb::Cli
@@ -25,7 +25,7 @@ module Rbkb::Cli
     #  :argv   - An array of cli arguments (default ARGV)
     #  :opts    - executable/function options for use when running 'go'
     #  :stdout, - IO redirection (mostly for unit tests)
-    #  :stderr,   
+    #  :stderr,
     #  :stdin
     #
     #
@@ -75,7 +75,7 @@ module Rbkb::Cli
     #
     # See parse for actual parsing.
     def make_parser
-      @oparse ||= OptionParser.new 
+      @oparse ||= OptionParser.new
       @oparse.banner = "Usage: #{File.basename $0} [options]"
 
       @oparse.on("-h", "--help", "Show this message") do
@@ -91,7 +91,7 @@ module Rbkb::Cli
     end
 
 
-    # Abstract argument parser. Override this method with super() from 
+    # Abstract argument parser. Override this method with super() from
     # inherited executables. The base method just calls OptionParser.parse!
     # on the internal @oparse object.
     def parse
@@ -101,14 +101,14 @@ module Rbkb::Cli
 
       # the overriding class may implement additional arguments from here
     end
-    
+
 
     # Abstract 'runner'. Override this method with super() from inherited
     # executables. The base method just slurps in an optional argv and
     # runs 'parse' if it hasn't already
     def go(argv=nil)
       @exit_status = nil
-      @argv = argv if argv 
+      @argv = argv if argv
 
       parse
 
@@ -145,7 +145,7 @@ module Rbkb::Cli
     #
     # (Used commonly throughout several executables)
     def add_range_opts(fkey, lkey)
-      @oparse.on("-r", "--range=START[:END]", 
+      @oparse.on("-r", "--range=START[:END]",
                  "Start and optional end range") do |r|
 
         raise "-x and -r are mutually exclusive" if @parser_got_range
@@ -159,7 +159,7 @@ module Rbkb::Cli
         @opts[lkey] = $2.to_i if $2
       end
 
-      @oparse.on("-x", "--hexrange=START[:END]", 
+      @oparse.on("-x", "--hexrange=START[:END]",
                  "Start and optional end range in hex") do |r|
 
         raise "-x and -r are mutually exclusive" if @parser_got_range
@@ -169,7 +169,7 @@ module Rbkb::Cli
           raise "invalid range #{r.inspect}"
         end
 
-        @opts[fkey] = 
+        @opts[fkey] =
           if ($1[0,1] == '-')
             ($1[1..-1]).hex_to_num * -1
           else
@@ -177,7 +177,7 @@ module Rbkb::Cli
           end
 
         if $2
-          @opts[lkey] = 
+          @opts[lkey] =
             if($2[0,1] == '-')
               $2[1..-1].hex_to_num * -1
             else
@@ -188,17 +188,17 @@ module Rbkb::Cli
     end
 
 
-    # Conditionally parses a string argument. Uses 'key' to first check for 
+    # Conditionally parses a string argument. Uses 'key' to first check for
     # then store it in @opts hash if it is not yet there.
     # (Used commonly throughout several executables)
     def parse_string_argument(key)
       if @opts[key].nil? and s=@argv.shift
-        @opts[key] = s.dup 
+        @opts[key] = s.dup
       end
     end
 
 
-    # Conditionally parses a file argument. Uses 'key' to first check for 
+    # Conditionally parses a file argument. Uses 'key' to first check for
     # then store it in @opts hash if it is not yet there.
     # (Used commonly throughout several executables)
     def parse_file_argument(key)
