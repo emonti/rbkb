@@ -1,4 +1,5 @@
 require 'rbkb/cli'
+require 'rbkb/extends'
 
 # Copyright 2009 emonti at matasano.com 
 # See README.rdoc for license information

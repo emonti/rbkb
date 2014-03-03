@@ -1,4 +1,5 @@
 require 'rbkb'
+require 'rbkb/extends'
 require 'optparse'
 
 # Copyright 2009 emonti at matasano.com 
@@ -151,7 +152,7 @@ module Rbkb::Cli
         raise "-x and -r are mutually exclusive" if @parser_got_range
         @parser_got_range=true
 
-        unless m=/^(-?[0-9]+)(?::(-?[0-9]+))?$/.match(r)
+        unless /^(-?[0-9]+)(?::(-?[0-9]+))?$/.match(r)
           raise "invalid range #{r.inspect}"
         end
 
@@ -165,7 +166,7 @@ module Rbkb::Cli
         raise "-x and -r are mutually exclusive" if @parser_got_range
         @parser_got_range=true
 
-        unless m=/^(-?[0-9a-f]+)(?::(-?[0-9a-f]+))?$/i.match(r)
+        unless /^(-?[0-9a-f]+)(?::(-?[0-9a-f]+))?$/i.match(r)
           raise "invalid range #{r.inspect}"
         end
 

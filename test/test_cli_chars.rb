@@ -1,5 +1,7 @@
 require File.join(File.dirname(__FILE__), "test_cli_helper.rb")
 
+require 'rbkb/cli/chars'
+
 class TestCliChars < Test::Unit::TestCase
   include CliTest
 

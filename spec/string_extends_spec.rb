@@ -105,4 +105,25 @@ _EOF_
     end
   end
 
+  context 'strings' do
+    before :all do
+      @test_dat = RbkbString("a\000bc\001def\002gehi\003jklmn\004string 1\005string 2\020\370\f string 3\314string4\221string 5\n\000string 6\r\n\000\000\000\000string 7\000\000w\000i\000d\000e\000s\000t\000r\000i\000n\000g\000\000\000last string\000")
+
+      @expect_strings =[
+        [20, 28, :ascii, "string 1"],
+        [29, 37, :ascii, "string 2"],
+        [39, 49, :ascii, "\f string 3"],
+        [50, 57, :ascii, "string4"],
+        [58, 68, :ascii, "string 5\n\x00"],
+        [68, 79, :ascii, "string 6\r\n\x00"],
+        [82, 91, :ascii, "string 7\x00"],
+        [92, 114, :unicode, "w\x00i\x00d\x00e\x00s\x00t\x00r\x00i\x00n\x00g\x00\x00\x00"],
+        [114, 126, :ascii, "last string\x00"],
+      ]
+    end
+
+    it "should find strings in a binary blob" do
+      @test_dat.strings.should == @expect_strings
+    end
+  end
 end

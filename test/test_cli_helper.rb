@@ -1,10 +1,6 @@
 require File.join(File.dirname(__FILE__), 'test_helper.rb')
 require 'rbkb/cli.rb'
 
-
-
-Rbkb.require_all_libs_relative_to(File.dirname(__FILE__) + "/../lib/rbkb/cli.rb")
-
 Rbkb::Cli::TESTING = true unless defined? Rbkb::Cli::TESTING
 
 module CliTest

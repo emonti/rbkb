@@ -459,7 +459,7 @@ module Rbkb
         # iterate each line of hexdump
         s.split(/\r?\n/).each do |hl|
           # match and check offset
-          if m = dumprx.match(hl) and $1.hex == off
+          if dumprx.match(hl) and $1.hex == off
             i+=1
             # take the data chunk and unhexify it
             raw = $2.unhexify
@@ -491,8 +491,8 @@ module Rbkb
 
         dat=self
         if find.kind_of? Regexp
-          search = lambda do |m, buf| 
-            if m = m.match(buf)
+          search = lambda do |mf, buf| 
+            if m = mf.match(buf)
               mtch = m[0]
               off,endoff = m.offset(0)
               return off, endoff, mtch
@@ -508,7 +508,7 @@ module Rbkb
 
         ret=[]
         pos = 0
-        while (res = search.call(find, dat[pos..-1]))
+        while (res = search.call(find, dat[pos..-1].force_to_binary))
           off, endoff, match = res
           if align and ( pad = (pos+off).pad(align) ) != 0
             pos += pad
@@ -571,7 +571,7 @@ module Rbkb
         acc = /[\s[:print:]]/
         ucc = /(?:#{acc}\x00)/
 
-          arx = /(#{acc}{#{min}}#{acc}*\x00?)/
+        arx = /(#{acc}{#{min}}#{acc}*\x00?)/
         urx = /(#{ucc}{#{min}}#{ucc}*(?:\x00\x00)?)/
 
         rx = case (opts[:encoding] || :both).to_sym
@@ -589,7 +589,6 @@ module Rbkb
                raise "Encoding must be :unicode, :ascii, or :both"
              end
 
-        off=0
         ret = []
 
         # wow ruby 1.9 string encoding is a total cluster

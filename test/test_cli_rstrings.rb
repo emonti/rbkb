@@ -1,5 +1,7 @@
 require File.join(File.dirname(__FILE__), "test_cli_helper.rb")
 
+require 'rbkb/cli/rstrings'
+
 # FIXME Finish test cases for rstrings cli
 
 class TestCliRstrings < Test::Unit::TestCase
