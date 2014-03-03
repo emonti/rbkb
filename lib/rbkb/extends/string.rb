@@ -29,7 +29,7 @@ module Rbkb
         end
         hx = Rbkb::HEXCHARS
 
-        s.gsub(opts[:rx]) do |c|
+        s.force_to_binary.gsub(opts[:rx]) do |c|
           c=c.ord
           (plus and c==32)? '+' : "%" + (hx[(c >> 4)] + hx[(c & 0xf )])
         end
