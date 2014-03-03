@@ -30,19 +30,18 @@ describe Rbkb::Extends::String do
     RbkbString("foo%0a").urldec.should == "foo\n"
     RbkbString("foo%20").urldec.should == "foo "
     RbkbString("foo+").urldec.should == "foo "
-    RbkbString("foo%ff\n").urldec.should == "foo\xFF\n".force_encoding('ascii')
+    RbkbString("foo%ff\n").urldec.bytes.to_a.should == "foo\xFF\n".bytes.to_a
   end
 
 
   it "should base-64 encode a string" do
     RbkbString("fooby").b64.should == "Zm9vYnk="
     RbkbString("\xca\xfe\xba\xbe").b64.should == "yv66vg=="
-    RbkbString("foo\xFF\n".force_encoding('ascii')).b64.should == "Zm9v/wo="
+    RbkbString("foo\xFF\n").b64.should == "Zm9v/wo="
   end
 
   it "should base-64 decode a string" do
     RbkbString("Zm9vYnk=").d64.should == "fooby"
-    RbkbString("yv66vg==").d64.should == "\xca\xfe\xba\xbe"
     RbkbString("yv66vg==").d64.bytes.to_a.should == [0xca,0xfe,0xba,0xbe]
     RbkbString("Zm9v/wo=").d64.bytes.to_a.should == [0x66, 0x6f, 0x6f, 0xff, 0x0a]
    end
