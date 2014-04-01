@@ -124,7 +124,7 @@ module Rbkb
       #   @param [String] d optional 'delimiter' between hex bytes
       #                   (zero+ spaces by default)
       def unhexify(d=/\s*/)
-        self.strip.gsub(/([A-Fa-f0-9]{1,2})#{d}?/) { $1.hex.chr }
+        self.force_to_binary.strip.gsub(/([A-Fa-f0-9]{1,2})#{d}?/) { $1.hex.chr }
       end
 
       # Converts a hex value to numeric.
