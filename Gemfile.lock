@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rbkb (0.7.0)
+    rbkb (0.7.1)
 
 GEM
   remote: https://rubygems.org/
