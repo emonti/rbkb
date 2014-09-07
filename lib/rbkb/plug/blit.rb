@@ -55,7 +55,7 @@ module Plug
       @buf.rewind
 
       return unless @buf.read(SIG.size) == SIG and
-                    op = OPCODES[ @buf.read(1)[0] ]
+                    op = OPCODES[ @buf.read(1)[0].ord ]
 
       initbuf if self.send(op)
     end
