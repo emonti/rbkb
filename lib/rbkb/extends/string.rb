@@ -241,7 +241,7 @@ module Rbkb
 
       # String randomizer
       def randomize
-        self.split('').randomize.to_s
+        self.split('').randomize.join
       end
 
 
