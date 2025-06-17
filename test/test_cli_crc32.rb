@@ -81,7 +81,7 @@ class TestCliCrc32 < Test::Unit::TestCase
     assert_match(/invalid range/, @stderr_io.string)
   end
 
-  def test_range_last_ten_hex
+  def test_range_last_ten_hex_invalid
     assert_equal 1, go_with_args(%w(-x 26:z30))
     assert_match(/invalid range/, @stderr_io.string)
   end

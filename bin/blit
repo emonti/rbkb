@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require "rbkb/cli/blit"
+require 'rbkb/cli/blit'
 
-Rbkb::Cli::Blit.run()
+Rbkb::Cli::Blit.run

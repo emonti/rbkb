@@ -1,11 +1,10 @@
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 
 require 'socket'
 
 module Plug
-
   class Peer
     attr_reader :addr, :transport, :name, :owner, :host, :port
     attr_accessor :mute
@@ -20,7 +19,7 @@ module Plug
     end
 
     def say(dat, sender)
-      UI.dump(sender.name, self.name, dat)
+      UI.dump(sender.name, name, dat)
 
       if @transport == :UDP
         @owner.send_datagram(dat, @host, @port)
@@ -30,7 +29,7 @@ module Plug
     end
 
     def start_tls(sender)
-      UI.logmsg(self.name, "#{sender.name} initiated TLS")
+      UI.logmsg(name, "#{sender.name} initiated TLS")
       @owner.start_tls
     end
 
@@ -39,34 +38,33 @@ module Plug
     end
   end
 
-
   class PeerList < Array
     def initialize(owner, *args)
       @owner = owner
       @transport = @owner.transport
-      
+
       super(*args)
     end
 
     def find_peer(addr)
-      self.find {|p| p.addr == addr }
+      find { |p| p.addr == addr }
     end
 
     def add_peer(addr)
       self << Peer.new(addr, @owner)
-      self.last
+      last
     end
 
     def add_peer_manually(host, port)
       addr = Socket.pack_sockaddr_in(port, host)
-      return (find_peer(addr) || add_peer(addr))
+      find_peer(addr) || add_peer(addr)
     end
 
     def delete(addr)
-      if p=find_peer(addr)
-        p.close
-        super(p)
-      end
+      return unless p = find_peer(addr)
+
+      p.close
+      super(p)
     end
   end
 end

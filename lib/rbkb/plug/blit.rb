@@ -1,12 +1,12 @@
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 module Plug
   module Blit
     include Base
 
-    DEFAULT_IPADDR = "127.0.0.1"
-    DEFAULT_PORT = 25195
+    DEFAULT_IPADDR = '127.0.0.1'
+    DEFAULT_PORT = 25_195
     DEFAULT_PROTOCOL = :TCP
 
     OPCODES = {
@@ -18,7 +18,7 @@ module Plug
       7 => :starttls,
 
       0xfe => :clear,
-      0xff => :kill,
+      0xff => :kill
     }
 
     attr_accessor :kind
@@ -40,94 +40,91 @@ module Plug
       # override so we don't get unneccessary "closed" message from Base
     end
 
-
     ### Blit protocol stuff
-    SIG = "BLT"
+    SIG = 'BLT'
 
     # (re)initializes the blit buffer
     def initbuf
       @buf = StringIO.new
     end
-    
-    def receive_data dat
+
+    def receive_data(dat)
       return unless (@buf.write(dat) > SIG.size) or (@buf.pos > (SIG.size + 1))
 
       @buf.rewind
 
       return unless @buf.read(SIG.size) == SIG and
-                    op = OPCODES[ @buf.read(1)[0] ]
+                    op = OPCODES[@buf.read(1)[0]]
 
-      initbuf if self.send(op)
+      initbuf if send(op)
     end
-    
 
     def self.blit_header(op)
       return nil unless opno = OPCODES.invert[op]
+
       SIG + opno.chr
     end
 
     def starttls
-      unless ( peerno=@buf.read(2) and peerno.size == 2 and
-               peer=@peers[peerno.dat_to_num(:big)] )
+      unless peerno = @buf.read(2) and peerno.size == 2 and
+             peer = @peers[peerno.dat_to_num(:big)]
 
-        UI.log "** BLIT-ERROR(Malformed or missing peer for starttls)"
+        UI.log '** BLIT-ERROR(Malformed or missing peer for starttls)'
         return true
       end
 
       peer.start_tls(self)
     end
- 
+
     def self.make_starttls(peerno)
-      self.blit_header(:starttls) + peerno.to_bytes(:big, 2)
+      blit_header(:starttls) + peerno.to_bytes(:big, 2)
     end
 
     def mute
-      unless ( peerno=@buf.read(2) and peerno.size == 2 and
-               peer=@peers[peerno.dat_to_num(:big)] )
+      unless peerno = @buf.read(2) and peerno.size == 2 and
+             @peers[peerno.dat_to_num(:big)]
 
-        UI.log "** BLIT-ERROR(Malformed or missing peer for mute)"
-        return true
+        UI.log '** BLIT-ERROR(Malformed or missing peer for mute)'
+        true
       end
     end
 
     def self.make_mute(peerno)
-      self.blit_header(:squelch) +
+      blit_header(:squelch) +
         peerno.to_bytes(:big, 2)
     end
 
     def unmute
-      unless ( peerno=@buf.read(2) and peerno.size == 2 and
-               peer=@peers[peerno.dat_to_num(:big)] )
-        UI.log "** BLIT-ERROR(Malformed or missing peer for unmute)"
-        return true
+      unless peerno = @buf.read(2) and peerno.size == 2 and
+             @peers[peerno.dat_to_num(:big)]
+        UI.log '** BLIT-ERROR(Malformed or missing peer for unmute)'
+        true
       end
     end
 
     def self.make_squelch(peerno)
-      self.blit_header(:squelch) +
+      blit_header(:squelch) +
         peerno.to_bytes(:big, 2)
     end
 
     def sendmsg
-      unless peerno=@buf.read(2) and peerno.size == 2 and
-             bufsiz=@buf.read(4) and bufsiz.size == 4
-        UI.log "** BLIT-ERROR(Malformed sendmsg)"
+      unless peerno = @buf.read(2) and peerno.size == 2 and
+             bufsiz = @buf.read(4) and bufsiz.size == 4
+        UI.log '** BLIT-ERROR(Malformed sendmsg)'
         return true
       end
 
       peerno = peerno.dat_to_num(:big)
       bufsiz = bufsiz.dat_to_num(:big)
 
-      if (rdat=@buf.read(bufsiz)).size == bufsiz
-        if peer=@peers[peerno]
+      if (rdat = @buf.read(bufsiz)).size == bufsiz
+        if peer = @peers[peerno]
           peer.say(rdat, self)
-          return true
+          true
         else
           UI.log "** BLIT-ERROR(Invalid peer index #{peerno})"
-          return true
+          true
         end
-      else
-        return nil
       end
     end
 
@@ -138,19 +135,19 @@ module Plug
     #   uint32le size  = length of data
     #   str      data
     def self.make_sendmsg(idx, dat)
-      self.blit_header(:sendmsg) +
-        idx.to_bytes(:big, 2) + 
-        dat.size.to_bytes(:big, 4) + 
+      blit_header(:sendmsg) +
+        idx.to_bytes(:big, 2) +
+        dat.size.to_bytes(:big, 4) +
         dat
     end
 
     def kill
-      UI.log("** BLIT-KILL - Received shutdown command")
+      UI.log('** BLIT-KILL - Received shutdown command')
       EM.stop
     end
 
-    def self.make_kill(idx=nil)
-      self.blit_header(:kill)
+    def self.make_kill(_idx = nil)
+      blit_header(:kill)
     end
 
     def clear
@@ -159,27 +156,27 @@ module Plug
     end
 
     def self.make_clear
-      self.blit_header(:clear)
+      blit_header(:clear)
     end
 
     def delete(peerno)
       @peers.delete(peerno)
     end
 
-    def self.make_delete(idx=0)
-      self.blit_header(:delete) +
+    def self.make_delete(idx = 0)
+      blit_header(:delete) +
         idx.to_bytes(:big, 2)
     end
 
     def list_peers
-      UI.log("** BLIT-LISTPEERS - Received list peers command")
+      UI.log('** BLIT-LISTPEERS - Received list peers command')
 
-      @peers.each_index {|i| UI.log "**   #{i} - #{@peers[i].name}"}
-      UI.log("** BLIT-LISTPEERS-END - End of peer list")
+      @peers.each_index { |i| UI.log "**   #{i} - #{@peers[i].name}" }
+      UI.log('** BLIT-LISTPEERS-END - End of peer list')
     end
 
     def self.make_list_peers
-      self.blit_header(:list_peers)
+      blit_header(:list_peers)
     end
 
     #----------------------------------------------------------------------
@@ -187,33 +184,33 @@ module Plug
     #----------------------------------------------------------------------
 
     BLIT_HANDLERS = {
-      :TCP => lambda {|msg| 
-        s=TCPSocket.new(@blit_addr, @blit_port)
-        wl=s.write(msg)
+      TCP: lambda { |msg|
+        s = TCPSocket.new(@blit_addr, @blit_port)
+        wl = s.write(msg)
         s.close
-        return wl
+        wl
       },
-      :UDP => lambda {|msg|
-        s=UDPSocket.new
-        wl=s.send( msg, 0, @blit_addr, @blit_port)
+      UDP: lambda { |msg|
+        s = UDPSocket.new
+        wl = s.send(msg, 0, @blit_addr, @blit_port)
         s.close
-        return wl
+        wl
       }
     }
 
-    def self.blit_init(opts={})
-      @blit_addr = (opts[:addr] || DEFAULT_IPADDR)
-      @blit_port = (opts[:port] || DEFAULT_PORT)
-      proto = (opts[:protocol] || DEFAULT_PROTOCOL)
-      @blit_handler = BLIT_HANDLERS[ proto ]
-      raise "invalid blit transport protocol" unless @blit_handler
+    def self.blit_init(opts = {})
+      @blit_addr = opts[:addr] || DEFAULT_IPADDR
+      @blit_port = opts[:port] || DEFAULT_PORT
+      proto = opts[:protocol] || DEFAULT_PROTOCOL
+      @blit_handler = BLIT_HANDLERS[proto]
+      raise 'invalid blit transport protocol' unless @blit_handler
     end
 
     def self.initialized?
       @blit_addr and @blit_port and @blit_handler
     end
 
-    def self.blit_send(data, idx=0)
+    def self.blit_send(data, idx = 0)
       msg = make_sendmsg(idx, data)
       blit_raw(msg)
     end
@@ -224,19 +221,19 @@ module Plug
     end
 
     def self.blit_raw(buf)
-      raise "use blit_init first!" unless self.initialized?
+      raise 'use blit_init first!' unless initialized?
+
       @blit_handler.call buf
     end
-
-  end  # of module Blit
-
+  end # of module Blit
 end # of module Plug
 
 class String
   #----------------------------------------------------------------------
   # A Blit sender convenience method for strings
-  def blit(idx=0)
-    raise "blit must be initialized with blit_init" unless Plug::Blit.initialized?
+  def blit(idx = 0)
+    raise 'blit must be initialized with blit_init' unless Plug::Blit.initialized?
+
     Plug::Blit.blit_send(self, idx)
   end
 end

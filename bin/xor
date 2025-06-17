@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require "rbkb/cli/xor"
+require 'rbkb/cli/xor'
 
-Rbkb::Cli::Xor.run()
+Rbkb::Cli::Xor.run

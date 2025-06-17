@@ -1,27 +1,27 @@
-
 module Enumerable
   def each_recursive(&block)
-    self.each do |n|
+    each do |n|
       block.call(n)
-      n.each_recursive(&block) if Enumerable === n
+      n.each_recursive(&block) if n.is_a?(Enumerable)
     end
   end
 
   def sum
-    return self.inject(0){|accum, i| accum + i }
+    inject(0) { |accum, i| accum + i }
   end
 
   def mean
-    return self.sum / self.length.to_f
+    sum / length.to_f
   end
 
   def sample_variance
-    m = self.mean
-    sum = self.inject(0){|accum, i| accum + (i - m) ** 2 }
-    return sum / (self.length - 1).to_f
+    m = mean
+    sum = inject(0) { |accum, i| accum + (i - m)**2 }
+    sum / (length - 1).to_f
   end
 
   def standard_deviation
-    return Math.sqrt(self.sample_variance)
+    Math.sqrt(sample_variance)
   end
 end
+

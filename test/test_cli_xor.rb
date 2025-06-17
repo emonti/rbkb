@@ -14,12 +14,12 @@ class TestCliXor < Test::Unit::TestCase
     @tst_xored = "\036\027E\022\016\032\001\v\021\022K\030\001\vE\027\016\v\nN\026\004\b\v\026\032"
   end
 
-  def test_string_arg_str_key
+  def test_string_arg_str_key_s_flag
     assert_equal 0, go_with_args(["-s", @tst_key_str, @tst_dat])
     assert_equal @tst_xored, @stdout_io.string
   end
 
-  def test_string_arg_str_key
+  def test_string_arg_str_key_x_flag
     assert_equal 0, go_with_args(["-x", @tst_key_hex, @tst_dat])
     assert_equal @tst_xored, @stdout_io.string
   end
@@ -34,12 +34,12 @@ class TestCliXor < Test::Unit::TestCase
     assert_equal "\x00"*10, @stdout_io.string
   end
 
-  def test_string_arg_str_key_reverse
+  def test_string_arg_str_key_reverse_s_flag
     assert_equal 0, go_with_args(["-s", @tst_key_str, @tst_xored])
     assert_equal @tst_dat, @stdout_io.string
   end
 
-  def test_string_arg_str_key_reverse
+  def test_string_arg_str_key_reverse_x_flag
     assert_equal 0, go_with_args(["-x", @tst_key_hex, @tst_xored])
     assert_equal @tst_dat, @stdout_io.string
   end

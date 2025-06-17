@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require "rbkb/cli/slice"
+require 'rbkb/cli/slice'
 
-Rbkb::Cli::Slice.run()
+Rbkb::Cli::Slice.run

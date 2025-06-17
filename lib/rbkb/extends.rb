@@ -1,4 +1,3 @@
-
 require_relative 'extends/array'
 require_relative 'extends/enumerable'
 require_relative 'extends/float'

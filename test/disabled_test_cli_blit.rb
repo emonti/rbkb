@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), "test_cli_helper.rb")
+require File.join(File.dirname(__FILE__), 'test_cli_helper.rb')
 
 class TestCliBlit < Test::Unit::TestCase
   include CliTest
@@ -7,5 +7,4 @@ class TestCliBlit < Test::Unit::TestCase
     @cli_class = Rbkb::Cli::Blit
     super()
   end
-
 end

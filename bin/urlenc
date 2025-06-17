@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require "rbkb/cli/urlenc"
+require 'rbkb/cli/urlenc'
 
-Rbkb::Cli::Urlenc.run()
+Rbkb::Cli::Urlenc.run

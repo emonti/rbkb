@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require "rbkb/cli/dedump"
+require 'rbkb/cli/dedump'
 
-Rbkb::Cli::Dedump.run()
+Rbkb::Cli::Dedump.run

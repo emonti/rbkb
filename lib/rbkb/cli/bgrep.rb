@@ -1,6 +1,6 @@
 require 'rbkb/cli'
 
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 # searches for a binary string in input. string can be provided 'hexified'
@@ -15,37 +15,36 @@ class Rbkb::Cli::Bgrep < Rbkb::Cli::Executable
 
   def make_parser
     arg = super()
-    arg.banner += " <search> <file | blank for stdin>"
+    arg.banner += ' <search> <file | blank for stdin>'
 
-    arg.on("-x", "--[no-]hex", "Search for hex (default: false)") do |x|
+    arg.on('-x', '--[no-]hex', 'Search for hex (default: false)') do |x|
       @opts[:hex] = x
     end
 
-    arg.on("-r", "--[no-]regex", "Search for regex (default: false)") do |r|
+    arg.on('-r', '--[no-]regex', 'Search for regex (default: false)') do |r|
       @opts[:rx] = r
     end
 
-    arg.on("-a", "--align=BYTES", Numeric, 
-           "Only match on alignment boundary") do |a|
+    arg.on('-a', '--align=BYTES', Numeric,
+           'Only match on alignment boundary') do |a|
       @opts[:align] = a
     end
 
-    arg.on("-n", "--[no-]filename", 
+    arg.on('-n', '--[no-]filename',
            "Toggle filenames. (Default: #{@opts[:include_fname]})") do |n|
       @opts[:include_fname] = n
     end
-    return arg
+    arg
   end
-
 
   def parse(*args)
     super(*args)
 
-    bail "need search argument" unless @find = @argv.shift
+    bail 'need search argument' unless @find = @argv.shift
 
-    if @opts[:hex] and @opts[:rx]
-      bail "-r and -x are mutually exclusive"
-    end
+    return unless @opts[:hex] and @opts[:rx]
+
+    bail '-r and -x are mutually exclusive'
 
     # ... filenames vs. stdin will be parsed in 'go'
   end
@@ -67,17 +66,17 @@ class Rbkb::Cli::Bgrep < Rbkb::Cli::Executable
       dat = @stdin.read
     end
 
-    loop do 
+    loop do
       dat.bgrep(@find, @opts[:align]) do |hit_start, hit_end, match|
         @stdout.write "#{fname}:" if fname and @opts[:include_fname]
 
-        @stdout.write("%0.8x:%0.8x:b:#{match.inspect}\n" %[hit_start, hit_end])
+        @stdout.write(format("%0.8x:%0.8x:b:#{match.inspect}\n", hit_start, hit_end))
       end
 
-      break unless fname=@argv.shift
+      break unless fname = @argv.shift
+
       dat = do_file_read(fname)
     end
     self.exit(0)
   end
 end
-

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require "rbkb/cli/rstrings"
+require 'rbkb/cli/rstrings'
 
-Rbkb::Cli::Rstrings.run()
+Rbkb::Cli::Rstrings.run

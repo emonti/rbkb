@@ -1,6 +1,6 @@
 require 'rbkb/cli'
 
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 # Repeats an argument N times
@@ -21,4 +21,3 @@ class Rbkb::Cli::Chars < Rbkb::Cli::Executable
     self.exit(0)
   end
 end
-

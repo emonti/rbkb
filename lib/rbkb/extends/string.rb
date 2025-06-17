@@ -5,12 +5,12 @@ require 'cgi'
 module Rbkb
   module Extends
     module String
-      # This is so disgusting... but str.encode('BINARY') 
-      # fails hard whenever certain utf-8 characters 
+      # This is so disgusting... but str.encode('BINARY')
+      # fails hard whenever certain utf-8 characters
       # present. Try "\xca\xfe\xba\xbe".encode('BINARY')
       # for kicks.
       def force_to_binary
-        self.dup.force_encoding('binary')
+        dup.force_encoding('binary')
       end
 
       def ishex?
@@ -21,24 +21,25 @@ module Rbkb
       # @param [Hash] opts Optional parameters
       # @option opts [optional, Boolean] :plus
       #     Treat + as a literal '+', instead of a space
-      def urlenc(opts={})
-        s=self
+      def urlenc(opts = {})
+        s = self
         plus = opts[:plus]
-        unless (opts[:rx] ||= /[^A-Za-z0-9_\.~-]/).kind_of? Regexp
-          raise "rx must be a regular expression for a character class"
+        unless (opts[:rx] ||= /[^A-Za-z0-9_.~-]/).is_a? Regexp
+          raise 'rx must be a regular expression for a character class'
         end
+
         hx = Rbkb::HEXCHARS
 
         s.force_to_binary.gsub(opts[:rx]) do |c|
-          c=c.ord
-          (plus and c==32)? '+' : "%" + (hx[(c >> 4)] + hx[(c & 0xf )])
+          c = c.ord
+          (plus and c == 32) ? '+' : '%' + (hx[(c >> 4)] + hx[(c & 0xf)])
         end
       end
 
       # Base64 encode
-      def b64(len=nil)
-        ret = [self].pack("m").gsub("\n", "")
-        if len and Numeric === len 
+      def b64(len = nil)
+        ret = [self].pack('m').gsub("\n", '')
+        if len and len.is_a?(Numeric)
           ret.scan(/.{1,#{len}}/).join("\n") + "\n"
         else
           ret
@@ -47,36 +48,36 @@ module Rbkb
 
       # Base64 decode
       def d64
-        self.unpack("m").first
+        unpack1('m')
       end
 
       # right-align to 'a' alignment padded with 'p'
-      def ralign(a, p=' ')
+      def ralign(a, p = ' ')
         p ||= ' '
-        l = self.bytesize
+        l = bytesize
         pad = l.pad(a)
-        self.rjust(pad+l, p)
+        rjust(pad + l, p)
       end
 
       # left-align to 'a' alignment padded with 'p'
-      def lalign(a, p=' ')
+      def lalign(a, p = ' ')
         p ||= ' '
-        l = self.bytesize
+        l = bytesize
         pad = l.pad(a)
-        self.ljust(pad+l, p)
+        ljust(pad + l, p)
       end
 
       # Undo percent-hexified url encoded string
       # @param [Hash] opts Optional parameters
       # @option opts [optional, Boolean] :noplus
       #     Treat + as a literal '+', instead of a space
-      def urldec(opts=nil)
+      def urldec(opts = nil)
         if opts.nil? or opts.empty?
           CGI.unescape(self)
         else
-          s=self
+          s = self
           s.gsub!('+', ' ') unless opts[:noplus]
-          s.gsub(/%([A-Fa-f0-9]{2})/) {$1.hex.chr}
+          s.gsub(/%([A-Fa-f0-9]{2})/) { ::Regexp.last_match(1).hex.chr }
         end
       end
 
@@ -94,49 +95,47 @@ module Rbkb
       # @option opts [String] :suffix
       #   suffix after each hex byte
       #
-      def hexify(opts={})
+      def hexify(opts = {})
         delim = opts[:delim]
-        pre = (opts[:prefix] || "")
-        suf = (opts[:suffix] || "")
+        pre = opts[:prefix] || ''
+        suf = opts[:suffix] || ''
 
-        if (rx=opts[:rx]) and not rx.kind_of? Regexp
-          raise "rx must be a regular expression for a character class"
+        if (rx = opts[:rx]) and !rx.is_a? Regexp
+          raise 'rx must be a regular expression for a character class'
         end
 
-        hx=Rbkb::HEXCHARS
+        hx = Rbkb::HEXCHARS
 
-        out=Array.new
+        out = []
 
-        self.each_byte do |c| 
-          hc = if (rx and not rx.match c.chr)
-                 c.chr 
+        each_byte do |c|
+          hc = if rx and !rx.match c.chr
+                 c.chr
                else
-                 pre + (hx[(c >> 4)] + hx[(c & 0xf )]) + suf
+                 pre + (hx[(c >> 4)] + hx[(c & 0xf)]) + suf
                end
-          out << (hc)
+          out << hc
         end
         out.join(delim)
       end
 
-
-      # Convert ASCII hex string to raw. 
+      # Convert ASCII hex string to raw.
       #
       #   @param [String] d optional 'delimiter' between hex bytes
       #                   (zero+ spaces by default)
-      def unhexify(d=/\s*/)
-        self.force_to_binary.strip.gsub(/([A-Fa-f0-9]{1,2})#{d}?/) { $1.hex.chr }
+      def unhexify(d = /\s*/)
+        force_to_binary.strip.gsub(/([A-Fa-f0-9]{1,2})#{d}?/) { ::Regexp.last_match(1).hex.chr }
       end
 
       # Converts a hex value to numeric.
       #
       # Parameters:
-      #   
+      #
       #   order => :big or :little endian (default is :big)
       #
-      def hex_to_num(order=Rbkb::DEFAULT_BYTE_ORDER)
-        self.unhexify.dat_to_num(order)
+      def hex_to_num(order = Rbkb::DEFAULT_BYTE_ORDER)
+        unhexify.dat_to_num(order)
       end
-
 
       # A "generalized" lazy bytestring -> numeric converter.
       #
@@ -149,14 +148,13 @@ module Rbkb
       #   >> ("\xFF"*20).dat_to_num
       #   => 1461501637330902918203684832716283019655932542975
       #
-      def dat_to_num(order=Rbkb::DEFAULT_BYTE_ORDER)
-        b = self.bytes
+      def dat_to_num(order = Rbkb::DEFAULT_BYTE_ORDER)
+        b = bytes
         b = b.to_a.reverse if order == :little
         r = 0
-        b.each {|c| r = ((r << 8) | c)}
+        b.each { |c| r = ((r << 8) | c) }
         r
       end
-
 
       #### Crypto'ey stuff
 
@@ -167,17 +165,14 @@ module Rbkb
       # string, in "bits of randomness per byte". This is useful, so..."
       def entropy
         e = 0
-        sz = self.bytesize.to_f
-        b = self.bytes
+        sz = bytesize.to_f
+        b = bytes
         0.upto(255) do |i|
-          x = b.count(i)/sz
-          if x > 0
-            e += - x * (Math.log(x)/Math.log(2))
-          end
+          x = b.count(i) / sz
+          e += - x * (Math.log(x) / Math.log(2)) if x > 0
         end
         e
       end
-
 
       # Produces a character frequency distribution histogram in descending
       # order. Example:
@@ -194,66 +189,63 @@ module Rbkb
       #
       def char_frequency
         hits = {}
-        self.each_byte {|c| hits[c.chr] ||= 0; hits[c.chr] += 1 }
-        hits.to_a.sort {|a,b| b[1] <=> a[1] }
+        each_byte do |c|
+          hits[c.chr] ||= 0
+          hits[c.chr] += 1
+        end
+        hits.to_a.sort { |a, b| b[1] <=> a[1] }
       end
 
       # xor against a key. key will be repeated or truncated to self.size.
       def xor(k)
-        i=0
-        self.bytes.map do |b|
-          x = k.getbyte(i) || k.getbyte(i=0)
-          i+=1 
+        i = 0
+        bytes.map do |b|
+          x = k.getbyte(i) || k.getbyte(i = 0)
+          i += 1
           (b ^ x).chr
         end.join
       end
 
-
-      # (en|de)ciphers using a substition cipher en/decoder ring in the form of a 
+      # (en|de)ciphers using a substition cipher en/decoder ring in the form of a
       # hash with orig => substitute mappings
       def substitution(keymap)
-        split('').map {|c| (sub=keymap[c]) ? sub : c }.join
+        split('').map { |c| (sub = keymap[c]) ? sub : c }.join
       end
 
-
-      # (en|de)crypts using a substition xor en/decoder ring in the form of 
-      # a hash with orig => substitute mappings. Used in conjunction with 
-      # char_frequency, this sometimes provides a shorter way to derive a single 
+      # (en|de)crypts using a substition xor en/decoder ring in the form of
+      # a hash with orig => substitute mappings. Used in conjunction with
+      # char_frequency, this sometimes provides a shorter way to derive a single
       # character xor key used in conjunction with char_frequency.
       def substitution_xor(keymap)
-        split('').map {|c| (sub=keymap[c]) ? sub.xor(c) : c }.join
+        split('').map { |c| (sub = keymap[c]) ? sub.xor(c) : c }.join
       end
-
 
       # convert bytes to number then xor against another byte-string or number
-      def ^(x)
-        x = x.dat_to_num unless x.is_a? Numeric
-        (self.dat_to_num ^ x)#.to_bytes
+      def ^(other)
+        other = other.dat_to_num unless other.is_a? Numeric
+        (dat_to_num ^ other) # .to_bytes
       end
-
 
       # Byte rotation as found in lame ciphers.
-      def rotate_bytes(k=0)
+      def rotate_bytes(k = 0)
         k = (256 + k) if k < 0
-        self.bytes.map {|c| ((c + k) & 0xff).chr }.join
+        bytes.map { |c| ((c + k) & 0xff).chr }.join
       end
-
 
       # String randomizer
       def randomize
-        self.split('').randomize.to_s
+        split('').randomize.to_s
       end
-
 
       # In-place string randomizer
       def randomize!
-        self.replace(randomize)
+        replace(randomize)
       end
 
       # Does string "start with" dat?
       # No clue whether/when this is faster than a regex, but it is easier to type.
       def starts_with?(dat)
-        self.index(dat) == 0
+        index(dat) == 0
       end
 
       # Returns a single null-terminated ascii string from beginning of self.
@@ -263,8 +255,8 @@ module Rbkb
       #
       #   off = specify an optional beggining offset
       #
-      def cstring(off=0)
-        self[ off, (self.index("\x00") || self.size) ]
+      def cstring(off = 0)
+        self[off, (index("\x00") || size)]
       end
 
       # returns CRC32 checksum for the string object
@@ -284,7 +276,7 @@ module Rbkb
 
       # @return [Digest::MD5] the MD5 digest/checksum for this string.
       def md5
-        d=Digest::MD5.new()
+        d = Digest::MD5.new
         d.update(self)
         d
       end
@@ -292,14 +284,14 @@ module Rbkb
 
       # @return [Digest::SHA1] the SHA1 digest for this string.
       def sha1
-        d=Digest::SHA1.new()
+        d = Digest::SHA1.new
         d.update(self)
         d
       end
 
       # @return [Digest::SHA2] the SHA2 digest for this string.
       def sha2
-        d=Digest::SHA2.new()
+        d = Digest::SHA2.new
         d.update(self)
         d
       end
@@ -309,58 +301,59 @@ module Rbkb
       # (using popen3 because IO.popen blows)
       # Tried doing this with a fmagic ruby extention to libmagic, but it was
       # a whole lot slower.
-      def pipe_magick(arg="")
-        ret=""
-        Open3.popen3("file #{arg} -") do |w,r,e|
-          w.write self; w.close
-          ret = r.read ; r.close
-          ret.sub!(/^\/dev\/stdin: /, "")
+      def pipe_magick(arg = '')
+        ret = ''
+        Open3.popen3("file #{arg} -") do |w, r, _e|
+          w.write self
+          w.close
+          ret = r.read
+          r.close
+          ret.sub!(%r{^/dev/stdin: }, '')
         end
         ret
       end
 
-      # Converts a '_' delimited string to CamelCase like 'foo_class' into 
+      # Converts a '_' delimited string to CamelCase like 'foo_class' into
       # 'FooClass'.
       # See also: camelize_meth, decamelize
       def camelize
-        self.gsub(/(^|_)([a-z])/) { $2.upcase }
+        gsub(/(^|_)([a-z])/) { ::Regexp.last_match(2).upcase }
       end
 
       # Converts a '_' delimited string to method style camelCase like 'foo_method'
       # into 'fooMethod'.
       # See also: camelize, decamelize
       def camelize_meth
-        self.gsub(/_([a-z])/) { $1.upcase }
+        gsub(/_([a-z])/) { ::Regexp.last_match(1).upcase }
       end
 
-
       # Converts a CamelCase or camelCase string into '_' delimited form like
-      # 'FooBar' or 'fooBar' into 'foo_bar'. 
+      # 'FooBar' or 'fooBar' into 'foo_bar'.
       #
-      # Note: This method only handles camel humps. Strings with consecutive 
+      # Note: This method only handles camel humps. Strings with consecutive
       # uppercase chars like 'FooBAR' will be converted to 'foo_bar'
       #
       # See also: camelize, camelize_meth
       def decamelize
-        self.gsub(/(^|[a-z])([A-Z])/) do 
-          ($1.empty?)? $2 : "#{$1}_#{$2}"
+        gsub(/(^|[a-z])([A-Z])/) do
+          ::Regexp.last_match(1).empty? ? ::Regexp.last_match(2) : "#{::Regexp.last_match(1)}_#{::Regexp.last_match(2)}"
         end.downcase
       end
 
       # convert a string to its idiomatic ruby class name
       def class_name
-        r = ""
+        r = ''
         up = true
         each_byte do |c|
           if c == 95
             if up
-              r << "::"
+              r << '::'
             else
               up = true
             end
           else
             m = up ? :upcase : :to_s
-            r << (c.chr.send(m))
+            r << c.chr.send(m)
             up = false
           end
         end
@@ -369,8 +362,8 @@ module Rbkb
 
       # Returns a reference to actual constant for a given name in namespace
       # can be used to lookup classes from enums and such
-      def const_lookup(ns=Object)
-        if c=ns.constants.select {|n| n == self.class_name } and not c.empty?
+      def const_lookup(ns = Object)
+        if c = ns.constants.select { |n| n == class_name } and !c.empty?
           ns.const_get(c.first)
         end
       end
@@ -382,11 +375,11 @@ module Rbkb
 
       # Returns or prints a hexdump in the style of 'hexdump -C'
       #
-      # :len => optionally specify a length other than 16 for a wider or thinner 
+      # :len => optionally specify a length other than 16 for a wider or thinner
       # dump. If length is an odd number, it will be rounded up.
       #
       # :out => optionally specify an alternate IO object for output. By default,
-      # hexdump will output to STDOUT.  Pass a StringIO object and it will return 
+      # hexdump will output to STDOUT.  Pass a StringIO object and it will return
       # it as a string.
       #
       # Example:
@@ -402,29 +395,29 @@ module Rbkb
       #   <prints hexdump on STDERR>
       #   -> nil # return value is nil!
       #
-      def hexdump(opt={})
-        s=self
+      def hexdump(opt = {})
+        s = self
         out = opt[:out] || StringIO.new
-        len = (opt[:len] and opt[:len] > 0)? opt[:len] + (opt[:len] % 2) : 16
+        len = (opt[:len] and opt[:len] > 0) ? opt[:len] + (opt[:len] % 2) : 16
 
         off = opt[:start_addr] || 0
         offlen = opt[:start_len] || 8
 
-        hlen=len/2
+        hlen = len / 2
 
         s.bytes.each_slice(len) do |m|
-          out.write(off.to_s(16).rjust(offlen, "0") + '  ')
+          out.write(off.to_s(16).rjust(offlen, '0') + '  ')
 
-          i=0
+          i = 0
           m.each do |c|
-            out.write "%0.2x " % c
-            out.write(' ') if (i+=1) == hlen
+            out.write '%0.2x ' % c
+            out.write(' ') if (i += 1) == hlen
           end
 
-          out.write("   " * (len-i) ) # pad
-          out.write(" ") if i < hlen
+          out.write('   ' * (len - i)) # pad
+          out.write(' ') if i < hlen
 
-          out.write(" |")
+          out.write(' |')
           m.each do |c|
             if c > 0x19 and c < 0x7f
               out.write(c.chr)
@@ -436,96 +429,89 @@ module Rbkb
           off += m.length
         end
 
-        out.write(off.to_s(16).rjust(offlen,'0') + "\n")
+        out.write(off.to_s(16).rjust(offlen, '0') + "\n")
 
-        if out.class == StringIO
-          out.string
-        end
+        return unless out.class == StringIO
+
+        out.string
       end
-
 
       # Converts a hexdump back to binary - takes the same options as hexdump().
       # Fairly flexible. Should work both with 'xxd' and 'hexdump -C' style dumps.
-      def dehexdump(opt={})
-        s=self
+      def dehexdump(opt = {})
+        s = self
         out = opt[:out] || StringIO.new
-        len = (opt[:len] and opt[:len] > 0)? opt[:len] : 16
+        l = opt[:len]
+        len = l && l.positive? ? opt[:len] : 16
 
         hcrx = /[A-Fa-f0-9]/
         dumprx = /^(#{hcrx}+):?\s*((?:#{hcrx}{2}\s*){0,#{len}})/
-          off = opt[:start_addr] || 0
+        off = opt[:start_addr] || 0
 
-        i=1
+        i = 1
         # iterate each line of hexdump
         s.split(/\r?\n/).each do |hl|
           # match and check offset
-          if dumprx.match(hl) and $1.hex == off
-            i+=1
-            # take the data chunk and unhexify it
-            raw = $2.unhexify
-            off += out.write(raw)
-          else
-            raise "Hexdump parse error on line #{i} #{s}"
-          end
+          raise "Hexdump parse error on line #{i} #{s}" unless dumprx.match(hl) && ::Regexp.last_match(1).hex == off
+
+          i += 1
+          # take the data chunk and unhexify it
+          raw = ::Regexp.last_match(2).unhexify
+          off += out.write(raw)
         end
 
-        if out.class == StringIO
-          out.string
-        end
+        return unless out.instance_of?(StringIO)
+
+        out.string.force_to_binary
       end
       alias dedump dehexdump
       alias undump dehexdump
       alias unhexdump dehexdump
 
-
       # Binary grep
-      # 
+      #
       # Parameters:
       #
       #   find  : A Regexp or string to search for in self
       #   align : nil | numeric alignment (matches only made if aligned)
-      def bgrep(find, align=nil)
-        if align and (not align.is_a?(Integer) or align < 0)
-          raise "alignment must be a integer >= 0"
-        end
+      def bgrep(find, align = nil)
+        raise 'alignment must be a integer >= 0' if align and (!align.is_a?(Integer) or align < 0)
 
-        dat=self
-        if find.kind_of? Regexp
-          search = lambda do |mf, buf| 
-            if m = mf.match(buf)
-              mtch = m[0]
-              off,endoff = m.offset(0)
-              return off, endoff, mtch
-            end
-          end
-        else
-          search = lambda do |s, buf|
-            if off = buf.index(s)
-              return off, off+s.size, s
-            end
-          end
-        end
+        dat = self
+        search = if find.is_a? Regexp
+                   lambda do |mf, buf|
+                     if m = mf.match(buf)
+                       mtch = m[0]
+                       off, endoff = m.offset(0)
+                       [off, endoff, mtch]
+                     end
+                   end
+                 else
+                   lambda do |s, buf|
+                     if off = buf.index(s)
+                       [off, off + s.size, s]
+                     end
+                   end
+                 end
 
-        ret=[]
+        ret = []
         pos = 0
         while (res = search.call(find, dat[pos..-1].force_to_binary))
           off, endoff, match = res
-          if align and ( pad = (pos+off).pad(align) ) != 0
+          if align and (pad = (pos + off).pad(align)) != 0
             pos += pad
           else
-            hit = [pos+off, pos+endoff, match]
-            if not block_given? or yield([pos+off, pos+endoff, match])
-              ret << hit
-            end
+            hit = [pos + off, pos + endoff, match]
+            ret << hit if !block_given? or yield([pos + off, pos + endoff, match])
             pos += endoff
           end
         end
-        return ret
+        ret
       end
 
       # A 'strings' method a-la unix strings utility. Finds printable strings in
       # a binary blob.
-      # Supports ASCII and little endian unicode (though only for ASCII printable 
+      # Supports ASCII and little endian unicode (though only for ASCII printable
       # character.)
       #
       # === Parameters and options:
@@ -542,7 +528,7 @@ module Rbkb
       #
       #  * Supports an optional block, which will be passed |offset, type, string|
       #    for each match.
-      #    The block's boolean return value also determines whether the match 
+      #    The block's boolean return value also determines whether the match
       #    passes or fails (true or false/nil) and gets returned by the function.
       #
       # === Return Value:
@@ -555,18 +541,18 @@ module Rbkb
       #  * end_offset will include the terminating null character
       #  * end_offset will include all null bytes in unicode strings (including
       #  * both terminating nulls)
-      # 
+      #
       #   If strings are null terminated, the trailing null *IS* included
       #   in the end_offset. Unicode matches will also include null bytes.
       #
       # Todos?
       #    - better unicode support (i.e. not using half-assed unicode)
       #    - support other encodings such as all those the binutils strings does?
-      def strings(opts={})
+      def strings(opts = {})
         opts[:encoding] ||= :both
-        min = (opts[:minimum] || 6)
+        min = opts[:minimum] || 6
 
-        raise "Minimum must be numeric and > 0" unless min.kind_of? Numeric and min > 0
+        raise 'Minimum must be numeric and > 0' unless min.is_a? Numeric and min > 0
 
         acc = /[\s[:print:]]/
         ucc = /(?:#{acc}\x00)/
@@ -575,41 +561,39 @@ module Rbkb
         urx = /(#{ucc}{#{min}}#{ucc}*(?:\x00\x00)?)/
 
         rx = case (opts[:encoding] || :both).to_sym
-             when :ascii   
-               mtype_blk = lambda {|x| :ascii }
+             when :ascii
+               mtype_blk = ->(_x) { :ascii }
                arx
-             when :unicode 
-               mtype_blk = lambda {|x| :unicode }
+             when :unicode
+               mtype_blk = ->(_x) { :unicode }
                urx
-             when :both    
-               mtype_blk = lambda {|x| (x[2].nil?)? :ascii : :unicode }
+             when :both
+               mtype_blk = ->(x) { x[2].nil? ? :ascii : :unicode }
 
-               Regexp.union( arx, urx )
-             else 
-               raise "Encoding must be :unicode, :ascii, or :both"
+               Regexp.union(arx, urx)
+             else
+               raise 'Encoding must be :unicode, :ascii, or :both'
              end
 
         ret = []
 
         # wow ruby 1.9 string encoding is a total cluster
-        self.force_to_binary.scan(rx) do 
+        force_to_binary.scan(rx) do
           mtch = $~
 
           stype = mtype_blk.call(mtch)
 
           startoff, endoff = mtch.offset(0)
-          mret = [startoff, endoff, stype, mtch[0] ]
+          mret = [startoff, endoff, stype, mtch[0]]
 
           # yield to a block for additional criteria
-          next if block_given? and not yield( *mret )
+          next if block_given? and !yield(*mret)
 
           ret << mret
         end
 
-        return ret
+        ret
       end
-
-
     end
   end
 end
@@ -621,4 +605,3 @@ end
 def RbkbString(x)
   RbkbString.new(x)
 end
-

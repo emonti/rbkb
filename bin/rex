@@ -6,5 +6,4 @@
 require 'pp'
 require 'rbkb'
 
-eval ARGV.join(' ');
-
+eval ARGV.join(' ')

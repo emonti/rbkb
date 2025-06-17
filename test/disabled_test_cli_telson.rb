@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), "test_cli_helper.rb")
+require File.join(File.dirname(__FILE__), 'test_cli_helper.rb')
 
 class TestCliTelson < Test::Unit::TestCase
   include CliTest
@@ -7,5 +7,4 @@ class TestCliTelson < Test::Unit::TestCase
     @cli_class = Rbkb::Cli::Telson
     super()
   end
-
 end

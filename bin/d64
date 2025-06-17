@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require "rbkb/cli/d64"
+require 'rbkb/cli/d64'
 
-Rbkb::Cli::D64.run()
+Rbkb::Cli::D64.run

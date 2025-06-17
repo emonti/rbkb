@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require "rbkb/cli/hexify"
+require 'rbkb/cli/hexify'
 
-Rbkb::Cli::Hexify.run()
+Rbkb::Cli::Hexify.run

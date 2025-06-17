@@ -1,4 +1,4 @@
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 
@@ -6,60 +6,57 @@ require 'yaml'
 require 'rbkb'
 
 module FeedImport
-
   ## TODO switch to pcaprub or some other up to date pcap lib. make it a dep.
   begin
     ## This requires the 'ruby-pcap' library from:
     ##   http://raa.ruby-lang.org/project/pcap/
     ## ... which is old and krufty...
-    $VERBOSE=nil
+    $VERBOSE = nil
     require 'pcaplet'
-    $VERBOSE=false
+    $VERBOSE = false
 
     # Imports an array from pcap
-    def import_pcap(file, filter=nil)
-      ret = Array.new
+    def import_pcap(file, filter = nil)
+      ret = []
       pcap = Pcap::Capture.open_offline(file)
       pcap.setfilter filter if filter
       pcap.each_packet do |pkt|
-        if ( (pkt.udp? and dat=pkt.udp_data) or 
-             (pkt.tcp? and dat=pkt.tcp_data and not dat.empty?)
-           ) 
-             ret <<  dat 
-        end
+        next unless (pkt.udp? and dat = pkt.udp_data) or
+                    (pkt.tcp? and dat = pkt.tcp_data and !dat.empty?)
+
+        ret << dat
       end
-      return ret
+      ret
     end
   rescue LoadError
-    def import_pcap(*args)
-      raise "you must install ruby-pcap to use this feature"
+    def import_pcap(*_args)
+      raise 'you must install ruby-pcap to use this feature'
     end
   end
 
   module_function :import_pcap
 
-
   # Imports an array from yaml
   def import_yaml(file)
-    unless ( ret = YAML.load_file(file) ).kind_of? Array
+    unless (ret = YAML.load_file(file)).is_a? Array
       raise "#{file.inspect} did not provide an array"
     end
-    return ret
+
+    ret
   end
   module_function :import_yaml
-
 
   # Imports from hexdumps separated by "%" and merged by ','
   def import_dump(file)
     ret = []
     dat = File.read(file)
     dat.strip.split(/^%$/).each do |msg|
-      ret << ""
+      ret << ''
       msg.strip.split(/^,$/).each do |chunk|
         ret[-1] << chunk.strip.dehexdump
       end
     end
-    return ret
+    ret
   end
   module_function :import_dump
 
@@ -71,4 +68,3 @@ module FeedImport
   end
   module_function :import_rawfiles
 end
-

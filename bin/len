@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require "rbkb/cli/len"
+require 'rbkb/cli/len'
 
-Rbkb::Cli::Len.run()
+Rbkb::Cli::Len.run

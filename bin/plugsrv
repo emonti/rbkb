@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 # A blit-able reverse TCP proxy. Displays traffic hexdumps. Currently uses
@@ -18,16 +18,17 @@ require 'rbkb/plug'
 
 class BlitPlug
   module UI
-    def log( *msg )
-      unless PLUG_OPTS[:quiet]
-        PLUG_OPTS[:out].puts msg
-      end
+    def log(*msg)
+      return if PLUG_OPTS[:quiet]
+
+      PLUG_OPTS[:out].puts msg
     end
     module_function :log
   end
 
   class Controller
     attr_accessor :tgtaddr, :tgtport, :tgtclient, :blit, :peers
+
     @@controller = nil
 
     def initialize(tgtaddr, tgtport, tgtclient)
@@ -37,28 +38,27 @@ class BlitPlug
 
       @@controller = self
 
-      @peers = Array.new
+      @peers = []
 
       ## Just tack on a blit server???
-      @blit = EventMachine::start_server(
+      @blit = EventMachine.start_server(
         PLUG_OPTS[:blit_addr], PLUG_OPTS[:blit_port], Plug::Blit, :TCP, self
       )
-
     end
 
-    ##----------------------------------------
+    # #----------------------------------------
 
-    def dispatch_rcv(snder, data)
+    def dispatch_rcv(_snder, data)
       data # for now
     end
 
-    ##----------------------------------------
+    # #----------------------------------------
 
-    def dispatch_close(snder)
+    def dispatch_close(_snder)
       nil # for now
     end
 
-    ##----------------------------------------
+    # #----------------------------------------
 
     def self.proxy(cli)
       unless (ctrl = @@controller)
@@ -69,7 +69,7 @@ class BlitPlug
       tgtport = ctrl.tgtport
       tgtclient = ctrl.tgtclient
 
-      srv = EventMachine::connect(tgtaddr, tgtport, tgtclient)
+      srv = EventMachine.connect(tgtaddr, tgtport, tgtclient)
       srv.plug_peers.push cli
       cli.plug_peers.push srv
 
@@ -80,7 +80,6 @@ class BlitPlug
     end
   end # class BlitPlug::Controller
 
-
   module BaseTCP
     include UI
 
@@ -88,33 +87,32 @@ class BlitPlug
     attr_reader :sock_peer, :sock_peername
 
     def post_init
-      @plug_peers = Array.new
-      @kind = :conn  # default
+      @plug_peers = []
+      @kind = :conn # default
     end
- 
+
     def name
       @name
     end
 
     def say(data, sender)
-      log "%#{sender.kind.to_s.upcase}-SAYS", data.hexdump(:out => StringIO.new), "%"
-      send_data data 
+      log "%#{sender.kind.to_s.upcase}-SAYS", data.hexdump(out: StringIO.new), '%'
+      send_data data
     end
 
-    def receive_data data
-      log "%#{kind.to_s.upcase}-#{sock_peername}-SAYS", data.hexdump, "%"
+    def receive_data(data)
+      log "%#{kind.to_s.upcase}-#{sock_peername}-SAYS", data.hexdump, '%'
       if @controller and (data = @controller.dispatch_rcv(self, data)).nil?
         return
       end
-      @plug_peers.each {|p| p.send_data data}
-    end
 
+      @plug_peers.each { |p| p.send_data data }
+    end
 
     def notify_connection
       @name = "#{kind.to_s.upcase}-#{sock_peername}"
       log "%#{@name}-CONNECTED"
     end
-
 
     def unbind
       @name = "#{kind.to_s.upcase}-#{sock_peername}"
@@ -122,13 +120,12 @@ class BlitPlug
 
       cret = (@controller and @controller.dispatch_close(self))
 
-      @plug_peers.each do |p| 
+      @plug_peers.each do |p|
         p.plug_peers.delete(self)
         p.close_connection unless cret
       end
     end
   end
-
 
   module TCPListener
     include BlitPlug::BaseTCP
@@ -146,9 +143,7 @@ class BlitPlug
 
       notify_connection
     end
-
   end # module TCPListener
-
 
   module TCPClient
     include BlitPlug::BaseTCP
@@ -165,24 +160,20 @@ class BlitPlug
       notify_connection
       start_tls if PLUG_OPTS[:tgt_tls]
     end
-
   end # module TCPClient
-
 end # module BlitPlug
 
-PLUG_OPTS={ 
-  :quiet => false, 
-  :out => STDOUT,
-  :blit_addr => Plug::Blit::DEFAULT_IPADDR, 
-  :blit_port => Plug::Blit::DEFAULT_PORT,
+PLUG_OPTS = {
+  quiet: false,
+  out: STDOUT,
+  blit_addr: Plug::Blit::DEFAULT_IPADDR,
+  blit_port: Plug::Blit::DEFAULT_PORT
 }
 
 def bail(*msg)
-  STDERR.puts msg
+  warn msg
   exit 1
 end
-
-
 
 #############################################################################
 ### MAIN
@@ -194,78 +185,77 @@ opts = OptionParser.new do |opts|
                 "  <target:tport>  = the address of the target service\n",
                 "  <@laddr:lport> = optional address and port to listen on\n"
 
-  opts.separator ""
-  opts.separator "Options:"
+  opts.separator ''
+  opts.separator 'Options:'
 
-  opts.on_tail("-h", "--help", "Show this message") do
+  opts.on_tail('-h', '--help', 'Show this message') do
     puts opts
     exit 1
   end
 
-  opts.on("-o", "--output FILE", "send output to a file") do |o|
-    PLUG_OPTS[:out] = File.open(o, "w") rescue (bail $!)
+  opts.on('-o', '--output FILE', 'send output to a file') do |o|
+    PLUG_OPTS[:out] = begin
+      File.open(o, 'w')
+    rescue StandardError
+      (bail $!)
+    end
   end
 
-  opts.on("-l", "--listen ADDR:PORT", 
-          "optional listener address:port", 
-          "(default: 0.0.0.0:<tport>)"
-         ) do |addr|
-
-    unless m = /^([\w\.]+)?(?::(\d+))?$/.match(addr)
-      STDERR.puts "invalid listener address"
+  opts.on('-l', '--listen ADDR:PORT',
+          'optional listener address:port',
+          '(default: 0.0.0.0:<tport>)') do |addr|
+    unless m = /^([\w.]+)?(?::(\d+))?$/.match(addr)
+      warn 'invalid listener address'
       exit 1
     end
     PLUG_OPTS[:svraddr] = m[1]
-    PLUG_OPTS[:svrport] = (m[2])? m[2].to_i : nil
+    PLUG_OPTS[:svrport] = m[2] ? m[2].to_i : nil
   end
 
-  opts.on("-q", "--[no-]quiet", "Suppress/Enable conversation dumps.") do |q|
+  opts.on('-q', '--[no-]quiet', 'Suppress/Enable conversation dumps.') do |q|
     PLUG_OPTS[:quiet] = q
   end
 
-  opts.on("-b", "--blitsrv ADDR:PORT", 
-          "specify blit listener [address:]port", 
-          "(default: #{PLUG_OPTS[:blit_addr]}:#{PLUG_OPTS[:blit_port]})"
-         ) do |addr|
-
-    unless m = /^(?:([\w\.]+):)?(\d+)$/.match(addr)
-      STDERR.puts "invalid blit listener argument"
+  opts.on('-b', '--blitsrv ADDR:PORT',
+          'specify blit listener [address:]port',
+          "(default: #{PLUG_OPTS[:blit_addr]}:#{PLUG_OPTS[:blit_port]})") do |addr|
+    unless m = /^(?:([\w.]+):)?(\d+)$/.match(addr)
+      warn 'invalid blit listener argument'
       exit 1
     end
     PLUG_OPTS[:blit_addr] = m[1] if m[1]
     PLUG_OPTS[:blit_port] = m[2].to_i
   end
 
-  opts.on("--[no-]target-tls", "enable/disable TLS to target") {|t| PLUG_OPTS[:tgt_tls] = t }
-  opts.on("--[no-]server-tls", "enable/disable TLS to clients") {|t| PLUG_OPTS[:svr_tls] = t }
-
+  opts.on('--[no-]target-tls', 'enable/disable TLS to target') { |t| PLUG_OPTS[:tgt_tls] = t }
+  opts.on('--[no-]server-tls', 'enable/disable TLS to clients') { |t| PLUG_OPTS[:svr_tls] = t }
 end
 
-opts.parse!(ARGV) rescue (STDERR.puts $!; exit 1)
-
+begin
+  opts.parse!(ARGV)
+rescue StandardError
+  (warn $!
+   exit 1)
+end
 
 # Get target/listen argument
-rx = /^([\w\.]+):(\d+)(?:@(?:([\w\.]+):)?(\d+))?$/
+rx = /^([\w.]+):(\d+)(?:@(?:([\w.]+):)?(\d+))?$/
 unless (m = rx.match(ARGV.shift)) and ARGV.shift.nil?
-  $stderr.puts opts.banner
+  warn opts.banner
   exit 1
 end
 
 PLUG_OPTS[:tgtaddr] = m[1]
 PLUG_OPTS[:tgtport] = m[2].to_i
-PLUG_OPTS[:svraddr] ||= (m[3] || "0.0.0.0")
+PLUG_OPTS[:svraddr] ||= m[3] || '0.0.0.0'
 PLUG_OPTS[:svrport] ||= (m[4] || PLUG_OPTS[:tgtport]).to_i
 
-
-EventMachine::run {
+EventMachine.run do
   # Instantiate controller
-  ctrl = BlitPlug::Controller.new(PLUG_OPTS[:tgtaddr], PLUG_OPTS[:tgtport], BlitPlug::TCPClient)
+  BlitPlug::Controller.new(PLUG_OPTS[:tgtaddr], PLUG_OPTS[:tgtport], BlitPlug::TCPClient)
 
   # Start event loop
   BlitPlug::UI.log "%Starting TCP PlugServer #{PLUG_OPTS[:svraddr]}:#{PLUG_OPTS[:svrport]} -> #{PLUG_OPTS[:tgtaddr]}:#{PLUG_OPTS[:tgtport]}"
 
-  
-  EventMachine::start_server(PLUG_OPTS[:svraddr], PLUG_OPTS[:svrport], BlitPlug::TCPListener)
-}
-
-
+  EventMachine.start_server(PLUG_OPTS[:svraddr], PLUG_OPTS[:svrport], BlitPlug::TCPListener)
+end

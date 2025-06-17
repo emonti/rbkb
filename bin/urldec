@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require "rbkb/cli/urldec"
+require 'rbkb/cli/urldec'
 
-Rbkb::Cli::Urldec.run()
+Rbkb::Cli::Urldec.run

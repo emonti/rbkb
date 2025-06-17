@@ -1,13 +1,13 @@
 require 'rbkb/cli'
 
-# Copyright 2009 emonti at matasano.com 
+# Copyright 2009 emonti at matasano.com
 # See README.rdoc for license information
 #
 # d64 converts a base-64 encoded string back to its orginal form.
 class Rbkb::Cli::D64 < Rbkb::Cli::Executable
   def make_parser
     super()
-    @oparse.banner += " <data | blank for stdin>"
+    @oparse.banner += ' <data | blank for stdin>'
     add_std_file_opt(:indat)
   end
 
@@ -15,7 +15,7 @@ class Rbkb::Cli::D64 < Rbkb::Cli::Executable
     super(*args)
     parse_string_argument(:indat)
     parse_file_argument(:indat)
-    parse_catchall()
+    parse_catchall
     @opts[:indat] ||= @stdin.read
   end
 
@@ -25,4 +25,3 @@ class Rbkb::Cli::D64 < Rbkb::Cli::Executable
     self.exit(0)
   end
 end
-

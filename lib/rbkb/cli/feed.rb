@@ -7,10 +7,10 @@ require 'eventmachine'
 # See README.rdoc for license information
 #
 # This is a plug-board message feeder from static data sources.
-# The "feed" handles messages opaquely and just plays them in the given 
+# The "feed" handles messages opaquely and just plays them in the given
 # sequence.
 #
-# Feed can do the following things with minimum fuss: 
+# Feed can do the following things with minimum fuss:
 #   - Import messages from files, yaml, or pcap
 #   - Inject custom/modified messages with "blit"
 #   - Run as a server or client using UDP or TCP
@@ -29,7 +29,7 @@ require 'eventmachine'
 
 class Rbkb::Cli::Feed < Rbkb::Cli::Executable
   def initialize(*args)
-    @local_addr = "0.0.0.0"
+    @local_addr = '0.0.0.0'
     @local_port = nil
     @listen = false
     @persist = false
@@ -39,108 +39,106 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
     @blit_addr = Plug::Blit::DEFAULT_IPADDR
     @blit_port = Plug::Blit::DEFAULT_PORT
 
-
     ## Default options sent to the Feed handler
-    @feed_opts = { 
-      :close_at_end => false,
-      :step => false,
-      :go_first => false
+    @feed_opts = {
+      close_at_end: false,
+      step: false,
+      go_first: false
     }
 
     super(*args)
 
-    # TODO Plug::UI obviously need fixing. 
+    # TODO: Plug::UI obviously need fixing.
     # TODO It shouldn't be driven by constants for configuration
     Plug::UI::LOGCFG[:verbose] = true
     Plug::UI::LOGCFG[:dump] = :hex
     Plug::UI::LOGCFG[:out] = @stderr
   end
 
-  def make_parser()
+  def make_parser
     arg = super()
-    arg.banner += " host:port"
+    arg.banner += ' host:port'
 
-    arg.on("-o", "--output=FILE", "Output to file") do |o|
-      Plug::UI::LOGCFG[:out] = File.open(o, "w")
+    arg.on('-o', '--output=FILE', 'Output to file') do |o|
+      Plug::UI::LOGCFG[:out] = File.open(o, 'w')
     end
 
-    arg.on("-l", "--listen=(ADDR:?)PORT", "Server - on port (and addr?)") do |p|
-      if m=/^(?:([\w\._-]+):)?(\d+)$/.match(p)
-        @local_addr = $1 if $1
-        @local_port = $2.to_i
-        @listen = true
-      else
-        raise "Invalid listen argument: #{p.inspect}"
-      end
+    arg.on('-l', '--listen=(ADDR:?)PORT', 'Server - on port (and addr?)') do |p|
+      raise "Invalid listen argument: #{p.inspect}" unless /^(?:([\w._-]+):)?(\d+)$/.match(p)
+
+      @local_addr = ::Regexp.last_match(1) if ::Regexp.last_match(1)
+      @local_port = ::Regexp.last_match(2).to_i
+      @listen = true
     end
 
-    arg.on("-s", "--source=(ADDR:?)PORT", "Bind client on port and addr") do |p|
-      if m=/^(?:([\w\.]+):)?(\d+)$/.match(p)
-        @local_addr = $1 if $1
-        @local_port = $2.to_i
+    arg.on('-s', '--source=(ADDR:?)PORT', 'Bind client on port and addr') do |p|
+      if /^(?:([\w.]+):)?(\d+)$/.match(p)
+        @local_addr = ::Regexp.last_match(1) if ::Regexp.last_match(1)
+        @local_port = ::Regexp.last_match(2).to_i
       else
         bail("Invalid source argument: #{p.inspect}")
       end
     end
 
-    arg.on("-b", "--blit=(ADDR:)?PORT", "Where to listen for blit") do |b|
+    arg.on('-b', '--blit=(ADDR:)?PORT', 'Where to listen for blit') do |b|
       puts b
-      unless(m=/^(?:([\w\._-]+):)?(\d+)$/.match(b))
+      unless (m = /^(?:([\w._-]+):)?(\d+)$/.match(b))
         raise "Invalid blit argument: #{b.inspect}"
       end
+
       @blit_port = m[2].to_i
       @blit_addr = m[1] if m[1]
     end
 
-    arg.on("-i", "--[no-]initiate", "Send the first message on connect") do |i|
+    arg.on('-i', '--[no-]initiate', 'Send the first message on connect') do |i|
       @feed_opts[:go_first] = i
     end
 
-    arg.on("-e", "--[no-]end", "End connection when feed is exhausted") do |c|
+    arg.on('-e', '--[no-]end', 'End connection when feed is exhausted') do |c|
       @feed_opts[:close_at_end] = c
     end
-     
-    arg.on("--[no-]step", "'Continue' prompt between messages") do |s|
+
+    arg.on('--[no-]step', "'Continue' prompt between messages") do |s|
       @feed_opts[:step] = s
     end
 
-    arg.on("-u", "--udp", "Use UDP instead of TCP" ) do
+    arg.on('-u', '--udp', 'Use UDP instead of TCP') do
       @transport = :UDP
     end
 
-    arg.on("-r", "--reconnect", "Attempt to reconnect endlessly.") do
-      @persist=true
+    arg.on('-r', '--reconnect', 'Attempt to reconnect endlessly.') do
+      @persist = true
     end
 
-    arg.on("-q", "--quiet", "Suppress verbose messages/dumps") do
+    arg.on('-q', '--quiet', 'Suppress verbose messages/dumps') do
       Plug::UI::LOGCFG[:verbose] = false
     end
 
-    arg.on("-Q", "--squelch-exhausted", "Squelch 'FEED EXHAUSTED' messages") do |s|
+    arg.on('-Q', '--squelch-exhausted', "Squelch 'FEED EXHAUSTED' messages") do |_s|
       @feed_opts[:squelch_exhausted] = true
     end
 
-    arg.separator  "  Sources: (can be combined)"
+    arg.separator '  Sources: (can be combined)'
 
-    arg.on("-f", "--from-files=GLOB", "Import messages from raw files") do |f|
+    arg.on('-f', '--from-files=GLOB', 'Import messages from raw files') do |f|
       @feed_opts[:feed] ||= []
       @feed_opts[:feed] += FeedImport.import_rawfiles(f)
     end
 
-    arg.on("-x", "--from-hex=FILE", "Import messages from hexdumps") do |x|
+    arg.on('-x', '--from-hex=FILE', 'Import messages from hexdumps') do |x|
       @feed_opts[:feed] ||= []
       @feed_opts[:feed] += FeedImport.import_dump(x)
     end
 
-    arg.on("-y", "--from-yaml=FILE", "Import messages from yaml") do |y|
+    arg.on('-y', '--from-yaml=FILE', 'Import messages from yaml') do |y|
       @feed_opts[:feed] ||= []
       @feed_opts[:feed] += FeedImport.import_yaml(y)
     end
 
-    arg.on("-p", "--from-pcap=FILE[:FILTER]", "Import messages from pcap") do |p|
+    arg.on('-p', '--from-pcap=FILE[:FILTER]', 'Import messages from pcap') do |p|
       if /^([^:]+):(.+)$/.match(p)
-        file = $1
-        filter = $2
+        file = ::Regexp.last_match(1)
+        filter = ::Regexp.last_match(2)
       else
         file = p
         filter = nil
@@ -154,9 +152,7 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
   def parse(*args)
     super(*args)
 
-    if @transport == :UDP
-      @svr_method = @cli_method = :open_datagram_socket
-    end
+    @svr_method = @cli_method = :open_datagram_socket if @transport == :UDP
 
     @local_port ||= 0
     # Prepare EventMachine arguments based on whether we are a client or server
@@ -168,18 +164,18 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
     else # client
 
       ## Get target/listen argument for client mode
-      unless (m = /^([\w\.]+):(\d+)$/.match(tgt=@argv.shift))
+      unless (m = /^([\w.]+):(\d+)$/.match(tgt = @argv.shift))
         bail_args tgt
       end
 
       @target_addr = m[1]
       @target_port = m[2].to_i
 
-      if @transport == :UDP
-        addr_args = [@local_addr, @local_port]
-      else
-        addr_args = [@local_addr, @local_port, @target_addr, @target_port]
-      end
+      addr_args = if @transport == :UDP
+                    [@local_addr, @local_port]
+                  else
+                    [@local_addr, @local_port, @target_addr, @target_port]
+                  end
 
       @meth = @cli_method
       @feed_opts[:kind] = :client
@@ -187,17 +183,16 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
 
     @feed_opts[:feed] ||= []
 
-    @em_args=[ 
-      @meth, 
+    @em_args = [
+      @meth,
       addr_args,
-      Plug::ArrayFeeder, 
-      @transport, 
+      Plug::ArrayFeeder,
+      @transport,
       @feed_opts
     ].flatten
 
-    parse_catchall()
+    parse_catchall
   end
-
 
   def go(*args)
     super(*args)
@@ -206,13 +201,13 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
 
     ## Start the eventmachine
     loop do
-      EventMachine::run do
+      EventMachine.run do
         EventMachine.send(*@em_args) do |c|
           EventMachine.start_server(@blit_addr, @blit_port, Plug::Blit, :TCP, c)
-          Plug::UI::verbose("** BLITSRV-#{@blit_addr}:#{@blit_port}(TCP) Started")
+          Plug::UI.verbose("** BLITSRV-#{@blit_addr}:#{@blit_port}(TCP) Started")
 
           # if this is a UDP client, we will always send the first message
-          if [:UDP, :client] == [@transport, c.kind]
+          if %i[UDP client] == [@transport, c.kind]
             peer = c.peers.add_peer_manually(@target_addr, @target_port)
             c.feed_data(peer)
             c.go_first = false
@@ -221,9 +216,8 @@ class Rbkb::Cli::Feed < Rbkb::Cli::Executable
       end
 
       break unless @persist
-      Plug::UI::verbose("** RECONNECTING")
-    end
 
+      Plug::UI.verbose('** RECONNECTING')
+    end
   end
 end
-
