@@ -1,4 +1,4 @@
-### Using the rbkb library's Monkey Patches
+# Using the rbkb library's Monkey Patches
 
 Much of rbkb is implemented as a bunch of monkeypatches to Array, String, 
 Numeric and other base classes. If this suits your fancy (some people despise
@@ -8,7 +8,24 @@ your irb sessions and own scripts.
 The monkey-patches were designed to let you approximate use of the rbkb shell 
 commands from IRB or ruby scripts.
 
-(My dirty secret: I use IRB for like... everything!)
+(My dirty secret: I use IRB for like... everything!). Here's what I dropped in
+my `.irbrc`:
+```ruby
+require 'rbkb'
+
+# this isn't strictly related to rbkb, but it's super handy on my mac
+# for using the pasteboard (copy/paste) to get things in and out of irb
+class String
+  def pbcopy
+    Open3.popen3('pbcopy') {|i, o, e,t| i.write(self)}
+  end
+end
+
+def pbpaste
+  `pbpaste`
+end
+```
+
 
 Using the rbkb library in ruby will let you do things like the following (just 
 some samples, see rdoc for more info).
