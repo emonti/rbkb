@@ -1,15 +1,15 @@
-= rbkb
+# rbkb
 
 * http://emonti.github.com/rbkb
 
-== DESCRIPTION:
+## DESCRIPTION:
 
 Ruby BlackBag (rbkb)
 
 A miscellaneous collection of command-line tools and ruby library helpers 
 related to pen-testing and reversing. 
 
-=== Rationale
+### Rationale
 
     Disclaimer: 
     Most of what's in the black bag came from a desire to do less typing.
@@ -28,9 +28,9 @@ that may or may not make it to 'bkb' right away (if ever). Similarly some of
 the things in 'bkb' have not yet made it to 'rbkb' (and may not).
 
 
-== SYNOPSIS:
+## SYNOPSIS:
 
-=== Command Line Tools
+### Command Line Tools
 
 The tools almost all support '-h', but I'll admit this only goes so far.
 See cli_usage.rdoc for usage and a bit of extra info on the various tools. 
@@ -39,7 +39,7 @@ When I get some spare time, I'll try and do up some examples of using all
 the tools.
 
 
-=== Plug
+### Plug
 
 Black Bag includes several tools for testing network protocols using plugboard
 proxies. Users of the original Matasano BlackBag may be familiar with the
@@ -63,7 +63,7 @@ Ruby BlackBag has a similar set of network tools:
   didn't do this, which makes plugsrv kindof neat.
 
 
-=== Monkey Patches
+### Monkey Patches
 
 Much of rbkb is implemented as a bunch of monkeypatches to Array, String, 
 Numeric and other base classes. If this suits your fancy (some people despise
@@ -71,21 +71,21 @@ monkeypatches, this is not their fancy) then you can 'require "rbkb"' from
 your irb sessions and own scripts. See 'lib_usage.rdoc' for more info.
 
 
-== REQUIREMENTS:
+## REQUIREMENTS:
 
 * eventmachine >= 0.12.8
 
 
-== INSTALL:
+## INSTALL:
 
-=== Gem Installation
+### Gem Installation
 
 rbkb is available as a gem on gemcutter.org:
 
     gem install rbkb --source http://gemcutter.org
 
 
-==== Gem Install Note
+#### Gem Install Note
 
 Installing the gem as root may be risky depending on your rubygems 
 configuration so I don't really recommend using 'sudo gem install'. 
@@ -102,7 +102,7 @@ either add them to your PATH or copy/symlink them somewhere else like
     gem contents rbkb
 
 
-=== Manual installation:
+### Manual installation:
 
   git clone git://github.com/emonti/rbkb.git
   cd rbkb
@@ -120,7 +120,7 @@ Run this to generate docs with rdoc the same way the gem would have:
 
   rake doc:rdoc
 
-== LICENSE:
+## LICENSE:
 
 (The MIT License) 
 
@@ -144,4 +144,3 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-

@@ -1,5 +1,4 @@
-
-=== Using the rbkb library's Monkey Patches
+### Using the rbkb library's Monkey Patches
 
 Much of rbkb is implemented as a bunch of monkeypatches to Array, String, 
 Numeric and other base classes. If this suits your fancy (some people despise
@@ -172,5 +171,3 @@ little helpers.  Time permitting, I'll try to keep the docs useful and up
 to date. 
 
 Comments are welcome.
-
-

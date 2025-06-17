@@ -1,9 +1,9 @@
-== Command Line Tools
+## Command Line Tools
 
 Below is a list of the command line utilities with short descriptions and
 usage information. Examples to come.
 
-=== b64
+### b64
 
 Base64 encode data supplied via an argument, file, or standard input.
 
@@ -14,7 +14,7 @@ Usage: b64 [options] <data | blank for stdin>
     -l, --length LEN                 Output LEN chars per line
 
 
-=== bgrep
+### bgrep
 
 Binary grep. Prints 'inspected' matches and offset information.
 
@@ -27,7 +27,7 @@ Binary grep. Prints 'inspected' matches and offset information.
     -n, --[no-]filename              Suppress prefixing of filenames.
 
 
-=== blit
+### blit
 
 Sends data through any plugboard that implements a Plug::Blit listener for
 out-of band input.
@@ -45,14 +45,14 @@ See also: telson
     -k, --kill                       Stops the remote event loop.
 
 
-=== c
+### c
 
 Prints a character n-times.
 
   Usage: c 100 A; # print 100 A's'
 
 
-=== crc32
+### crc32
 
 Generates a crc32 checksum for data provided via stdin or file
 
@@ -64,7 +64,7 @@ Generates a crc32 checksum for data provided via stdin or file
     -x, --hexrange=START[:END]       same, but in hex
 
 
-=== d64
+### d64
 
 Base64 decode an encoded chunk supplied via argument, file, or standard input.
 
@@ -74,7 +74,7 @@ Usage: d64 [options] <data | blank for stdin>
     -f, --file FILENAME              Input from FILENAME
 
 
-=== dedump
+### dedump
 
 Reverses a hexdump back to raw data. Designed to work with hexdumps created 
 by Unix utilities like 'xxd' as well as 'hexdump -C'.
@@ -85,7 +85,7 @@ by Unix utilities like 'xxd' as well as 'hexdump -C'.
     -l, --length LEN                 Bytes per line in hexdump (default: 16)
 
 
-=== feed
+### feed
 
 This is a plug-board message feeder from static data sources.
 The "feed" handles messages opaquely and just plays them as a server or
@@ -123,7 +123,7 @@ Feed can do the following things with minimum fuss:
 
 
 
-=== hexify
+### hexify
 
 Converts a string or raw data to hex characters. Input can be supplied via 
 stdin, a string argument, or a file (with -f).
@@ -138,7 +138,7 @@ stdin, a string argument, or a file (with -f).
     -s, --suffix=SUFFIX              SUFFIX after each byte
 
 
-=== len
+### len
 
 Takes input from a blob of data and output it with its binary length prepended.
 
@@ -153,7 +153,7 @@ Takes input from a blob of data and output it with its binary length prepended.
     -l, --length=LEN                 Ignore all else and use LEN
 
 
-=== plugsrv
+### plugsrv
 
 A blit-able reverse TCP proxy. Displays traffic hexdumps.
 
@@ -173,14 +173,14 @@ A blit-able reverse TCP proxy. Displays traffic hexdumps.
       -h, --help                       Show this message
 
 
-=== rex
+### rex
 
   Lazy shortcut for ruby -e "..."
 
   All commandline arguments get smeared into a ruby statement via 'eval()'.
 
 
-=== rstrings
+### rstrings
 
 A utility much like Unix 'strings' -- implemented in ruby.
 
@@ -194,7 +194,7 @@ A utility much like Unix 'strings' -- implemented in ruby.
     -a, --align=ALIGNMENT            Match only on alignment (default=none)
 
 
-=== slice
+### slice
 
 Returns a slice from input. Just a shell interface to a string slice operation.
 
@@ -206,7 +206,7 @@ Returns a slice from input. Just a shell interface to a string slice operation.
     -x, --hexrange=START[:END]       same, but in hex
 
 
-=== telson
+### telson
 
 This is an implementation of the original blackbag "telson" using ruby and 
 eventmachine. 
@@ -232,7 +232,7 @@ Telson is for doing the following things with minimum fuss:
       -s, --source=(ADDR:?)PORT        Bind client on port and addr
 
 
-=== unhexify
+### unhexify
 
 unhexify converts a string of hex bytes back to raw data. Input can be 
 supplied via stdin, a hex-string argument, or a file containing hex (use -f).
@@ -244,7 +244,7 @@ supplied via stdin, a hex-string argument, or a file containing hex (use -f).
     -d, --delim DELIMITER            DELIMITER regex between hex chunks
 
 
-=== urldec
+### urldec
 
 Decodes a url percent-encoded string. 
 Input from stdin, file, or command-line argument.
@@ -256,7 +256,7 @@ Input from stdin, file, or command-line argument.
     -p, --[no-]plus                  Convert '+' to space (default is true)
 
 
-=== urlenc
+### urlenc
 
 Encodes data as a url percent-encoded string.
 Input from stdin, file, or command-line argument.
@@ -268,7 +268,7 @@ Input from stdin, file, or command-line argument.
     -p, --[no-]plus                  Convert spaces to '+' (default is false)
 
 
-=== xor
+### xor
 
 Repeating string xor. Takes input and XOR's it against a string. 
 String can be provided in hex.
@@ -281,5 +281,3 @@ String can be provided in hex.
   Key options (one of the following is required):
     -s, --strkey STRING              xor against bare STRING
     -x, --hexkey HEXSTR              xor against decoded HEXSTR
-
-
