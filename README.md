@@ -11,9 +11,9 @@ related to pen-testing and reversing.
 
 ### Rationale
 
-    Disclaimer: 
-    Most of what's in the black bag came from a desire to do less typing.
-    But there might be a few clever things that were added by accident.
+Disclaimer: 
+Most of what's in the black bag came from a desire to do less typing.
+But there might be a few clever things that were added by accident.
 
 rbkb is inspired by Matasano BlackBag (a set of similar tools written in C).
 
@@ -33,7 +33,7 @@ the things in 'bkb' have not yet made it to 'rbkb' (and may not).
 ### Command Line Tools
 
 The tools almost all support '-h', but I'll admit this only goes so far.
-See cli_usage.rdoc for usage and a bit of extra info on the various tools. 
+See cli_usage.md for usage and a bit of extra info on the various tools. 
 
 When I get some spare time, I'll try and do up some examples of using all
 the tools.
@@ -68,7 +68,7 @@ Ruby BlackBag has a similar set of network tools:
 Much of rbkb is implemented as a bunch of monkeypatches to Array, String, 
 Numeric and other base classes. If this suits your fancy (some people despise
 monkeypatches, this is not their fancy) then you can 'require "rbkb"' from 
-your irb sessions and own scripts. See 'lib_usage.rdoc' for more info.
+your irb sessions and own scripts. See 'lib_usage.md' for more info.
 
 
 ## REQUIREMENTS:
@@ -80,9 +80,7 @@ your irb sessions and own scripts. See 'lib_usage.rdoc' for more info.
 
 ### Gem Installation
 
-rbkb is available as a gem on gemcutter.org:
-
-    gem install rbkb --source http://gemcutter.org
+    gem install rbkb
 
 
 #### Gem Install Note
@@ -98,27 +96,9 @@ When installing as a regular user, however, rubygems may stick rbkb's
 executable bin/* files somewhere unexpected. To find out where these are and 
 either add them to your PATH or copy/symlink them somewhere else like 
 /usr/local/bin/ do this:
-
+```
     gem contents rbkb
-
-
-### Manual installation:
-
-  git clone git://github.com/emonti/rbkb.git
-  cd rbkb
-  rake gem:install
-
-
-or ... you can also install manually without rubygems.
-
-You can access the rbkb project at github. You'll want git installed:
-
-  cp -r rbkb/lib/* /usr/lib/ruby/1.8/site_ruby/1.8 # or another ruby libdir
-  cp bin/* ~/bin      # or wherever else in your PATH
-
-Run this to generate docs with rdoc the same way the gem would have:
-
-  rake doc:rdoc
+```
 
 ## LICENSE:
 
@@ -144,3 +124,4 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
