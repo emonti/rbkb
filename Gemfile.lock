@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rbkb (0.7.1)
+    rbkb (0.7.3)
 
 GEM
   remote: https://rubygems.org/
@@ -21,7 +21,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 1.3)
+  bundler
   rake
   rbkb!
   rspec
+
+BUNDLED WITH
+   2.6.9
